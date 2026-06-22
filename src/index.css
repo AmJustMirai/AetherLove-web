@@ -1,0 +1,103 @@
+@import '@fontsource-variable/bricolage-grotesque/index.css';
+@import '@fontsource-variable/hanken-grotesk/index.css';
+@import '@fontsource/geist-mono/400.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* Crystal Void defaults. The shell root overrides these per active theme (ui/theme.ts);
+       they live here too so anything rendered outside the shell still has a sane palette. */
+    --al-accent: 186 107 201;
+    --al-accent-light: 217 143 230;
+    --al-accent-dark: 122 64 161;
+    --al-chip-fill: 38 18 59;
+    --al-secondary-start: 158 102 235;
+    --al-secondary-end: 250 115 199;
+    --al-btn-normal: 128 56 179;
+    --al-btn-hovered: 173 87 224;
+    --al-btn-active: 97 31 140;
+
+    /* Surfaces (the page chrome) — dark defaults; the shell root overrides these per active theme so a
+       light theme can flip the whole canvas (ui/theme.ts SurfacePalette). Stored as "R G B" triplets so
+       they compose with alpha at every call site. */
+    --al-void: 11 6 18; /* the dark "void" the app floats on */
+    --al-text-strong: 245 240 255; /* headings / high-emphasis text (was literal white) */
+    --al-body: 217 217 217; /* UiColors.Body 0.85 */
+    --al-subtle: 179 179 189; /* UiColors.Subtle */
+    --al-muted: 140 140 140; /* UiColors.Muted */
+    --al-surface: 255 255 255; /* card/panel tint composited at low alpha */
+    --al-line: 255 255 255; /* border/divider tint composited at low alpha */
+    --al-scrim: 0 0 0; /* modal / toast backdrop */
+
+    --al-text: #f5f0ff;
+    /* Text that sits on a saturated accent/button/danger fill — stays light in every theme (the fills are
+       mid-tone in both modes), so it is intentionally NOT overridden per theme. */
+    --al-on-accent: 245 240 255;
+    --al-danger: 242 115 115; /* UiColors.Danger */
+    --al-amber: 242 166 36; /* UiColors.Amber */
+    --al-success: 89 217 115; /* UiColors.Success */
+
+    color-scheme: dark;
+
+    --font-display: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+    --font-body: 'Hanken Grotesk Variable', system-ui, sans-serif;
+    --font-mono: 'Geist Mono', ui-monospace, monospace;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background: rgb(var(--al-void));
+    color: var(--al-text);
+    font-family: var(--font-body);
+    /* The app shell owns the whole viewport; scrolling happens inside panes, never the page. */
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Ambient aether: slow-drifting accent glow + faint twinkling constellation behind the app. */
+@keyframes aether-drift {
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: 0.55;
+    }
+    50% {
+        transform: translate3d(2%, -3%, 0) scale(1.1);
+        opacity: 0.85;
+    }
+}
+
+@keyframes aether-twinkle {
+    0%,
+    100% {
+        opacity: 0.2;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Quiet, consistent keyboard focus — part of the a11y quality floor. */
+:focus-visible {
+    outline: 2px solid rgb(var(--al-accent-light));
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}
