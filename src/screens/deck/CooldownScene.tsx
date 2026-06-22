@@ -21,7 +21,6 @@ const WingNear: Rgb = [51, 46, 92];
 const WingFar: Rgb = [31, 28, 61];
 const Silver: Rgb = [219, 224, 250];
 const Violet: Rgb = [158, 133, 235];
-const Gold: Rgb = [255, 219, 143];
 const Cream: Rgb = [245, 240, 252];
 const BodyText: Rgb = [214, 219, 245];
 const Danger: Rgb = [242, 140, 140];
@@ -135,7 +134,6 @@ export function CooldownScene({heading, body, timer, error}: Props) {
 
             drawHeading(ctx, cx, 44, props.current.heading, settle);
             drawBody(ctx, cx, H - 110, W - 72, props.current.body, settle);
-            if (props.current.timer) drawTimerPill(ctx, cx, H - 58, props.current.timer, anim, settle);
             if (props.current.error) drawError(ctx, cx, H - 26, W - 72, props.current.error, settle);
 
             if (!reduce) raf = requestAnimationFrame(draw);
@@ -449,31 +447,4 @@ function drawError(ctx: CanvasRenderingContext2D, cx: number, topY: number, wrap
     ctx.textBaseline = 'top';
     ctx.fillStyle = rgba(Danger, settle);
     wrapLines(ctx, error, wrap).forEach((l, i) => ctx.fillText(l, cx, topY + i * 18));
-}
-
-function drawTimerPill(ctx: CanvasRenderingContext2D, cx: number, y: number, timer: string, anim: number, settle: number) {
-    ctx.font = '600 16px "Hanken Grotesk Variable", system-ui, sans-serif';
-    const clock = '🕒 ';
-    const text = clock + timer;
-    const textW = ctx.measureText(text).width;
-    const padX = 20, padY = 11;
-    const pillW = textW + padX * 2;
-    const pillH = 16 + padY * 2;
-    const x = cx - pillW * 0.5;
-    const top = y - pillH * 0.5;
-    const round = pillH * 0.5;
-    const glow = 0.5 + 0.5 * Math.sin(anim * 1.6);
-    roundRect(ctx, x - 5, top - 5, pillW + 10, pillH + 10, round + 5);
-    ctx.fillStyle = rgba(Violet, 0.2 * glow * settle);
-    ctx.fill();
-    roundRect(ctx, x, top, pillW, pillH, round);
-    ctx.fillStyle = rgba([38, 33, 77], settle);
-    ctx.fill();
-    ctx.strokeStyle = rgba(Gold, 0.6 * settle);
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = rgba(Cream, settle);
-    ctx.fillText(text, cx, y);
 }
