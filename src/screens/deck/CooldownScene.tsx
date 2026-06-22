@@ -4,7 +4,7 @@
 // stardust, plus the heading / body / timer-pill / error overlay. Reduce-motion renders a settled frame.
 
 import {useEffect, useRef} from 'react';
-import {prefersReducedMotion} from '../../effects/reduceMotion';
+import {prefersReducedMotion} from '@/effects/reduceMotion.ts';
 
 type Rgb = [number, number, number];
 const rgba = ([r, g, b]: Rgb, a: number) => `rgba(${r}, ${g}, ${b}, ${a})`;

@@ -165,16 +165,21 @@ export function DeckScreen() {
                         <DeckDetails card={deck.top}/>
                     </div>
                 ) : (
-                    // Night-sky pegasus scene (CooldownScene): slot cooldown shows a live countdown pill; an empty
-                    // candidate pool shows the no-pool body without a timer.
-                    <div
-                        className="aspect-[350/560] w-[min(88vw,380px)] overflow-hidden rounded-[28px] ring-1 ring-line/10">
-                        <CooldownScene
-                            heading={t('deck.empty_title')}
-                            body={deck.noPool ? t('deck.no_pool') : t('deck.empty_body')}
-                            timer={!deck.noPool ? countdown || null : null}
-                            error={deck.error}
-                        />
+                    <div className="flex w-full max-w-[760px] flex-col items-center justify-center">
+                        <div
+                            className="aspect-[350/560] w-full max-w-[380px] overflow-hidden rounded-[28px] ring-1 ring-line/10 shadow-xl">
+                            <CooldownScene
+                                heading={t('deck.empty_title')}
+                                body={deck.noPool ? t('deck.no_pool') : t('deck.empty_body')}
+                                timer={!deck.noPool ? countdown || null : null}
+                                error={deck.error}
+                            />
+                        </div>
+
+                        {/* Optional subtle hint text on wide screens */}
+                        <p className="mt-6 text-center font-mono text-xs text-muted/70 hidden sm:block">
+                            Next refresh in {countdown || '...'}
+                        </p>
                     </div>
                 )}
             </div>
