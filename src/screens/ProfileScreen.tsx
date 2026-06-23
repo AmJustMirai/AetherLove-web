@@ -24,6 +24,7 @@ import {
 } from '../shared/enumLabels';
 import {Avatar, Button, Chip, LoadingSpinner, Modal, pushToast, TextInput} from '../ui/components';
 import {revokeUrl, webpUrl} from '../ui/image';
+import {safeColor} from '../ui/color';
 import {useT} from '../i18n/useT';
 
 type T = ReturnType<typeof useT>;
@@ -148,7 +149,7 @@ function PeerBody({t, detail, flairs}: { t: T; detail: ProfileDetailDto; flairs:
                             <span
                                 key={f.Id}
                                 className="rounded-full px-3 py-1 text-[12px] font-semibold text-white"
-                                style={{backgroundColor: f.BackgroundColor || 'rgb(var(--al-accent))'}}
+                                style={{backgroundColor: safeColor(f.BackgroundColor, 'rgb(var(--al-accent))')}}
                             >
                 {flairText(f, lang)}
               </span>

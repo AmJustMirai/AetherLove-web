@@ -123,9 +123,22 @@ export class AuthService {
         this.setState(AuthFlowState.Failed);
     }
 
-    private openBrowser(url: string): void {
+    /** Opens the server-supplied login URL. Rejects anything that isn't https so a tampered
+     *  response can't smuggle a javascript:/data: URL into window.open. Returns false on reject. */
+    private openBrowser(url: string): boolean {
+        let scheme: string;
+        try {
+            scheme = new URL(url).protocol;
+        } catch {
+            scheme = '';
+        }
+        if (scheme !== 'https:') {
+            this.fail('The sign-in link the server returned was invalid. Please try again.', false);
+            return false;
+        }
         // noopener/noreferrer so the opened XIVAuth tab can't reach back into this window.
         window.open(url, '_blank', 'noopener,noreferrer');
+        return true;
     }
 
     private async runFlow(signal: AbortSignal): Promise<void> {
@@ -147,7 +160,7 @@ export class AuthService {
 
         this.loginUrl = start.loginUrl;
         this.setState(AuthFlowState.AwaitingBrowser);
-        this.openBrowser(start.loginUrl);
+        if (!this.openBrowser(start.loginUrl)) return;
 
         const expiresAt = Date.parse(start.expiresAtUtc);
         while (!signal.aborted) {
