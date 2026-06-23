@@ -4,6 +4,9 @@ A standalone browser-based port of the AetherLove FFXIV matchmaking plugin.
 
 This project is not an original creation. It is a port of the existing plugin, rewritten for the browser.
 
+The client is hosted on GitHub Pages and can be accessed at:
+**https://amjustmirai.github.io/AetherLove-web/**
+
 ---
 
 ## Support & Maintenance
