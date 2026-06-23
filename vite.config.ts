@@ -51,6 +51,7 @@ function cspMeta(): Plugin {
 }
 
 export default defineConfig({
+  base: process.env.VITE_BASE ?? '/',
   plugins: [react(), cspMeta()],
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
