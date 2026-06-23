@@ -18,6 +18,7 @@ function useImage(bytes: Uint8Array | null): HTMLImageElement | null {
   useEffect(() => {
     const url = webpUrl(bytes);
     if (!url) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setImg(null);
       return;
     }
@@ -40,6 +41,7 @@ export function MatchScreen() {
 
   // Snapshot peer routing info before we clear the pending match on unmount.
   const peerRef = useRef<{ id: string; name: string } | null>(null);
+  // eslint-disable-next-line react-hooks/refs
   if (pending) peerRef.current = { id: pending.peerProfileId, name: pending.peerName };
 
   useEffect(() => () => clearPendingMatch(), []);

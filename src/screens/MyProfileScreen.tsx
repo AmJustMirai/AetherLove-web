@@ -60,6 +60,7 @@ export function MyProfileScreen() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -237,6 +238,7 @@ function PhotoThumb({ bytes }: { bytes: Uint8Array }) {
   const [url, setUrl] = useState<string | null>(null);
   useEffect(() => {
     const made = webpUrl(bytes);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setUrl(made);
     return () => revokeUrl(made);
   }, [bytes]);

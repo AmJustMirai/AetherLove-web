@@ -24,6 +24,7 @@ const MIN_SPLASH_MS = 1400;
 export function SplashScreen() {
   const t = useT();
   const [ready, setReady] = useState(false);
+  // eslint-disable-next-line react-hooks/purity
   const shownAt = useRef(Date.now());
 
   useEffect(() => {

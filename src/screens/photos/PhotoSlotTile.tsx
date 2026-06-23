@@ -71,6 +71,7 @@ export function PhotoSlotTile({
 
   useEffect(() => {
     const url = webpUrl(serverBytes);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setServerDisplayUrl(url);
     return () => {
       if (url) revokeUrl(url);

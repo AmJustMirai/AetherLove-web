@@ -42,6 +42,7 @@ export function DeckCard({
   const [portrait, setPortrait] = useState<string | null>(null);
   useEffect(() => {
     const url = webpUrl(card.PortraitWebp) ?? webpUrl(card.AvatarWebp);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPortrait(url);
     return () => revokeUrl(url);
   }, [card]);

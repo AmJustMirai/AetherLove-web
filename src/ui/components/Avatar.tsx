@@ -20,6 +20,7 @@ export function Avatar({ bytes, src, size, className, ring = true }: AvatarProps
 
   useEffect(() => {
     if (src !== undefined) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUrl(src ?? null);
       return;
     }

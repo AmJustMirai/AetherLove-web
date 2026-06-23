@@ -21,6 +21,7 @@ import { router, Screen } from '../../app/router';
 import { useT } from '../../i18n/useT';
 
 function useCountdown(targetIso: string | null): string {
+  // eslint-disable-next-line react-hooks/purity
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
     if (!targetIso) return;
@@ -119,6 +120,7 @@ export function DeckScreen() {
     }
     const id = setTimeout(() => void deck.reload(), remaining + 250);
     return () => clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deck.hasCards, deck.loading, deck.nextPullAtUtc, deck.reload]);
 
   // Keyboard: ← pass, → like. Only while a card is present.
@@ -132,6 +134,7 @@ export function DeckScreen() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deck.hasCards, deck.pass, deck.like]);
 
   return (

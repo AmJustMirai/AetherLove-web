@@ -64,7 +64,7 @@ async function genJobIcons() {
       console.warn(`job ${id}: ${res.status} (skipped)`);
       continue;
     }
-    const buf = Buffer.from(await res.arrayBuffer());
+    const buf = new Uint8Array(await res.arrayBuffer());
     await writeFile(join(dir, `${id}.png`), buf);
     manifest[id] = `${id}.png`;
   }

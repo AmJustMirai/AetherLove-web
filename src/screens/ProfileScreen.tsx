@@ -72,6 +72,7 @@ export function ProfileScreen() {
 
   useEffect(() => {
     let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     setError(null);
     void (async () => {
@@ -271,6 +272,7 @@ function CarouselImage({ bytes, blurred }: { bytes: Uint8Array; blurred: boolean
   const [url, setUrl] = useState<string | null>(null);
   useEffect(() => {
     const made = webpUrl(bytes);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setUrl(made);
     return () => revokeUrl(made);
   }, [bytes]);

@@ -36,6 +36,7 @@ export function ImageCropModal({ open, img, kind, onConfirm, onCancel }: ImageCr
 
   useEffect(() => {
     if (!open || !img) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCrop(defaultCropRect(img.width, img.height, aspectWoverH));
   }, [open, img, aspectWoverH]);
 

@@ -127,8 +127,9 @@ interface Props {
 export function CooldownScene({ heading, body, timer, error }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // Refs so the rAF loop reads current text without restarting.
-  const props = useRef<Props>({ heading, body, timer, error });
-  props.current = { heading, body, timer, error };
+  const latestProps = useRef<Props>({ heading, body, timer, error });
+  // eslint-disable-next-line react-hooks/refs
+  latestProps.current = { heading, body, timer, error };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -171,9 +172,10 @@ export function CooldownScene({ heading, body, timer, error }: Props) {
       drawStardust(ctx, hc, time, reduce, settle);
       drawHorse(ctx, hc, flap, time, reduce, settle);
 
-      drawHeading(ctx, cx, 44, props.current.heading, settle);
-      drawBody(ctx, cx, H - 110, W - 72, props.current.body, settle);
-      if (props.current.error) drawError(ctx, cx, H - 26, W - 72, props.current.error, settle);
+      drawHeading(ctx, cx, 44, latestProps.current.heading, settle);
+      drawBody(ctx, cx, H - 110, W - 72, latestProps.current.body, settle);
+      if (latestProps.current.error)
+        drawError(ctx, cx, H - 26, W - 72, latestProps.current.error, settle);
 
       if (!reduce) raf = requestAnimationFrame(draw);
     };

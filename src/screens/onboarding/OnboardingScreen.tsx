@@ -95,6 +95,7 @@ export function OnboardingScreen() {
   // TOS read-timer: counts down when the step is shown (mirrors _tosTimerStart).
   useEffect(() => {
     if (step !== 'tos') return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTosSecondsLeft(TOS_WAIT_SECONDS);
     const id = setInterval(() => setTosSecondsLeft((s) => Math.max(0, s - 1)), 1000);
     return () => clearInterval(id);

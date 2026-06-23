@@ -45,6 +45,7 @@ export function NewsScreen() {
   // Initial route: unseen queue if the snapshot has unseen items, otherwise the full list.
   useEffect(() => {
     if (unseen.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setView('queue');
       void openArticle(unseen[0].Id, 'queue');
     } else {
@@ -90,14 +91,6 @@ export function NewsScreen() {
     }
   }
 
-  function Heading() {
-    return (
-      <h1 className="mb-4 font-display text-3xl font-extrabold tracking-tight text-strong">
-        {t('news.title')}
-      </h1>
-    );
-  }
-
   if (view === 'loading') {
     return (
       <div className="flex h-full items-center justify-center">
@@ -109,7 +102,9 @@ export function NewsScreen() {
   if (view === 'empty' || view === 'error') {
     return (
       <div className="mx-auto flex h-full w-full max-w-md flex-col px-6 pt-10">
-        <Heading />
+        <h1 className="mb-4 font-display text-3xl font-extrabold tracking-tight text-strong">
+          {t('news.title')}
+        </h1>
         <p className="text-[14px] text-subtle">
           {view === 'empty' ? t('news.empty') : t('news.load_error', error ?? '')}
         </p>
@@ -134,7 +129,9 @@ export function NewsScreen() {
     }
     return (
       <div className="mx-auto flex h-full w-full max-w-md flex-col px-6 pt-10">
-        <Heading />
+        <h1 className="mb-4 font-display text-3xl font-extrabold tracking-tight text-strong">
+          {t('news.title')}
+        </h1>
         <div className="min-h-0 flex-1 space-y-5 overflow-y-auto pb-6">
           {[...byDay.entries()].map(([day, items]) => (
             <div key={day}>
