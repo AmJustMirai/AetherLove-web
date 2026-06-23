@@ -8,28 +8,28 @@
 // so the user is warned before trusting it. This mirrors Signal's safety-number-change behaviour: we
 // warn, we don't silently re-key. The pin only moves forward once the user explicitly accepts.
 
-import {sha256} from '@noble/hashes/sha256';
-import {secureStore} from '../storage';
-import type {Guid} from '../../shared/wire';
+import { sha256 } from '@noble/hashes/sha256';
+import { secureStore } from '../storage';
+import type { Guid } from '../../shared/wire';
 
 const keyOf = (peerId: Guid): string => `peerkey:${peerId}`;
 
 export type PeerKeyStatus = 'first-seen' | 'unchanged' | 'changed';
 
 export interface PeerKeyCheck {
-    status: PeerKeyStatus;
-    /** Human-comparable safety number of the key we just received. */
-    fingerprint: string;
-    /** Safety number of the previously pinned key. Only set when status === 'changed'. */
-    previousFingerprint?: string;
+  status: PeerKeyStatus;
+  /** Human-comparable safety number of the key we just received. */
+  fingerprint: string;
+  /** Safety number of the previously pinned key. Only set when status === 'changed'. */
+  previousFingerprint?: string;
 }
 
 function equalBytes(a: Uint8Array, b: Uint8Array): boolean {
-    if (a.length !== b.length) return false;
-    for (let i = 0; i < a.length; i++) {
-        if (a[i] !== b[i]) return false;
-    }
-    return true;
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
 }
 
 /**
@@ -39,12 +39,12 @@ function equalBytes(a: Uint8Array, b: Uint8Array): boolean {
  * and uniform regardless of key encoding.
  */
 export function keyFingerprint(publicKey: Uint8Array): string {
-    const h = sha256(publicKey);
-    const groups: string[] = [];
-    for (let i = 0; i < 8; i += 2) {
-        groups.push((((h[i] << 8) | h[i + 1]) >>> 0).toString(16).padStart(4, '0'));
-    }
-    return groups.join(' ').toUpperCase();
+  const h = sha256(publicKey);
+  const groups: string[] = [];
+  for (let i = 0; i < 8; i += 2) {
+    groups.push((((h[i] << 8) | h[i + 1]) >>> 0).toString(16).padStart(4, '0'));
+  }
+  return groups.join(' ').toUpperCase();
 }
 
 /**
@@ -53,24 +53,24 @@ export function keyFingerprint(publicKey: Uint8Array): string {
  * showing until they act on it.
  */
 export async function verifyPeerKey(peerId: Guid, publicKey: Uint8Array): Promise<PeerKeyCheck> {
-    const fingerprint = keyFingerprint(publicKey);
-    const stored = await secureStore.get<Uint8Array>(keyOf(peerId));
-    if (!stored || stored.length === 0) {
-        await secureStore.put(keyOf(peerId), publicKey);
-        return {status: 'first-seen', fingerprint};
-    }
-    if (equalBytes(stored, publicKey)) {
-        return {status: 'unchanged', fingerprint};
-    }
-    return {status: 'changed', fingerprint, previousFingerprint: keyFingerprint(stored)};
+  const fingerprint = keyFingerprint(publicKey);
+  const stored = await secureStore.get<Uint8Array>(keyOf(peerId));
+  if (!stored || stored.length === 0) {
+    await secureStore.put(keyOf(peerId), publicKey);
+    return { status: 'first-seen', fingerprint };
+  }
+  if (equalBytes(stored, publicKey)) {
+    return { status: 'unchanged', fingerprint };
+  }
+  return { status: 'changed', fingerprint, previousFingerprint: keyFingerprint(stored) };
 }
 
 /** Re-pins the current key, clearing a 'changed' warning once the user has verified it out-of-band. */
 export async function acceptPeerKey(peerId: Guid, publicKey: Uint8Array): Promise<void> {
-    await secureStore.put(keyOf(peerId), publicKey);
+  await secureStore.put(keyOf(peerId), publicKey);
 }
 
 /** Drops a peer's pin (e.g. on unmatch/block) so a future re-match starts fresh. */
 export async function forgetPeerKey(peerId: Guid): Promise<void> {
-    await secureStore.delete(keyOf(peerId));
+  await secureStore.delete(keyOf(peerId));
 }

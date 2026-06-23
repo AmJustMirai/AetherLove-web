@@ -13,23 +13,23 @@
 
 /** Normalizes any wire form of a C# DateTimeOffset to an ISO-8601 UTC string. */
 export function toIsoString(value: unknown): string {
-    if (value == null) return '';
-    if (typeof value === 'string') return value;
-    if (value instanceof Date) return value.toISOString();
-    // [DateTime, offsetMinutes] — the offset only shifts the labeled zone; the instant is the Date.
-    if (Array.isArray(value) && value.length >= 1) {
-        const [instant] = value;
-        if (instant instanceof Date) return instant.toISOString();
-        if (typeof instant === 'string') return instant;
-        if (typeof instant === 'number') return new Date(instant).toISOString();
-    }
-    if (typeof value === 'number') return new Date(value).toISOString();
-    return '';
+  if (value == null) return '';
+  if (typeof value === 'string') return value;
+  if (value instanceof Date) return value.toISOString();
+  // [DateTime, offsetMinutes] — the offset only shifts the labeled zone; the instant is the Date.
+  if (Array.isArray(value) && value.length >= 1) {
+    const [instant] = value;
+    if (instant instanceof Date) return instant.toISOString();
+    if (typeof instant === 'string') return instant;
+    if (typeof instant === 'number') return new Date(instant).toISOString();
+  }
+  if (typeof value === 'number') return new Date(value).toISOString();
+  return '';
 }
 
 /** Nullable variant: passes null/undefined through as null. */
 export function toIsoStringOrNull(value: unknown): string | null {
-    if (value == null) return null;
-    const s = toIsoString(value);
-    return s === '' ? null : s;
+  if (value == null) return null;
+  const s = toIsoString(value);
+  return s === '' ? null : s;
 }

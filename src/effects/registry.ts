@@ -2,17 +2,17 @@
 // IMatchEffect selection). Three are ported in this pass; the remaining 17 land in later batches and
 // register here.
 
-import type {MatchEffect} from './types';
-import {ClassicEffect} from './effects/classic';
-import {CosmicEffect} from './effects/cosmic';
-import {FireworkEffect} from './effects/firework';
+import type { MatchEffect } from './types';
+import { ClassicEffect } from './effects/classic';
+import { CosmicEffect } from './effects/cosmic';
+import { FireworkEffect } from './effects/firework';
 
 export const EFFECT_FACTORIES: Array<() => MatchEffect> = [
-    () => new ClassicEffect(),
-    () => new CosmicEffect(),
-    () => new FireworkEffect(),
+  () => new ClassicEffect(),
+  () => new CosmicEffect(),
+  () => new FireworkEffect(),
 ];
 
 export function pickRandomEffect(): MatchEffect {
-    return EFFECT_FACTORIES[(Math.random() * EFFECT_FACTORIES.length) | 0]();
+  return EFFECT_FACTORIES[(Math.random() * EFFECT_FACTORIES.length) | 0]();
 }

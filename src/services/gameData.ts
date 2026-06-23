@@ -4,8 +4,8 @@
 // which degrade to "(unavailable)" when a sheet can't be read).
 
 export interface Territory {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 const BASE = `${import.meta.env.BASE_URL}assets/gamedata`;
@@ -14,13 +14,13 @@ let territoriesPromise: Promise<Territory[]> | null = null;
 
 /** Named territories for the favourite-location picker (sorted, distinct by name). */
 export function loadTerritories(): Promise<Territory[]> {
-    territoriesPromise ??= fetch(`${BASE}/territories.json`)
-        .then((r) => (r.ok ? (r.json() as Promise<Territory[]>) : []))
-        .catch(() => []);
-    return territoriesPromise;
+  territoriesPromise ??= fetch(`${BASE}/territories.json`)
+    .then((r) => (r.ok ? (r.json() as Promise<Territory[]>) : []))
+    .catch(() => []);
+  return territoriesPromise;
 }
 
 /** URL of the job's class icon, or null for Job.None / jobs without a bundled icon. */
 export function jobIconUrl(job: number): string | null {
-    return job > 0 ? `${BASE}/jobs/${job}.png` : null;
+  return job > 0 ? `${BASE}/jobs/${job}.png` : null;
 }

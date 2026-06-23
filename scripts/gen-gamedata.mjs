@@ -10,9 +10,9 @@
 // Output is committed under public/assets/gamedata/ so dev/build need no network. Re-run with
 // `npm run gen:gamedata` to refresh against a new game patch.
 
-import {mkdir, writeFile} from 'node:fs/promises';
-import {dirname, join} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const API = 'https://v2.xivapi.com/api';
 const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'public', 'assets', 'gamedata');
@@ -33,16 +33,16 @@ async function genTerritories() {
   const seen = new Set();
   const out = [];
   let after = 0;
-  for (; ;) {
+  for (;;) {
     const url = `${API}/sheet/TerritoryType?fields=PlaceName.Name&limit=500&after=${after}`;
-    const {rows} = await fetchJson(url);
+    const { rows } = await fetchJson(url);
     if (!rows || rows.length === 0) break;
     for (const r of rows) {
       const pn = r.fields?.PlaceName;
       const name = (pn && typeof pn === 'object' ? pn.fields?.Name : undefined)?.trim();
       if (name && !seen.has(name)) {
         seen.add(name);
-        out.push({id: r.row_id, name});
+        out.push({ id: r.row_id, name });
       }
     }
     after = rows[rows.length - 1].row_id;
@@ -54,7 +54,7 @@ async function genTerritories() {
 
 async function genJobIcons() {
   const dir = join(OUT, 'jobs');
-  await mkdir(dir, {recursive: true});
+  await mkdir(dir, { recursive: true });
   const manifest = {};
   for (const id of JOB_IDS) {
     const icon = `0620${String(id).padStart(2, '0')}`;
@@ -72,6 +72,6 @@ async function genJobIcons() {
   console.log(`jobs: ${Object.keys(manifest).length} icons`);
 }
 
-await mkdir(OUT, {recursive: true});
+await mkdir(OUT, { recursive: true });
 await Promise.all([genTerritories(), genJobIcons()]);
 console.log('game data written to', OUT);

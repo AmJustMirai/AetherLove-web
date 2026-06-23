@@ -11,7 +11,7 @@ const FUNC = /^(?:rgb|rgba|hsl|hsla)\([0-9.,%/\s]+\)$/;
 
 /** Returns `value` only if it is a safe CSS color literal (hex or rgb/hsl function), else `fallback`. */
 export function safeColor(value: string | null | undefined, fallback: string): string {
-    if (!value) return fallback;
-    const v = value.trim();
-    return HEX.test(v) || FUNC.test(v) ? v : fallback;
+  if (!value) return fallback;
+  const v = value.trim();
+  return HEX.test(v) || FUNC.test(v) ? v : fallback;
 }

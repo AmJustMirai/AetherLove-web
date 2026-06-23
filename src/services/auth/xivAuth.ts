@@ -4,9 +4,9 @@
 // camelCase JSON. The plugin shelled out to a system browser; the web client opens the login URL in
 // a new tab. Tokens land in the shared tokenStore on success; the caller wires the hub connect.
 
-import {API_BASE} from '../../config';
-import {getOrCreateDeviceId} from '../storage';
-import {tokenStore} from './tokenStore';
+import { API_BASE } from '../../config';
+import { getOrCreateDeviceId } from '../storage';
+import { tokenStore } from './tokenStore';
 
 export enum AuthFlowState {
   Idle = 0,
@@ -46,13 +46,13 @@ export interface AuthFlowSnapshot {
 type Listener = (snap: AuthFlowSnapshot) => void;
 
 const delay = (ms: number, signal?: AbortSignal) =>
-    new Promise<void>((resolve, reject) => {
-      const t = setTimeout(resolve, ms);
-      signal?.addEventListener('abort', () => {
-        clearTimeout(t);
-        reject(new DOMException('Aborted', 'AbortError'));
-      });
+  new Promise<void>((resolve, reject) => {
+    const t = setTimeout(resolve, ms);
+    signal?.addEventListener('abort', () => {
+      clearTimeout(t);
+      reject(new DOMException('Aborted', 'AbortError'));
     });
+  });
 
 export class AuthService {
   private state = AuthFlowState.Idle;
@@ -62,8 +62,7 @@ export class AuthService {
   private abort: AbortController | null = null;
   private readonly listeners = new Set<Listener>();
 
-  constructor(private readonly onCompleted?: () => void) {
-  }
+  constructor(private readonly onCompleted?: () => void) {}
 
   get snapshot(): AuthFlowSnapshot {
     return {
@@ -146,8 +145,8 @@ export class AuthService {
     try {
       const resp = await fetch(API_BASE + 'auth/login/start', {
         method: 'POST',
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify({deviceName: getOrCreateDeviceId()}),
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ deviceName: getOrCreateDeviceId() }),
         signal,
       });
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
@@ -172,7 +171,7 @@ export class AuthService {
       try {
         const resp = await fetch(API_BASE + 'auth/login/poll', {
           method: 'POST',
-          headers: {'content-type': 'application/json'},
+          headers: { 'content-type': 'application/json' },
           body: JSON.stringify({
             transactionId: start.transactionId,
             transactionSecret: start.transactionSecret,

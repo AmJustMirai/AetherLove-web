@@ -13,10 +13,10 @@ const DEFAULT_API_BASE = 'https://api.aetherlove.space/';
  *  3. Production default — the real server origin.
  */
 export const API_BASE: string = (() => {
-    const override = import.meta.env?.VITE_API_BASE as string | undefined;
-    const raw =
-        override ?? (import.meta.env?.DEV ? `${window.location.origin}/api/` : DEFAULT_API_BASE);
-    return raw.endsWith('/') ? raw : raw + '/';
+  const override = import.meta.env?.VITE_API_BASE as string | undefined;
+  const raw =
+    override ?? (import.meta.env?.DEV ? `${window.location.origin}/api/` : DEFAULT_API_BASE);
+  return raw.endsWith('/') ? raw : raw + '/';
 })();
 
 /** Protocol version the client sends on the hub connection. Mirrors ApiVersion.Current. */

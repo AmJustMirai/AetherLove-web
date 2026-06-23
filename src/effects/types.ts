@@ -4,36 +4,36 @@
 // direct analog to the plugin's ImGui draw-list effects.
 
 export interface MatchContent {
-    ownAvatar: HTMLImageElement | null;
-    peerAvatar: HTMLImageElement | null;
-    ownName: string;
-    peerName: string;
+  ownAvatar: HTMLImageElement | null;
+  peerAvatar: HTMLImageElement | null;
+  ownName: string;
+  peerName: string;
 }
 
 export interface Scene {
-    ctx: CanvasRenderingContext2D;
-    /** Design-space dimensions (464×835); the runner scales the context for DPR. */
-    w: number;
-    h: number;
-    /** Seconds since the effect was shown. */
-    t: number;
-    /** Seconds since the previous frame. */
-    dt: number;
-    /** Effective reduce-motion: effects skip animation and render their static end-frame. */
-    reduce: boolean;
-    content: MatchContent;
-    /** Themed accent as [r,g,b] (0-255), resolved from the active theme's CSS vars. */
-    accent: [number, number, number];
-    accentLight: [number, number, number];
-    /** The theme's secondary gradient stops (ThemeDefinition.SecondaryStart/End). */
-    secondaryStart: [number, number, number];
-    secondaryEnd: [number, number, number];
+  ctx: CanvasRenderingContext2D;
+  /** Design-space dimensions (464×835); the runner scales the context for DPR. */
+  w: number;
+  h: number;
+  /** Seconds since the effect was shown. */
+  t: number;
+  /** Seconds since the previous frame. */
+  dt: number;
+  /** Effective reduce-motion: effects skip animation and render their static end-frame. */
+  reduce: boolean;
+  content: MatchContent;
+  /** Themed accent as [r,g,b] (0-255), resolved from the active theme's CSS vars. */
+  accent: [number, number, number];
+  accentLight: [number, number, number];
+  /** The theme's secondary gradient stops (ThemeDefinition.SecondaryStart/End). */
+  secondaryStart: [number, number, number];
+  secondaryEnd: [number, number, number];
 }
 
 export interface MatchEffect {
-    readonly name: string;
+  readonly name: string;
 
-    onShow(scene: Scene): void;
+  onShow(scene: Scene): void;
 
-    draw(scene: Scene): void;
+  draw(scene: Scene): void;
 }

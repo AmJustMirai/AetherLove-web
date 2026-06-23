@@ -45,17 +45,17 @@ export const en = {
   'onboarding.welcome_body': 'Meet other Warriors of Light. Swipe, match, and chat — privately.',
   'onboarding.welcome_language': 'Language',
   'onboarding.how_it_works_body':
-      'Swipe through profiles. When two people like each other, it’s a match — and you can start an end-to-end encrypted chat.',
+    'Swipe through profiles. When two people like each other, it’s a match — and you can start an end-to-end encrypted chat.',
   'onboarding.tos_body':
-      'AetherLove — Terms of Service\n\n' +
-      '1. Eligibility. You must be 18 years of age or older to use AetherLove. By accepting these terms you confirm that you are an adult. Accounts found to belong to minors are removed immediately and permanently.\n\n' +
-      '2. Your account. You are responsible for activity on your account and for keeping your sign-in and passphrase secure. Your messages are end-to-end encrypted with a key derived from your passphrase: we cannot read them and we cannot recover them for you if you lose it.\n\n' +
-      '3. Conduct. Treat other Warriors of Light with respect. The following are not permitted: harassment, threats, hate speech, or stalking; impersonating another person; soliciting money, scams, or spam; sharing another person’s private messages, images, or real-world identity without consent; any content involving minors, real or fictional.\n\n' +
-      '4. Content. You are solely responsible for what you upload and send. NSFW and ERP content is permitted only between consenting adults and only where you have marked your profile accordingly. Do not upload photos you do not have the right to share.\n\n' +
-      '5. Enforcement. We may issue warnings, suspend, or permanently ban accounts that break these rules, with or without notice. Serious violations — especially anything involving minors or non-consensual content — are removed on sight and may be reported to the relevant authorities.\n\n' +
-      '6. No warranty. AetherLove is provided “as is”, without warranty of any kind. We are not responsible for the conduct of other users or for interactions that take place outside the app.\n\n' +
-      '7. Not affiliated with Square Enix. AetherLove is an unofficial fan project. FINAL FANTASY XIV and all related marks are trademarks of Square Enix. This service is not endorsed by or affiliated with Square Enix.\n\n' +
-      '8. Changes. We may update these terms; continued use after a change means you accept the updated terms.',
+    'AetherLove — Terms of Service\n\n' +
+    '1. Eligibility. You must be 18 years of age or older to use AetherLove. By accepting these terms you confirm that you are an adult. Accounts found to belong to minors are removed immediately and permanently.\n\n' +
+    '2. Your account. You are responsible for activity on your account and for keeping your sign-in and passphrase secure. Your messages are end-to-end encrypted with a key derived from your passphrase: we cannot read them and we cannot recover them for you if you lose it.\n\n' +
+    '3. Conduct. Treat other Warriors of Light with respect. The following are not permitted: harassment, threats, hate speech, or stalking; impersonating another person; soliciting money, scams, or spam; sharing another person’s private messages, images, or real-world identity without consent; any content involving minors, real or fictional.\n\n' +
+    '4. Content. You are solely responsible for what you upload and send. NSFW and ERP content is permitted only between consenting adults and only where you have marked your profile accordingly. Do not upload photos you do not have the right to share.\n\n' +
+    '5. Enforcement. We may issue warnings, suspend, or permanently ban accounts that break these rules, with or without notice. Serious violations — especially anything involving minors or non-consensual content — are removed on sight and may be reported to the relevant authorities.\n\n' +
+    '6. No warranty. AetherLove is provided “as is”, without warranty of any kind. We are not responsible for the conduct of other users or for interactions that take place outside the app.\n\n' +
+    '7. Not affiliated with Square Enix. AetherLove is an unofficial fan project. FINAL FANTASY XIV and all related marks are trademarks of Square Enix. This service is not endorsed by or affiliated with Square Enix.\n\n' +
+    '8. Changes. We may update these terms; continued use after a change means you accept the updated terms.',
   'onboarding.tos_accept': 'I have read and accept the terms',
   'onboarding.tos_wait': 'Please take a moment to read ({0}s)',
   'onboarding.auth_intro': 'Sign in with your XIVAuth account to continue.',
@@ -64,7 +64,7 @@ export const en = {
   'onboarding.auth_reopen': 'Re-open sign-in tab',
   'onboarding.auth_done': 'Signed in',
   'onboarding.passphrase_intro':
-      'Your messages are encrypted with a key only you can unlock. Choose a passphrase — we can never recover it for you.',
+    'Your messages are encrypted with a key only you can unlock. Choose a passphrase — we can never recover it for you.',
   'onboarding.passphrase_label': 'Passphrase',
   'onboarding.passphrase_confirm': 'Confirm passphrase',
   'onboarding.passphrase_mismatch': 'Passphrases don’t match.',
@@ -125,13 +125,13 @@ export const en = {
   'chat.send': 'Send',
   'chat.locked': 'Unlock your messages to read this conversation.',
   'chat.e2e_self_broken':
-      'Your message encryption isn’t set up yet. Reconnect to finish setting up encryption before chatting.',
+    'Your message encryption isn’t set up yet. Reconnect to finish setting up encryption before chatting.',
   'chat.read': 'Read',
   'chat.encrypted_note': 'Messages are end-to-end encrypted.',
   'chat.key_changed_toast': '⚠️ {0}’s security key changed.',
   'chat.key_changed_title': 'Security key changed',
   'chat.key_changed_body':
-      'This contact’s encryption key is different from the one you saw before. This is expected if they reinstalled or switched devices — but it can also mean someone is intercepting your messages. Verify the new safety number with them before trusting it.',
+    'This contact’s encryption key is different from the one you saw before. This is expected if they reinstalled or switched devices — but it can also mean someone is intercepting your messages. Verify the new safety number with them before trusting it.',
   'chat.key_safety_number': 'New safety number: {0}',
   'chat.key_accept': 'I verified it — trust new key',
 
@@ -161,9 +161,9 @@ export const en = {
   'settings.always_blur_nsfw_hint': 'Blur adult imagery even where you have opted in.',
   'settings.nsfw_profile': 'Adult (NSFW) profile',
   'settings.nsfw_profile_hint':
-      'Let your profile appear to players who have enabled adult content.',
+    'Let your profile appear to players who have enabled adult content.',
   'settings.nsfw_profile_locked':
-      'This stays on while you have adult roleplay selected or an NSFW photo.',
+    'This stays on while you have adult roleplay selected or an NSFW photo.',
   'settings.nsfw_load_failed': 'Could not load your privacy settings.',
   'settings.send_feedback': 'Send feedback',
   'settings.terms_of_service': 'Terms of service',
@@ -249,24 +249,24 @@ export const en = {
   'common.server_unreachable_detail': "Couldn't reach the server: {0}",
   'common.banned_title': 'Account banned',
   'common.banned_body':
-      'Your AetherLove account has been banned. You can no longer use the service.',
+    'Your AetherLove account has been banned. You can no longer use the service.',
   'common.banned_reason_label': 'Reason',
   'common.banned_uninstall_hint': 'You can close this tab at any time.',
   'common.outdated_title': 'Update required',
   'common.outdated_body':
-      'You are using an outdated version of AetherLove. The server no longer supports this version, so it can’t connect.',
+    'You are using an outdated version of AetherLove. The server no longer supports this version, so it can’t connect.',
   'common.outdated_hint':
-      'Please reload the page to get the latest version, then reopen AetherLove.',
+    'Please reload the page to get the latest version, then reopen AetherLove.',
   'common.offline_title': 'AetherLove is offline',
   'common.offline_body':
-      "We can't reach the AetherLove servers right now. The app needs a live connection to browse, match, and chat, so it's paused until we're back online.",
+    "We can't reach the AetherLove servers right now. The app needs a live connection to browse, match, and chat, so it's paused until we're back online.",
   'common.offline_reconnecting': 'Reconnecting…',
   'common.offline_keep_trying': "We'll keep trying automatically.",
   'common.passphrase_title': 'Enter your encryption passphrase',
   'common.passphrase_intro':
-      "We recognise this account, but this device doesn't have your chat key yet. Enter the passphrase you set on your first device to unlock your chat history.",
+    "We recognise this account, but this device doesn't have your chat key yet. Enter the passphrase you set on your first device to unlock your chat history.",
   'common.passphrase_forgot':
-      'Forgot your passphrase? There is no recovery, but you can sign out below and create a fresh account. Your chat history with this account will be lost.',
+    'Forgot your passphrase? There is no recovery, but you can sign out below and create a fresh account. Your chat history with this account will be lost.',
   'common.passphrase_bundle_load_failed': "Couldn't load encryption bundle from server.",
   'common.passphrase_empty': 'Please enter your passphrase.',
   'common.passphrase_incorrect': 'Incorrect passphrase. Try again.',
@@ -274,7 +274,7 @@ export const en = {
   'common.warnings_heading_one': 'You have a moderation warning',
   'common.warnings_heading_many': 'You have {0} moderation warnings',
   'common.warnings_body':
-      'Please read the following warning(s) from the moderation team. Repeat offenses can result in account suspension.',
+    'Please read the following warning(s) from the moderation team. Repeat offenses can result in account suspension.',
   'common.warnings_submit_error': "Couldn't reach the server: {0}. Tap to retry.",
   'common.modmsg_heading_one': 'A message from the moderation team',
   'common.modmsg_heading_many': 'You have {0} messages from the moderation team',
@@ -282,10 +282,10 @@ export const en = {
   'common.modmsg_got_it': 'Got it',
   'common.recovery_title': 'Set up message encryption',
   'common.recovery_intro':
-      'Your account is active but has no encryption key yet. Choose a passphrase to set up end-to-end encryption so you can send and receive messages. Keep it safe — there is no recovery if you forget it.',
+    'Your account is active but has no encryption key yet. Choose a passphrase to set up end-to-end encryption so you can send and receive messages. Keep it safe — there is no recovery if you forget it.',
   'common.recovery_button': 'Set up encryption',
   'common.recovery_support':
-      'If you previously had chats on this account, they cannot be recovered with a new key.',
+    'If you previously had chats on this account, they cannot be recovered with a new key.',
 
   // ---- Photo moderation / upload ----
   'common.ok': 'OK',
@@ -299,11 +299,11 @@ export const en = {
   'common.sfw_gate_b3': 'Visible pubic hair or genital areas.',
   'common.sfw_gate_b4': 'Graphic depictions of blood, injuries, wounds, or bodily harm.',
   'common.sfw_gate_b5':
-      'Tattoos, markings, symbols, or text that are obscene, discriminatory, hateful, or target individuals or groups based on protected characteristics.',
+    'Tattoos, markings, symbols, or text that are obscene, discriminatory, hateful, or target individuals or groups based on protected characteristics.',
   'common.sfw_gate_b6':
-      'Sexual gestures, poses, or visual references that imply or simulate sexual acts.',
+    'Sexual gestures, poses, or visual references that imply or simulate sexual acts.',
   'common.sfw_gate_secondary':
-      'You can still upload NSFW material in your secondary profile images.',
+    'You can still upload NSFW material in your secondary profile images.',
   'common.sfw_gate_ack': 'I understand the rules for SFW',
 
   // NSFW declaration
@@ -314,32 +314,32 @@ export const en = {
   // Lalafell NSFW modal
   'common.lalafell_nsfw_title': 'NSFW not available',
   'common.lalafell_nsfw_body':
-      "We do not allow NSFW pictures of Lalafell characters. Because Lalafells are child-like in appearance, we apply this policy uniformly to every Lalafell account and make no case-by-case exceptions.\n\nYour photo has been set back to SFW. If this photo isn't safe-for-work, please remove it and upload a different one.",
+    "We do not allow NSFW pictures of Lalafell characters. Because Lalafells are child-like in appearance, we apply this policy uniformly to every Lalafell account and make no case-by-case exceptions.\n\nYour photo has been set back to SFW. If this photo isn't safe-for-work, please remove it and upload a different one.",
 
   // Undeclared photo modal
   'common.undeclared_photo_title': 'Declaration required',
   'common.undeclared_photo_body':
-      'You must select whether your other picture is SFW or NSFW before uploading another.',
+    'You must select whether your other picture is SFW or NSFW before uploading another.',
 
   // Image requirements modal
   'common.img_requirements_title': "Image can't be used",
   'common.img_invalid': "That file isn't a valid image, or its format isn't supported.",
   'common.img_too_small': 'That image is only {0}×{1} px, which is too small.',
   'common.img_requirements_sizes':
-      'Avatars need at least {0}×{1} px and profile photos at least {2}×{3} px. Please choose a larger image.',
+    'Avatars need at least {0}×{1} px and profile photos at least {2}×{3} px. Please choose a larger image.',
 
   // Image disclaimer step
   'onboarding.header_image_disclaimer': 'Photo guidelines',
   'onboarding.disclaimer_intro':
-      'AetherLove is built for Final Fantasy XIV players. Before uploading any images, please read the following guidelines carefully.',
+    'AetherLove is built for Final Fantasy XIV players. Before uploading any images, please read the following guidelines carefully.',
   'onboarding.disclaimer_moderation':
-      'All uploads are subject to both automated and manual moderation.',
+    'All uploads are subject to both automated and manual moderation.',
   'onboarding.disclaimer_general_body':
-      'All images must depict your own Final Fantasy XIV character. Fan art, AI-generated images, real photos, and images unrelated to your character are not permitted.',
+    'All images must depict your own Final Fantasy XIV character. Fan art, AI-generated images, real photos, and images unrelated to your character are not permitted.',
   'onboarding.disclaimer_sfw_body':
-      'Your profile picture and main photo must be safe-for-work (SFW). Extra photos (slots 2–4) may be marked as adult content.',
+    'Your profile picture and main photo must be safe-for-work (SFW). Extra photos (slots 2–4) may be marked as adult content.',
   'onboarding.disclaimer_moderation_body':
-      'Every image is automatically reviewed using AI moderation APIs and assessed by human staff. Violations result in image removal and may result in account action.',
+    'Every image is automatically reviewed using AI moderation APIs and assessed by human staff. Violations result in image removal and may result in account action.',
   'onboarding.disclaimer_ack': 'I understand and agree',
 
   // Photo slot controls
@@ -352,23 +352,23 @@ export const en = {
   'profile.tab_images': 'Photos',
   'profile.images_avatar_section': 'Profile picture',
   'profile.images_avatar_desc':
-      'Your profile picture is shown in the chat list and on match cards. Use a square close-up portrait of your FFXIV character.',
+    'Your profile picture is shown in the chat list and on match cards. Use a square close-up portrait of your FFXIV character.',
   'profile.images_photos_section': 'Profile photos',
   'profile.images_photos_desc':
-      'Add portrait photos to your profile (10:16 ratio). The first slot is required; slots 2–4 are optional.',
+    'Add portrait photos to your profile (10:16 ratio). The first slot is required; slots 2–4 are optional.',
   'profile.images_nsfw_section': 'Adult content',
   'profile.images_nsfw_toggle': 'Adult (NSFW) profile',
   'profile.images_nsfw_hint':
-      'Required to appear in adult searches and to mark extra photos as NSFW.',
+    'Required to appear in adult searches and to mark extra photos as NSFW.',
   'profile.images_nsfw_locked': 'Stays on while you have an NSFW photo or adult roleplay selected.',
   'profile.images_declare_first': 'Mark every extra photo as SFW or NSFW before saving.',
   'profile.images_save_failed': 'Could not save photos: {0}',
   'profile.images_load_failed': 'Could not load photos: {0}',
   'profile.main_must_be_sfw':
-      'Your main profile picture MUST be SFW. Uploading an NSFW picture is grounds for account suspension or deletion.',
+    'Your main profile picture MUST be SFW. Uploading an NSFW picture is grounds for account suspension or deletion.',
   'profile.sfw_or_nsfw': 'Is this picture SFW or NSFW?',
   'profile.sfw_mismatch_warning':
-      'If our system detects you uploaded NSFW while SFW is selected, your photo will be held for moderation and you risk account suspension.',
+    'If our system detects you uploaded NSFW while SFW is selected, your photo will be held for moderation and you risk account suspension.',
   'profile.replace': 'Replace',
   'profile.remove': 'Remove',
   'profile.undo': 'Undo',
@@ -401,11 +401,11 @@ export const en = {
   'profile.nsfw_reveal': 'Click to show NSFW image',
   'profile.report_profile': 'Report profile',
   'profile.report_warning':
-      'False or malicious reports lead to warnings on your own account, and repeated abuse can result in suspension. Only report profiles that actually violate the rules.',
+    'False or malicious reports lead to warnings on your own account, and repeated abuse can result in suspension. Only report profiles that actually violate the rules.',
   'profile.report_prompt': "Tell our moderators what's wrong with {0}:",
   'profile.report_agree': 'I understand false reports may result in warnings against my account.',
   'profile.report_thanks':
-      "Thanks — our moderators will take a look. You won't see this profile again until you pull a fresh one from the deck.",
+    "Thanks — our moderators will take a look. You won't see this profile again until you pull a fresh one from the deck.",
 } as const;
 
 export type StringKey = keyof typeof en;

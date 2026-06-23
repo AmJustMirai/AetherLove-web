@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
-import {defineConfig, type Plugin} from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
-import {fileURLToPath, URL} from 'node:url';
+import { fileURLToPath, URL } from 'node:url';
 
 // VITE_API_BASE overrides the AetherLove server origin (defaults to production).
 //
@@ -26,49 +26,49 @@ const PROXY_TARGET = process.env.VITE_PROXY_TARGET ?? 'https://api.aetherlove.sp
 //  - connect-src lists the prod hub over https + wss. If a deployment overrides VITE_API_BASE to a
 //    different origin, this must be widened to match (otherwise REST + SignalR will be CSP-blocked).
 const CSP = [
-    "default-src 'self'",
-    "script-src 'self'",
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' blob: data:",
-    "connect-src 'self' https://api.aetherlove.space wss://api.aetherlove.space",
-    "font-src 'self' data:",
-    "object-src 'none'",
-    "base-uri 'self'",
-    "form-action 'self'",
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' blob: data:",
+  "connect-src 'self' https://api.aetherlove.space wss://api.aetherlove.space",
+  "font-src 'self' data:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
 ].join('; ');
 
 function cspMeta(): Plugin {
-    return {
-        name: 'inject-csp-meta',
-        apply: 'build',
-        transformIndexHtml(html) {
-            return html.replace(
-                '</title>',
-                `</title>\n    <meta http-equiv="Content-Security-Policy" content="${CSP}"/>`
-            );
-        },
-    };
+  return {
+    name: 'inject-csp-meta',
+    apply: 'build',
+    transformIndexHtml(html) {
+      return html.replace(
+        '</title>',
+        `</title>\n    <meta http-equiv="Content-Security-Policy" content="${CSP}"/>`
+      );
+    },
+  };
 }
 
 export default defineConfig({
-    plugins: [react(), cspMeta()],
-    resolve: {
-        alias: {'@': fileURLToPath(new URL('./src', import.meta.url))},
+  plugins: [react(), cspMeta()],
+  resolve: {
+    alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: PROXY_TARGET,
+        changeOrigin: true,
+        secure: true,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
     },
-    server: {
-        proxy: {
-            '/api': {
-                target: PROXY_TARGET,
-                changeOrigin: true,
-                secure: true,
-                ws: true,
-                rewrite: (path) => path.replace(/^\/api/, ''),
-            },
-        },
-    },
-    test: {
-        globals: true,
-        environment: 'node',
-        include: ['tests/**/*.test.ts', 'src/**/*.test.ts'],
-    },
+  },
+  test: {
+    globals: true,
+    environment: 'node',
+    include: ['tests/**/*.test.ts', 'src/**/*.test.ts'],
+  },
 });
