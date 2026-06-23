@@ -1,16 +1,32 @@
 # AetherLove - Web Client
 
-Standalone browser rewrite of the AetherLove FFXIV matchmaking plugin.
+A standalone browser-based port of the AetherLove FFXIV matchmaking plugin.
 
-No, I did not make this.
-Yes, this is a port from the plugin. All done through the power of water wasting (Claude).
+This project is not an original creation. It is a port of the existing plugin, rewritten for the browser.
 
-## I will not actively support, maintain and or bring updates to this.
+---
 
-## There's an integrity check on the public keys you receive. If they ever decide to do a MiTM you'd get a notification from the website.
+## Support & Maintenance
 
-## This is all open-source, feel free to study explore and conduct research for "untrusted behaviour" that is deemed by from the Plugin Developer. Doubt much will be found though. 
+This project is provided as-is. There are no plans for active support, ongoing maintenance, or feature parity updates with the original plugin.
+
+---
+
+## Security & Trust
+
+**Public-hosted instances should be treated with suspicion.**
+If you are using a version of this client hosted by someone else, you have no way to verify that the source has not been tampered with. This applies equally any Dalamud plugin. Aetherlove included. 
+
+There is an integrity check on public keys received through the client. Should a man-in-the-middle attempt occur, the site will surface a notification. But this is a mitigation, not a guarantee of safety.
+
+---
+
+## Open Source
+
+The full source is available for review. Anyone is welcome to audit the code, explore its behavior, and assess any concerns around what the original plugin developer has described as "untrusted behaviour." Draw your own conclusions.
+
+---
 
 ## Disclaimer
-**This project is not affiliated with, endorsed by, or associated with the original AetherLove plugin, its developers, or any related entities.**
-It is an independent, unofficial browser-based port.
+
+This project is not affiliated with, endorsed by, or associated with the AetherLove plugin, its developers, or any related parties. It is an independent, unofficial port with no formal relationship to the original project.
