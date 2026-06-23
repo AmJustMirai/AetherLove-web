@@ -1,2 +1,5 @@
 allowBuilds:
   esbuild: false
+
+overrides:
+  '@tybys/wasm-util': '0.10.2'
