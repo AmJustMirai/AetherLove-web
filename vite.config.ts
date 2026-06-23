@@ -1,4 +1,4 @@
-/// <reference types="vitest/config" />
+/// <reference types="vitest" />
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
@@ -67,6 +67,7 @@ export default defineConfig({
       },
     },
   },
+  // @ts-ignore
   test: {
     globals: true,
     environment: 'node',
