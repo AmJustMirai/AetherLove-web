@@ -32,8 +32,12 @@ export function SettingsScreen() {
     return (
         <div className="mx-auto flex h-full w-full max-w-2xl flex-col">
             <header className="px-6 pb-3 pt-6 lg:px-8 lg:pt-8">
-                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent-light/80">AetherLove</p>
-                <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-strong">{t('settings.title')}</h1>
+                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent-light/80">
+                    AetherLove
+                </p>
+                <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-strong">
+                    {t('settings.title')}
+                </h1>
             </header>
 
             <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-10 lg:px-6">
@@ -44,8 +48,14 @@ export function SettingsScreen() {
                 {view === 'warnings' && <WarningsView t={t} onBack={() => setView('normal')}/>}
                 {view === 'modMessages' && <ModMessagesView t={t} onBack={() => setView('normal')}/>}
                 {view === 'feedback' && <FeedbackView t={t} onBack={() => setView('normal')}/>}
-                {view === 'tos' && <TextPanel title={t('settings.terms_of_service')} body={t('onboarding.tos_body')}
-                                              onBack={() => setView('normal')} t={t}/>}
+                {view === 'tos' && (
+                    <TextPanel
+                        title={t('settings.terms_of_service')}
+                        body={t('onboarding.tos_body')}
+                        onBack={() => setView('normal')}
+                        t={t}
+                    />
+                )}
                 {view === 'contributors' && <ContributorsView t={t} onBack={() => setView('normal')}/>}
             </div>
         </div>
@@ -57,8 +67,11 @@ type T = ReturnType<typeof useT>;
 // ---- Shared bits -------------------------------------------------------------------------
 
 function SectionLabel({children}: { children: string }) {
-    return <h2
-        className="mb-2 mt-6 text-[13px] font-semibold uppercase tracking-wide text-accent-light">{children}</h2>;
+    return (
+        <h2 className="mb-2 mt-6 text-[13px] font-semibold uppercase tracking-wide text-accent-light">
+            {children}
+        </h2>
+    );
 }
 
 function Toggle({
@@ -90,13 +103,13 @@ function Toggle({
             <span
                 className={cn(
                     'relative h-6 w-11 shrink-0 rounded-full transition-colors',
-                    checked ? 'bg-accent' : 'bg-surface/15',
+                    checked ? 'bg-accent' : 'bg-surface/15'
                 )}
             >
         <span
             className={cn(
                 'absolute top-0.5 h-5 w-5 rounded-full bg-strong shadow transition-transform',
-                checked ? 'left-0.5 translate-x-5' : 'left-0.5',
+                checked ? 'left-0.5 translate-x-5' : 'left-0.5'
             )}
         />
       </span>
@@ -104,7 +117,15 @@ function Toggle({
     );
 }
 
-function MenuRow({label, onClick, badge}: { label: string; onClick: () => void; badge?: number }) {
+function MenuRow({
+                     label,
+                     onClick,
+                     badge,
+                 }: {
+    label: string;
+    onClick: () => void;
+    badge?: number;
+}) {
     return (
         <button
             type="button"
@@ -113,10 +134,13 @@ function MenuRow({label, onClick, badge}: { label: string; onClick: () => void; 
         >
             <span className="flex-1">{label}</span>
             {badge != null && badge > 0 && (
-                <span
-                    className="rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-on-accent">{badge}</span>
+                <span className="rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-on-accent">
+          {badge}
+        </span>
             )}
-            <span className="text-muted" aria-hidden>›</span>
+            <span className="text-muted" aria-hidden>
+        ›
+      </span>
         </button>
     );
 }
@@ -185,13 +209,21 @@ function NormalView({t, setView}: { t: T; setView: (v: View) => void }) {
             <SectionLabel>{t('settings.section_danger_zone')}</SectionLabel>
             <div className="space-y-2">
                 {warnings.length > 0 && (
-                    <Button variant="ghost" className="w-full justify-start" onClick={() => setView('warnings')}>
+                    <Button
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => setView('warnings')}
+                    >
                         {unseenWarnings > 0
                             ? t('settings.warnings_button_unseen', unseenWarnings, warnings.length)
                             : t('settings.warnings_button', warnings.length)}
                     </Button>
                 )}
-                <Button variant="danger" className="w-full justify-start" onClick={() => setView('confirmDelete')}>
+                <Button
+                    variant="danger"
+                    className="w-full justify-start"
+                    onClick={() => setView('confirmDelete')}
+                >
                     {t('settings.delete_account')}
                 </Button>
             </div>
@@ -213,7 +245,9 @@ function NsfwProfileToggle({t}: { t: T }) {
                 const detail = await hubClient.getMyProfileDetail();
                 if (cancelled) return;
                 setOn(detail.IsNsfw);
-                setLocked(hasFlag(detail.LookingForMask, LookingFor.Erp) || detail.Photos.some((p) => p.IsNsfw));
+                setLocked(
+                    hasFlag(detail.LookingForMask, LookingFor.Erp) || detail.Photos.some((p) => p.IsNsfw)
+                );
                 setLoaded(true);
             } catch {
                 if (!cancelled) setError(t('settings.nsfw_load_failed'));
@@ -249,7 +283,9 @@ function NsfwProfileToggle({t}: { t: T }) {
                 onChange={set}
                 disabled={!loaded || busy}
             />
-            {locked && on && <p className="px-1 pb-1 text-[12px] text-amber">{t('settings.nsfw_profile_locked')}</p>}
+            {locked && on && (
+                <p className="px-1 pb-1 text-[12px] text-amber">{t('settings.nsfw_profile_locked')}</p>
+            )}
             {error && <p className="px-1 pb-1 text-[12px] text-danger">{error}</p>}
         </div>
     );
@@ -285,7 +321,9 @@ function ConfirmDeleteView({t, setView}: { t: T; setView: (v: View) => void }) {
                     t('settings.delete_bullet_pictures'),
                 ].map((line) => (
                     <li key={line} className="flex gap-2">
-                        <span className="text-danger" aria-hidden>•</span>
+            <span className="text-danger" aria-hidden>
+              •
+            </span>
                         {line}
                     </li>
                 ))}
@@ -332,7 +370,9 @@ function WarningsView({t, onBack}: { t: T; onBack: () => void }) {
     const warnings = useStore(sessionStore).connection?.Warnings ?? [];
     return (
         <div className="pt-2">
-            <h2 className="mb-3 font-display text-xl font-bold text-strong">{t('settings.warnings_title')}</h2>
+            <h2 className="mb-3 font-display text-xl font-bold text-strong">
+                {t('settings.warnings_title')}
+            </h2>
             {warnings.length === 0 ? (
                 <p className="text-[14px] text-muted">{t('settings.no_warnings')}</p>
             ) : (
@@ -358,7 +398,9 @@ function ModMessagesView({t, onBack}: { t: T; onBack: () => void }) {
     const messages = useStore(sessionStore).connection?.ModeratorMessages ?? [];
     return (
         <div className="pt-2">
-            <h2 className="mb-3 font-display text-xl font-bold text-strong">{t('settings.modmsg_title')}</h2>
+            <h2 className="mb-3 font-display text-xl font-bold text-strong">
+                {t('settings.modmsg_title')}
+            </h2>
             {messages.length === 0 ? (
                 <p className="text-[14px] text-muted">{t('settings.no_modmsg')}</p>
             ) : (
@@ -368,7 +410,9 @@ function ModMessagesView({t, onBack}: { t: T; onBack: () => void }) {
                             <p className="font-mono text-[11px] uppercase tracking-wide text-muted">
                                 {new Date(m.CreatedAtUtc).toLocaleString()}
                             </p>
-                            <p className={cn('mt-1 text-[14px]', m.Seen ? 'text-muted' : 'text-accent-light')}>{m.Body}</p>
+                            <p className={cn('mt-1 text-[14px]', m.Seen ? 'text-muted' : 'text-accent-light')}>
+                                {m.Body}
+                            </p>
                         </Card>
                     ))}
                 </div>
@@ -380,7 +424,17 @@ function ModMessagesView({t, onBack}: { t: T; onBack: () => void }) {
     );
 }
 
-function TextPanel({title, body, onBack, t}: { title: string; body: string; onBack: () => void; t: T }) {
+function TextPanel({
+                       title,
+                       body,
+                       onBack,
+                       t,
+                   }: {
+    title: string;
+    body: string;
+    onBack: () => void;
+    t: T;
+}) {
     return (
         <div className="pt-2">
             <h2 className="mb-3 font-display text-xl font-bold text-strong">{title}</h2>
@@ -401,7 +455,9 @@ function ContributorsView({t, onBack}: { t: T; onBack: () => void }) {
                         d="M12 21s-7.5-4.6-10-9.2C.5 8.6 2 5.5 5 5.5c1.9 0 3.2 1.1 4 2.3.8-1.2 2.1-2.3 4-2.3 3 0 4.5 3.1 3 6.3C19.5 16.4 12 21 12 21z"/>
                 </svg>
             </div>
-            <h2 className="mt-3 font-display text-xl font-bold text-strong">{t('settings.contributors_title')}</h2>
+            <h2 className="mt-3 font-display text-xl font-bold text-strong">
+                {t('settings.contributors_title')}
+            </h2>
             <p className="mt-2 text-[14px] text-subtle">{t('settings.contributors_intro')}</p>
             <Button variant="ghost" className="mt-6" onClick={onBack}>
                 {t('settings.back_to_settings')}
@@ -448,7 +504,9 @@ function FeedbackView({t, onBack}: { t: T; onBack: () => void }) {
 
     return (
         <div className="pt-2">
-            <h2 className="mb-2 font-display text-xl font-bold text-strong">{t('settings.send_feedback')}</h2>
+            <h2 className="mb-2 font-display text-xl font-bold text-strong">
+                {t('settings.send_feedback')}
+            </h2>
             <p className="text-[14px] text-subtle">{t('settings.feedback_intro')}</p>
             <p className="mt-1 text-[13px] text-amber">{t('settings.feedback_note')}</p>
 
@@ -461,7 +519,9 @@ function FeedbackView({t, onBack}: { t: T; onBack: () => void }) {
                         onClick={() => setKind(k.value)}
                         className={cn(
                             'flex-1 rounded-xl border px-3 py-2 text-[13px] font-medium transition-colors',
-                            kind === k.value ? 'border-accent bg-accent/20 text-strong' : 'border-line/10 text-subtle hover:bg-surface/5',
+                            kind === k.value
+                                ? 'border-accent bg-accent/20 text-strong'
+                                : 'border-line/10 text-subtle hover:bg-surface/5'
                         )}
                     >
                         {k.label}
@@ -470,15 +530,26 @@ function FeedbackView({t, onBack}: { t: T; onBack: () => void }) {
             </div>
 
             <div className="mt-4">
-                <TextInput label={t('settings.feedback_message')} value={text} onChange={setText} multiline rows={6}
-                           maxLength={4000}/>
+                <TextInput
+                    label={t('settings.feedback_message')}
+                    value={text}
+                    onChange={setText}
+                    multiline
+                    rows={6}
+                    maxLength={4000}
+                />
             </div>
 
             <div className="mt-4 flex gap-2">
                 <Button variant="ghost" onClick={onBack}>
                     {t('settings.back')}
                 </Button>
-                <Button className="flex-1" onClick={submit} loading={submitting} disabled={text.trim().length === 0}>
+                <Button
+                    className="flex-1"
+                    onClick={submit}
+                    loading={submitting}
+                    disabled={text.trim().length === 0}
+                >
                     {submitting ? t('settings.feedback_sending') : t('settings.feedback_submit')}
                 </Button>
             </div>

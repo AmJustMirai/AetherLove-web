@@ -31,10 +31,12 @@ export function WarningsAcknowledgeScreen() {
                         ...s,
                         connection: {
                             ...s.connection,
-                            Warnings: s.connection.Warnings.map((w) => (ids.includes(w.Id) ? {...w, Seen: true} : w)),
+                            Warnings: s.connection.Warnings.map((w) =>
+                                ids.includes(w.Id) ? {...w, Seen: true} : w
+                            ),
                         },
                     }
-                    : s,
+                    : s
             );
             router.navigate(resolveNextScreen());
         } catch (e) {
@@ -43,7 +45,10 @@ export function WarningsAcknowledgeScreen() {
         }
     }
 
-    const heading = unseen.length === 1 ? t('common.warnings_heading_one') : t('common.warnings_heading_many', unseen.length);
+    const heading =
+        unseen.length === 1
+            ? t('common.warnings_heading_one')
+            : t('common.warnings_heading_many', unseen.length);
 
     return (
         <div className="mx-auto flex h-full w-full max-w-md flex-col px-6 pt-8">
@@ -60,7 +65,9 @@ export function WarningsAcknowledgeScreen() {
                 ))}
             </div>
 
-            {error && <p className="mb-2 text-[13px] text-danger">{t('common.warnings_submit_error', error)}</p>}
+            {error && (
+                <p className="mb-2 text-[13px] text-danger">{t('common.warnings_submit_error', error)}</p>
+            )}
             <Button className="mb-6 w-full" loading={submitting} onClick={() => void acknowledge()}>
                 {submitting ? t('common.acknowledging') : t('common.i_understand')}
             </Button>

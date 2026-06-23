@@ -39,14 +39,16 @@ export function SfwGateModal({open, onAccept, onCancel}: GateModalProps) {
         >
             <p className="mb-3 text-[13px] font-semibold text-danger">{t('common.sfw_gate_subtitle')}</p>
             <ul className="space-y-1.5">
-                {([
-                    'common.sfw_gate_b1',
-                    'common.sfw_gate_b2',
-                    'common.sfw_gate_b3',
-                    'common.sfw_gate_b4',
-                    'common.sfw_gate_b5',
-                    'common.sfw_gate_b6',
-                ] as const).map((key) => (
+                {(
+                    [
+                        'common.sfw_gate_b1',
+                        'common.sfw_gate_b2',
+                        'common.sfw_gate_b3',
+                        'common.sfw_gate_b4',
+                        'common.sfw_gate_b5',
+                        'common.sfw_gate_b6',
+                    ] as const
+                ).map((key) => (
                     <li key={key} className="flex items-start gap-2 text-[13px] text-danger/90">
                         <span className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full bg-danger/80"/>
                         {t(key)}

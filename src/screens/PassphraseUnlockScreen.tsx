@@ -28,7 +28,8 @@ export function PassphraseUnlockScreen() {
                 if (!b) setError(t('common.passphrase_bundle_load_failed'));
                 else setBundle(b);
             } catch (e) {
-                if (!cancelled) setError(t('common.server_unreachable_detail', String((e as Error)?.message ?? e)));
+                if (!cancelled)
+                    setError(t('common.server_unreachable_detail', String((e as Error)?.message ?? e)));
             } finally {
                 if (!cancelled) setFetching(false);
             }
@@ -68,7 +69,9 @@ export function PassphraseUnlockScreen() {
 
     return (
         <div className="mx-auto flex h-full w-full max-w-md flex-col px-6 pt-10">
-            <h1 className="font-display text-2xl font-bold text-accent-light">{t('common.passphrase_title')}</h1>
+            <h1 className="font-display text-2xl font-bold text-accent-light">
+                {t('common.passphrase_title')}
+            </h1>
             <p className="mt-2 text-[14px] leading-relaxed text-body">{t('common.passphrase_intro')}</p>
 
             <div className="mt-6 space-y-3">

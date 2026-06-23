@@ -35,7 +35,7 @@ export function TextInput({
         'w-full rounded-xl border bg-void/30 px-3 py-2 text-[15px] text-body outline-none transition-colors',
         'placeholder:text-muted focus:border-accent',
         nsfw ? 'border-danger/70 bg-[rgb(140_26_26/0.35)]' : 'border-line/10',
-        error && 'border-danger',
+        error && 'border-danger'
     );
 
     const common = {
@@ -50,15 +50,20 @@ export function TextInput({
         <label className="block">
             {label && <span className="mb-1 block text-[13px] font-medium text-subtle">{label}</span>}
             {multiline ? (
-                <textarea {...(common as TextareaHTMLAttributes<HTMLTextAreaElement>)} rows={rows}
-                          className={cn(base, 'resize-none')}/>
+                <textarea
+                    {...(common as TextareaHTMLAttributes<HTMLTextAreaElement>)}
+                    rows={rows}
+                    className={cn(base, 'resize-none')}
+                />
             ) : (
                 <input {...common} type={type} className={base}/>
             )}
             <span className="mt-1 flex justify-between text-[11px]">
         {error ? <span className="text-danger">{error}</span> : <span/>}
                 {maxLength != null && (
-                    <span className={cn('font-mono', value.length > maxLength ? 'text-danger' : 'text-muted')}>
+                    <span
+                        className={cn('font-mono', value.length > maxLength ? 'text-danger' : 'text-muted')}
+                    >
             {value.length}/{maxLength}
           </span>
                 )}

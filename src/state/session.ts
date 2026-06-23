@@ -12,13 +12,7 @@ import type {AetherConnectionDto, OnboardingStateDto} from '../shared/dtos';
 import type {IdentityKeyPair} from '../services/crypto/cryptoService';
 import {Screen} from '../app/router';
 
-export type BootResult =
-    | 'pending'
-    | 'noSession'
-    | 'onboarding'
-    | 'active'
-    | 'banned'
-    | 'outdated';
+export type BootResult = 'pending' | 'noSession' | 'onboarding' | 'active' | 'banned' | 'outdated';
 
 export interface SessionState {
     result: BootResult;
@@ -101,7 +95,7 @@ async function runCore(): Promise<BootResult> {
         }
 
         const status = await hubClient.getConnectionInfo();
-        patch({connection: status, identity: (await keyStorage.load())});
+        patch({connection: status, identity: await keyStorage.load()});
 
         if (status.Status === ProfileLifecycle.Onboarding) {
             try {
@@ -130,7 +124,11 @@ async function runCore(): Promise<BootResult> {
     } catch (e) {
         // Mirrors OutdatedClientException handling; we can't distinguish it precisely here, so treat an
         // explicit version rejection (surfaced as a message) as outdated, otherwise fall back to no-session.
-        if (String((e as Error)?.message ?? '').toLowerCase().includes('version')) {
+        if (
+            String((e as Error)?.message ?? '')
+                .toLowerCase()
+                .includes('version')
+        ) {
             await connection.disconnect();
             return settle('outdated', null);
         }

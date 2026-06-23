@@ -32,7 +32,7 @@ export function NewsBody({lines}: { lines: NewsLineDto[] }) {
                     <p key={i} className="whitespace-pre-line text-[15px] leading-relaxed text-body">
                         {line.Text}
                     </p>
-                ) : null,
+                ) : null
             )}
         </div>
     );

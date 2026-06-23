@@ -14,7 +14,8 @@ const DEFAULT_API_BASE = 'https://api.aetherlove.space/';
  */
 export const API_BASE: string = (() => {
     const override = import.meta.env?.VITE_API_BASE as string | undefined;
-    const raw = override ?? (import.meta.env?.DEV ? `${window.location.origin}/api/` : DEFAULT_API_BASE);
+    const raw =
+        override ?? (import.meta.env?.DEV ? `${window.location.origin}/api/` : DEFAULT_API_BASE);
     return raw.endsWith('/') ? raw : raw + '/';
 })();
 

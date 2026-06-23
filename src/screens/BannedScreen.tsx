@@ -22,7 +22,9 @@ export function BannedScreen() {
                     <p className="mt-1 text-[14px] leading-relaxed text-body">{reason}</p>
                 </div>
             )}
-            <p className="mt-6 text-[13px] leading-relaxed text-muted">{t('common.banned_uninstall_hint')}</p>
+            <p className="mt-6 text-[13px] leading-relaxed text-muted">
+                {t('common.banned_uninstall_hint')}
+            </p>
         </div>
     );
 }

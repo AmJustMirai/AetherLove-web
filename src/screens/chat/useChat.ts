@@ -5,7 +5,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {hubClient} from '../../services/signal/hubClient';
 import {decryptFromPeer, encryptForPeer} from '../../services/messaging/chatCrypto';
-import {acceptPeerKey, type PeerKeyCheck, verifyPeerKey} from '../../services/messaging/peerKeyTrust';
+import {acceptPeerKey, type PeerKeyCheck, verifyPeerKey,} from '../../services/messaging/peerKeyTrust';
 import {sessionStore} from '../../state/session';
 import {onLive} from '../../state/events';
 import type {Guid} from '../../shared/wire';
@@ -37,7 +37,7 @@ export function useChat(peerId: Guid) {
         selfBroken: false,
         messages: [],
         error: null,
-        keyAlert: null
+        keyAlert: null,
     });
     const peerKeyRef = useRef<Uint8Array | null>(null);
 
@@ -47,7 +47,14 @@ export function useChat(peerId: Guid) {
             // No unlocked identity: if the server holds no bundle at all, the user's own E2E is broken
             // (self-broken); otherwise the bundle just needs unlocking on this device (locked).
             const selfBroken = sessionStore.get().connection?.HasKeyBundle === false;
-            setState({loading: false, locked: true, selfBroken, messages: [], error: null, keyAlert: null});
+            setState({
+                loading: false,
+                locked: true,
+                selfBroken,
+                messages: [],
+                error: null,
+                keyAlert: null,
+            });
             return;
         }
         setState((s) => ({...s, loading: true, error: null}));
@@ -66,9 +73,16 @@ export function useChat(peerId: Guid) {
                     text: await decryptFromPeer(identity, convo.PeerPublicKey, m),
                     createdAtUtc: m.CreatedAtUtc,
                     read: m.ReadByOtherAtUtc != null,
-                })),
+                }))
             );
-            setState({loading: false, locked: false, selfBroken: false, messages, error: null, keyAlert});
+            setState({
+                loading: false,
+                locked: false,
+                selfBroken: false,
+                messages,
+                error: null,
+                keyAlert,
+            });
             // Mark read on open (mirrors MarkConversationReadAsync).
             void hubClient.markConversationRead(peerId).catch(() => undefined);
         } catch (e) {
@@ -87,16 +101,22 @@ export function useChat(peerId: Guid) {
             const identity = sessionStore.get().identity;
             const key = peerKeyRef.current;
             if (!identity || !key) return;
-            const text = await decryptFromPeer(identity, key, {Ciphertext: p.ciphertext, Nonce: p.nonce});
+            const text = await decryptFromPeer(identity, key, {
+                Ciphertext: p.ciphertext,
+                Nonce: p.nonce,
+            });
             setState((s) => ({
                 ...s,
-                messages: [...s.messages, {
-                    id: p.messageId,
-                    fromMe: false,
-                    text,
-                    createdAtUtc: p.createdAtUtc,
-                    read: false
-                }],
+                messages: [
+                    ...s.messages,
+                    {
+                        id: p.messageId,
+                        fromMe: false,
+                        text,
+                        createdAtUtc: p.createdAtUtc,
+                        read: false,
+                    },
+                ],
             }));
             void hubClient.markConversationRead(peerId).catch(() => undefined);
         });
@@ -126,11 +146,17 @@ export function useChat(peerId: Guid) {
                 ...s,
                 messages: [
                     ...s.messages,
-                    {id: resp.MessageId, fromMe: true, text: trimmed, createdAtUtc: resp.CreatedAtUtc, read: false},
+                    {
+                        id: resp.MessageId,
+                        fromMe: true,
+                        text: trimmed,
+                        createdAtUtc: resp.CreatedAtUtc,
+                        read: false,
+                    },
                 ],
             }));
         },
-        [peerId],
+        [peerId]
     );
 
     // User has verified the new key out-of-band: re-pin it and clear the warning.

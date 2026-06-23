@@ -27,7 +27,7 @@ export function ThemePicker() {
                             'flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-[14px] transition-colors',
                             selected
                                 ? 'border-accent bg-accent/20 text-strong'
-                                : 'border-line/10 text-subtle hover:bg-surface/5',
+                                : 'border-line/10 text-subtle hover:bg-surface/5'
                         )}
                     >
             <span
@@ -40,7 +40,7 @@ export function ThemePicker() {
                         <span
                             className={cn(
                                 'shrink-0 rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide',
-                                selected ? 'bg-accent/30 text-strong' : 'bg-surface/10 text-muted',
+                                selected ? 'bg-accent/30 text-strong' : 'bg-surface/10 text-muted'
                             )}
                         >
               {t(def.mode === 'light' ? 'theme.mode_light' : 'theme.mode_dark')}

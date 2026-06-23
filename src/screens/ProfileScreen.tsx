@@ -22,7 +22,7 @@ import {
     RACE_OPTIONS,
     REGION_OPTIONS,
 } from '../shared/enumLabels';
-import {Avatar, Button, Chip, LoadingSpinner, Modal, pushToast, TextInput} from '../ui/components';
+import {Avatar, Button, Chip, LoadingSpinner, Modal, pushToast, TextInput,} from '../ui/components';
 import {revokeUrl, webpUrl} from '../ui/image';
 import {safeColor} from '../ui/color';
 import {useT} from '../i18n/useT';
@@ -121,7 +121,10 @@ export function ProfileScreen() {
 
 function PeerBody({t, detail, flairs}: { t: T; detail: ProfileDetailDto; flairs: FlairDto[] }) {
     const lang = useStore(languageStore);
-    const photos = useMemo(() => [...detail.Photos].sort((a, b) => a.Order - b.Order), [detail.Photos]);
+    const photos = useMemo(
+        () => [...detail.Photos].sort((a, b) => a.Order - b.Order),
+        [detail.Photos]
+    );
     const languages = maskLabels(LANGUAGE_OPTIONS, detail.LanguageMask);
     const lookingFor = maskLabels(LOOKING_FOR_OPTIONS, detail.LookingForMask);
     const interests = maskLabels(CONTENT_OPTIONS, detail.ContentInterestMask);
@@ -136,7 +139,11 @@ function PeerBody({t, detail, flairs}: { t: T; detail: ProfileDetailDto; flairs:
             <div className="mt-4">
                 <h2 className="font-display text-2xl font-bold text-strong">{detail.DisplayName}</h2>
                 <p className="text-[13px] text-subtle">
-                    {[labelOf(RACE_OPTIONS, detail.Race), labelOf(GENDER_OPTIONS, detail.Gender), labelOf(REGION_OPTIONS, detail.Region)]
+                    {[
+                        labelOf(RACE_OPTIONS, detail.Race),
+                        labelOf(GENDER_OPTIONS, detail.Gender),
+                        labelOf(REGION_OPTIONS, detail.Region),
+                    ]
                         .filter(Boolean)
                         .join(' · ')}
                 </p>
@@ -164,11 +171,22 @@ function PeerBody({t, detail, flairs}: { t: T; detail: ProfileDetailDto; flairs:
                 </p>
             </Section>
 
-            {languages.length > 0 && <ChipSection title={t('profile.section_languages')} labels={languages}/>}
-            {lookingFor.length > 0 && <ChipSection title={t('profile.section_looking_for')} labels={lookingFor}/>}
-            {interests.length > 0 && <ChipSection title={t('profile.section_interests')} labels={interests} gradient/>}
+            {languages.length > 0 && (
+                <ChipSection title={t('profile.section_languages')} labels={languages}/>
+            )}
+            {lookingFor.length > 0 && (
+                <ChipSection title={t('profile.section_looking_for')} labels={lookingFor}/>
+            )}
+            {interests.length > 0 && (
+                <ChipSection title={t('profile.section_interests')} labels={interests} gradient/>
+            )}
 
-            {(job || expansion || detail.FavoriteAnime || detail.FavoriteMovie || detail.FavoriteFFCharacter || detail.FavoriteLocationName) && (
+            {(job ||
+                expansion ||
+                detail.FavoriteAnime ||
+                detail.FavoriteMovie ||
+                detail.FavoriteFFCharacter ||
+                detail.FavoriteLocationName) && (
                 <Section title={t('profile.section_favourites')}>
                     <dl className="grid grid-cols-1 gap-x-6 gap-y-1.5 sm:grid-cols-2">
                         <FavRow label={t('profile.fav_job')} value={job}/>
@@ -209,16 +227,30 @@ function PhotoCarousel({t, photos}: { t: T; photos: ProfilePhotoDto[] }) {
             )}
             {photos.length > 1 && (
                 <>
-                    <button onClick={() => step(-1)} aria-label="Previous"
-                            className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-scrim/40 px-3 py-2 text-white">‹
+                    <button
+                        onClick={() => step(-1)}
+                        aria-label="Previous"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-scrim/40 px-3 py-2 text-white"
+                    >
+                        ‹
                     </button>
-                    <button onClick={() => step(1)} aria-label="Next"
-                            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-scrim/40 px-3 py-2 text-white">›
+                    <button
+                        onClick={() => step(1)}
+                        aria-label="Next"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-scrim/40 px-3 py-2 text-white"
+                    >
+                        ›
                     </button>
                     <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
                         {photos.map((p, i) => (
-                            <span key={p.Order}
-                                  className={i === idx ? 'h-1.5 w-4 rounded-full bg-white' : 'h-1.5 w-1.5 rounded-full bg-white/50'}/>
+                            <span
+                                key={p.Order}
+                                className={
+                                    i === idx
+                                        ? 'h-1.5 w-4 rounded-full bg-white'
+                                        : 'h-1.5 w-1.5 rounded-full bg-white/50'
+                                }
+                            />
                         ))}
                     </div>
                 </>
@@ -279,19 +311,34 @@ function ReportControl({t, profileId, name}: { t: T; profileId: string; name: st
                 <p className="text-[13px] leading-relaxed text-muted">{t('profile.report_warning')}</p>
                 <p className="mt-3 text-[14px] text-body">{t('profile.report_prompt', name)}</p>
                 <div className="mt-3">
-                    <TextInput label="" value={reason} onChange={setReason} multiline rows={4} maxLength={500}/>
+                    <TextInput
+                        label=""
+                        value={reason}
+                        onChange={setReason}
+                        multiline
+                        rows={4}
+                        maxLength={500}
+                    />
                 </div>
                 <label className="mt-2 flex items-start gap-2 text-[13px] text-body">
-                    <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)}
-                           className="mt-0.5"/>
+                    <input
+                        type="checkbox"
+                        checked={agree}
+                        onChange={(e) => setAgree(e.target.checked)}
+                        className="mt-0.5"
+                    />
                     {t('profile.report_agree')}
                 </label>
                 <div className="mt-4 flex justify-end gap-2">
                     <Button variant="ghost" onClick={() => setOpen(false)}>
                         {t('common.cancel')}
                     </Button>
-                    <Button variant="danger" disabled={!agree || reason.trim().length === 0} loading={submitting}
-                            onClick={() => void submit()}>
+                    <Button
+                        variant="danger"
+                        disabled={!agree || reason.trim().length === 0}
+                        loading={submitting}
+                        onClick={() => void submit()}
+                    >
                         {t('profile.report_profile')}
                     </Button>
                 </div>
@@ -303,13 +350,23 @@ function ReportControl({t, profileId, name}: { t: T; profileId: string; name: st
 function Section({title, children}: { title: string; children: ReactNode }) {
     return (
         <div className="mt-6">
-            <h3 className="mb-2 text-[13px] font-semibold uppercase tracking-wide text-accent-light">{title}</h3>
+            <h3 className="mb-2 text-[13px] font-semibold uppercase tracking-wide text-accent-light">
+                {title}
+            </h3>
             {children}
         </div>
     );
 }
 
-function ChipSection({title, labels, gradient}: { title: string; labels: string[]; gradient?: boolean }) {
+function ChipSection({
+                         title,
+                         labels,
+                         gradient,
+                     }: {
+    title: string;
+    labels: string[];
+    gradient?: boolean;
+}) {
     return (
         <Section title={title}>
             <div className="flex flex-wrap gap-2">

@@ -44,7 +44,7 @@ function cspMeta(): Plugin {
         transformIndexHtml(html) {
             return html.replace(
                 '</title>',
-                `</title>\n    <meta http-equiv="Content-Security-Policy" content="${CSP}"/>`,
+                `</title>\n    <meta http-equiv="Content-Security-Policy" content="${CSP}"/>`
             );
         },
     };

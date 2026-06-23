@@ -27,7 +27,7 @@ export function Chip({label, selected, onToggle, gradient = false, disabled = fa
                     ? gradient
                         ? 'border-transparent bg-gradient-to-r from-secondary-start to-secondary-end text-on-accent'
                         : 'border-accent bg-accent text-on-accent'
-                    : 'border-accent/40 bg-chip-fill text-subtle hover:border-accent/70 hover:text-body',
+                    : 'border-accent/40 bg-chip-fill text-subtle hover:border-accent/70 hover:text-body'
             )}
         >
             {label}

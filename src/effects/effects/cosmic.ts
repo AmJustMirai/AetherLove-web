@@ -65,7 +65,21 @@ export class CosmicEffect implements MatchEffect {
         avatarCircle(ctx, lx, cy, r, content.ownAvatar, rgba(s.accentLight, 1), 3);
         avatarCircle(ctx, rx, cy, r, content.peerAvatar, rgba(s.accentLight, 1), 3);
 
-        centerText(ctx, cx, h * 0.2, "It's a match!", '800 36px "Bricolage Grotesque Variable", sans-serif', rgba([255, 255, 255], textA));
-        centerText(ctx, cx, cy + r + 30, `${content.ownName}  &  ${content.peerName}`, '600 15px "Hanken Grotesk Variable", sans-serif', rgba(s.accentLight, textA));
+        centerText(
+            ctx,
+            cx,
+            h * 0.2,
+            "It's a match!",
+            '800 36px "Bricolage Grotesque Variable", sans-serif',
+            rgba([255, 255, 255], textA)
+        );
+        centerText(
+            ctx,
+            cx,
+            cy + r + 30,
+            `${content.ownName}  &  ${content.peerName}`,
+            '600 15px "Hanken Grotesk Variable", sans-serif',
+            rgba(s.accentLight, textA)
+        );
     }
 }

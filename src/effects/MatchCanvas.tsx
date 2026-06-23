@@ -8,10 +8,16 @@ import type {MatchContent, MatchEffect, Scene} from './types';
 import {DESIGN} from '../ui/scale';
 import {prefersReducedMotion} from './reduceMotion';
 
-function readRgbVar(el: HTMLElement, name: string, fallback: [number, number, number]): [number, number, number] {
+function readRgbVar(
+    el: HTMLElement,
+    name: string,
+    fallback: [number, number, number]
+): [number, number, number] {
     const raw = getComputedStyle(el).getPropertyValue(name).trim();
     const parts = raw.split(/\s+/).map(Number);
-    return parts.length === 3 && parts.every((n) => !Number.isNaN(n)) ? (parts as [number, number, number]) : fallback;
+    return parts.length === 3 && parts.every((n) => !Number.isNaN(n))
+        ? (parts as [number, number, number])
+        : fallback;
 }
 
 export function MatchCanvas({effect, content}: { effect: MatchEffect; content: MatchContent }) {

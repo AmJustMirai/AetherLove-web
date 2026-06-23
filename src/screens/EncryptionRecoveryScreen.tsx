@@ -32,7 +32,7 @@ export function EncryptionRecoveryScreen() {
             await hubClient.uploadKeyBundle(bundle);
             await setIdentity(identity);
             sessionStore.update((s) =>
-                s.connection ? {...s, connection: {...s.connection, HasKeyBundle: true}} : s,
+                s.connection ? {...s, connection: {...s.connection, HasKeyBundle: true}} : s
             );
             router.navigate(resolveNextScreen());
         } catch (e) {
@@ -43,7 +43,9 @@ export function EncryptionRecoveryScreen() {
 
     return (
         <div className="mx-auto flex h-full w-full max-w-md flex-col px-6 pt-10">
-            <h1 className="font-display text-2xl font-bold text-accent-light">{t('common.recovery_title')}</h1>
+            <h1 className="font-display text-2xl font-bold text-accent-light">
+                {t('common.recovery_title')}
+            </h1>
             <p className="mt-2 text-[14px] leading-relaxed text-body">{t('common.recovery_intro')}</p>
 
             <div className="mt-6 space-y-3">
@@ -63,7 +65,12 @@ export function EncryptionRecoveryScreen() {
                     error={mismatch ? t('onboarding.passphrase_mismatch') : null}
                 />
                 {error && <p className="text-[13px] text-danger">{error}</p>}
-                <Button className="w-full" loading={submitting} disabled={!valid} onClick={() => void recover()}>
+                <Button
+                    className="w-full"
+                    loading={submitting}
+                    disabled={!valid}
+                    onClick={() => void recover()}
+                >
                     {submitting ? t('common.acknowledging') : t('common.recovery_button')}
                 </Button>
             </div>

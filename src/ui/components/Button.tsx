@@ -39,7 +39,7 @@ export function Button({
                 'font-body text-[15px] font-semibold leading-none transition-colors duration-150',
                 'disabled:cursor-not-allowed disabled:opacity-50',
                 VARIANT[variant],
-                className,
+                className
             )}
         >
             {loading && <LoadingSpinner size={14} className="text-current"/>}

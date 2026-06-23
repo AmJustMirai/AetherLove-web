@@ -10,7 +10,7 @@ export interface LiveEventMap {
         messageId: Guid;
         ciphertext: Uint8Array;
         nonce: Uint8Array;
-        createdAtUtc: string
+        createdAtUtc: string;
     };
     messageRead: { byProfileId: Guid; messageIds: Guid[]; readAtUtc: string };
     deckRefresh: { reason: string };

@@ -24,7 +24,7 @@ export function avatarCircle(
     r: number,
     img: HTMLImageElement | null,
     ringColor = 'rgba(255,255,255,1)',
-    ringWidth = 3,
+    ringWidth = 3
 ): void {
     ctx.save();
     ctx.beginPath();
@@ -53,7 +53,7 @@ export function centerText(
     y: number,
     text: string,
     font: string,
-    color: string,
+    color: string
 ): void {
     ctx.font = font;
     ctx.textAlign = 'center';

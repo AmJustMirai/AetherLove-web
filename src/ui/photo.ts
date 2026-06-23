@@ -57,7 +57,11 @@ export function defaultCropRect(imgW: number, imgH: number, aspectWoverH: number
 }
 
 /** Renders the crop region of img to target dimensions. Returns PNG base64 (no data-url prefix). */
-export function renderCrop(img: HTMLImageElement, crop: CropRect, target: { w: number; h: number }): string {
+export function renderCrop(
+    img: HTMLImageElement,
+    crop: CropRect,
+    target: { w: number; h: number }
+): string {
     const canvas = document.createElement('canvas');
     canvas.width = target.w;
     canvas.height = target.h;
@@ -70,11 +74,18 @@ export function processCroppedPhoto(
     img: HTMLImageElement,
     crop: CropRect,
     kind: 'avatar' | 'portrait',
-    isNsfw = false,
+    isNsfw = false
 ): PhotoUploadDto {
     const spec = PHOTO_SPEC[kind];
     const base64 = renderCrop(img, crop, spec);
-    return {Base64: base64, CropX: 0, CropY: 0, CropWidth: spec.w, CropHeight: spec.h, IsNsfw: isNsfw};
+    return {
+        Base64: base64,
+        CropX: 0,
+        CropY: 0,
+        CropWidth: spec.w,
+        CropHeight: spec.h,
+        IsNsfw: isNsfw,
+    };
 }
 
 /** A data-url preview for a processed PNG base64. */

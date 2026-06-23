@@ -13,7 +13,7 @@ export function ProgressDots({total, current}: { total: number; current: number 
                         'h-1.5 w-1.5 rounded-full transition-colors',
                         i < current && 'bg-accent-light',
                         i === current && 'bg-strong',
-                        i > current && 'border border-line/50',
+                        i > current && 'border border-line/50'
                     )}
                 />
             ))}

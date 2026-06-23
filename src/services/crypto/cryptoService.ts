@@ -93,7 +93,7 @@ export function deriveKek(passphrase: string, params: KdfParams): Uint8Array {
 /** AES-256-GCM wrap of the private key under the KEK. Output is ciphertext||tag, random 12B nonce. */
 export async function wrapPrivateKey(
     privateKey: Uint8Array,
-    kek: Uint8Array,
+    kek: Uint8Array
 ): Promise<WrappedPrivateKey> {
     const wrapNonce = randomBytes(AES_GCM_NONCE_LENGTH);
     const key = await importAesKey(kek, 'encrypt');
@@ -101,8 +101,8 @@ export async function wrapPrivateKey(
         await subtle().encrypt(
             {name: 'AES-GCM', iv: bs(wrapNonce), tagLength: AES_GCM_TAG_LENGTH * 8},
             key,
-            bs(privateKey),
-        ),
+            bs(privateKey)
+        )
     );
     return {encryptedPrivateKey: combined, wrapNonce};
 }
@@ -111,7 +111,7 @@ export async function wrapPrivateKey(
 export async function unwrapPrivateKey(
     encryptedPrivateKey: Uint8Array,
     wrapNonce: Uint8Array,
-    kek: Uint8Array,
+    kek: Uint8Array
 ): Promise<Uint8Array | null> {
     if (encryptedPrivateKey.length < AES_GCM_TAG_LENGTH) return null;
     try {
@@ -119,7 +119,7 @@ export async function unwrapPrivateKey(
         const plain = await subtle().decrypt(
             {name: 'AES-GCM', iv: bs(wrapNonce), tagLength: AES_GCM_TAG_LENGTH * 8},
             key,
-            bs(encryptedPrivateKey),
+            bs(encryptedPrivateKey)
         );
         return new Uint8Array(plain);
     } catch {
@@ -128,7 +128,10 @@ export async function unwrapPrivateKey(
 }
 
 /** Raw X25519 ECDH shared secret (32B). */
-export function deriveSharedSecret(myPrivateKey: Uint8Array, peerPublicKey: Uint8Array): Uint8Array {
+export function deriveSharedSecret(
+    myPrivateKey: Uint8Array,
+    peerPublicKey: Uint8Array
+): Uint8Array {
     return x25519.getSharedSecret(myPrivateKey, peerPublicKey);
 }
 
@@ -138,15 +141,18 @@ export function deriveMessageKey(sharedSecret: Uint8Array, salt: Uint8Array): Ui
 }
 
 /** AES-256-GCM encrypt. Output is ciphertext||tag, random 12B nonce. */
-export async function encrypt(messageKey: Uint8Array, plaintext: Uint8Array): Promise<EncryptResult> {
+export async function encrypt(
+    messageKey: Uint8Array,
+    plaintext: Uint8Array
+): Promise<EncryptResult> {
     const nonce = randomBytes(AES_GCM_NONCE_LENGTH);
     const key = await importAesKey(messageKey, 'encrypt');
     const combined = new Uint8Array(
         await subtle().encrypt(
             {name: 'AES-GCM', iv: bs(nonce), tagLength: AES_GCM_TAG_LENGTH * 8},
             key,
-            bs(plaintext),
-        ),
+            bs(plaintext)
+        )
     );
     return {ciphertext: combined, nonce};
 }
@@ -155,7 +161,7 @@ export async function encrypt(messageKey: Uint8Array, plaintext: Uint8Array): Pr
 export async function decrypt(
     messageKey: Uint8Array,
     nonce: Uint8Array,
-    ciphertextAndTag: Uint8Array,
+    ciphertextAndTag: Uint8Array
 ): Promise<Uint8Array> {
     if (ciphertextAndTag.length < AES_GCM_TAG_LENGTH) {
         throw new Error('Ciphertext shorter than auth tag.');
@@ -164,7 +170,7 @@ export async function decrypt(
     const plain = await subtle().decrypt(
         {name: 'AES-GCM', iv: bs(nonce), tagLength: AES_GCM_TAG_LENGTH * 8},
         key,
-        bs(ciphertextAndTag),
+        bs(ciphertextAndTag)
     );
     return new Uint8Array(plain);
 }
@@ -181,10 +187,7 @@ function compareBytes(a: Uint8Array, b: Uint8Array): number {
  * Deterministic per-pair salt: SHA-256 of the two public keys ordered by raw bytes (so both peers
  * derive the same value), truncated to 16 bytes. Mirrors DeriveConversationSalt.
  */
-export function deriveConversationSalt(
-    publicKeyA: Uint8Array,
-    publicKeyB: Uint8Array,
-): Uint8Array {
+export function deriveConversationSalt(publicKeyA: Uint8Array, publicKeyB: Uint8Array): Uint8Array {
     const aFirst = compareBytes(publicKeyA, publicKeyB) <= 0;
     const first = aFirst ? publicKeyA : publicKeyB;
     const second = aFirst ? publicKeyB : publicKeyA;

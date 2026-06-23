@@ -24,8 +24,22 @@ export class ClassicEffect implements MatchEffect {
         if (!reduce) this.confetti.draw(ctx, s.dt, h);
 
         const cx = w / 2;
-        centerText(ctx, cx, h * 0.2, 'Congratulations', '600 20px "Hanken Grotesk Variable", sans-serif', rgba(s.accentLight, text));
-        centerText(ctx, cx, h * 0.27, "It's a match!", '800 38px "Bricolage Grotesque Variable", sans-serif', rgba([255, 255, 255], text));
+        centerText(
+            ctx,
+            cx,
+            h * 0.2,
+            'Congratulations',
+            '600 20px "Hanken Grotesk Variable", sans-serif',
+            rgba(s.accentLight, text)
+        );
+        centerText(
+            ctx,
+            cx,
+            h * 0.27,
+            "It's a match!",
+            '800 38px "Bricolage Grotesque Variable", sans-serif',
+            rgba([255, 255, 255], text)
+        );
 
         const r = 52;
         const spacing = 70;
@@ -35,7 +49,21 @@ export class ClassicEffect implements MatchEffect {
         avatarCircle(ctx, lx, avatarY, r, content.ownAvatar);
         avatarCircle(ctx, rx, avatarY, r, content.peerAvatar);
 
-        centerText(ctx, lx, avatarY + r + 18, content.ownName, '600 14px "Hanken Grotesk Variable", sans-serif', rgba([235, 235, 235], text));
-        centerText(ctx, rx, avatarY + r + 18, content.peerName, '600 14px "Hanken Grotesk Variable", sans-serif', rgba([235, 235, 235], text));
+        centerText(
+            ctx,
+            lx,
+            avatarY + r + 18,
+            content.ownName,
+            '600 14px "Hanken Grotesk Variable", sans-serif',
+            rgba([235, 235, 235], text)
+        );
+        centerText(
+            ctx,
+            rx,
+            avatarY + r + 18,
+            content.peerName,
+            '600 14px "Hanken Grotesk Variable", sans-serif',
+            rgba([235, 235, 235], text)
+        );
     }
 }

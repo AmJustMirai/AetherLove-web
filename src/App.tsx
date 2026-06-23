@@ -28,69 +28,69 @@ import {ProfileScreen} from './screens/ProfileScreen';
 import {PlaceholderScreen} from './screens/PlaceholderScreen';
 
 function renderScreen(screen: Screen) {
-    switch (screen) {
-        case Screen.Splash:
-            return <SplashScreen/>;
-        case Screen.Onboarding:
-            return <OnboardingScreen/>;
-        case Screen.Deck:
-            return <DeckScreen/>;
-        case Screen.Match:
-            return <MatchScreen/>;
-        case Screen.ChatList:
-            return <ChatListScreen/>;
-        case Screen.ChatArchive:
-            return <ChatArchiveScreen/>;
-        case Screen.Chat:
-            return <ChatScreen/>;
-        case Screen.Settings:
-            return <SettingsScreen/>;
-        case Screen.MyProfile:
-            return <MyProfileScreen/>;
-        case Screen.Offline:
-            return <OfflineScreen/>;
-        case Screen.Outdated:
-            return <OutdatedScreen/>;
-        case Screen.Banned:
-            return <BannedScreen/>;
-        case Screen.WarningsAcknowledge:
-            return <WarningsAcknowledgeScreen/>;
-        case Screen.ModeratorMessages:
-            return <ModeratorMessageScreen/>;
-        case Screen.PassphraseUnlock:
-            return <PassphraseUnlockScreen/>;
-        case Screen.EncryptionRecovery:
-            return <EncryptionRecoveryScreen/>;
-        case Screen.News:
-            return <NewsScreen/>;
-        case Screen.Profile:
-            return <ProfileScreen/>;
-        default:
-            return <PlaceholderScreen screen={screen}/>;
-    }
+  switch (screen) {
+    case Screen.Splash:
+      return <SplashScreen/>;
+    case Screen.Onboarding:
+      return <OnboardingScreen/>;
+    case Screen.Deck:
+      return <DeckScreen/>;
+    case Screen.Match:
+      return <MatchScreen/>;
+    case Screen.ChatList:
+      return <ChatListScreen/>;
+    case Screen.ChatArchive:
+      return <ChatArchiveScreen/>;
+    case Screen.Chat:
+      return <ChatScreen/>;
+    case Screen.Settings:
+      return <SettingsScreen/>;
+    case Screen.MyProfile:
+      return <MyProfileScreen/>;
+    case Screen.Offline:
+      return <OfflineScreen/>;
+    case Screen.Outdated:
+      return <OutdatedScreen/>;
+    case Screen.Banned:
+      return <BannedScreen/>;
+    case Screen.WarningsAcknowledge:
+      return <WarningsAcknowledgeScreen/>;
+    case Screen.ModeratorMessages:
+      return <ModeratorMessageScreen/>;
+    case Screen.PassphraseUnlock:
+      return <PassphraseUnlockScreen/>;
+    case Screen.EncryptionRecovery:
+      return <EncryptionRecoveryScreen/>;
+    case Screen.News:
+      return <NewsScreen/>;
+    case Screen.Profile:
+      return <ProfileScreen/>;
+    default:
+      return <PlaceholderScreen screen={screen}/>;
+  }
 }
 
 export default function App() {
-    const route = useStore(router.store);
+  const route = useStore(router.store);
 
-    useEffect(() => {
-        registerPushHandlers();
-    }, []);
+  useEffect(() => {
+    registerPushHandlers();
+  }, []);
 
-    return (
-        <AppShell>
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={route.screen}
-                    className="absolute inset-0"
-                    initial={{opacity: 0}}
-                    animate={{opacity: 1}}
-                    exit={{opacity: 0}}
-                    transition={{duration: 0.18}}
-                >
-                    {renderScreen(route.screen)}
-                </motion.div>
-            </AnimatePresence>
-        </AppShell>
-    );
+  return (
+      <AppShell>
+        <AnimatePresence mode="wait">
+          <motion.div
+              key={route.screen}
+              className="absolute inset-0"
+              initial={{opacity: 0}}
+              animate={{opacity: 1}}
+              exit={{opacity: 0}}
+              transition={{duration: 0.18}}
+          >
+            {renderScreen(route.screen)}
+          </motion.div>
+        </AnimatePresence>
+      </AppShell>
+  );
 }

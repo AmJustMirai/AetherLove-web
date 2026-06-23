@@ -30,7 +30,11 @@ export function Avatar({bytes, src, size, className, ring = true}: AvatarProps) 
 
     return (
         <span
-            className={cn('inline-block overflow-hidden rounded-full bg-[#555]', ring && 'ring-1 ring-line/40', className)}
+            className={cn(
+                'inline-block overflow-hidden rounded-full bg-[#555]',
+                ring && 'ring-1 ring-line/40',
+                className
+            )}
             style={{width: size, height: size}}
         >
       {url && <img src={url} alt="" className="h-full w-full object-cover" draggable={false}/>}

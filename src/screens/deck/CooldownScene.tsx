@@ -26,9 +26,20 @@ const BodyText: Rgb = [214, 219, 245];
 const Danger: Rgb = [242, 140, 140];
 
 const lerp = (a: number, b: number, f: number) => a + (b - a) * f;
-const mix = (a: Rgb, b: Rgb, f: number): Rgb => [lerp(a[0], b[0], f), lerp(a[1], b[1], f), lerp(a[2], b[2], f)];
+const mix = (a: Rgb, b: Rgb, f: number): Rgb => [
+    lerp(a[0], b[0], f),
+    lerp(a[1], b[1], f),
+    lerp(a[2], b[2], f),
+];
 
-function ellipse(ctx: CanvasRenderingContext2D, cx: number, cy: number, hw: number, hh: number, fill: string) {
+function ellipse(
+    ctx: CanvasRenderingContext2D,
+    cx: number,
+    cy: number,
+    hw: number,
+    hh: number,
+    fill: string
+) {
     ctx.beginPath();
     ctx.ellipse(cx, cy, hw, hh, 0, 0, Math.PI * 2);
     ctx.fillStyle = fill;
@@ -42,7 +53,15 @@ function circle(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number
     ctx.fill();
 }
 
-function line(ctx: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y1: number, color: string, w: number) {
+function line(
+    ctx: CanvasRenderingContext2D,
+    x0: number,
+    y0: number,
+    x1: number,
+    y1: number,
+    color: string,
+    w: number
+) {
     ctx.beginPath();
     ctx.moveTo(x0, y0);
     ctx.lineTo(x1, y1);
@@ -52,7 +71,13 @@ function line(ctx: CanvasRenderingContext2D, x0: number, y0: number, x1: number,
     ctx.stroke();
 }
 
-function tri(ctx: CanvasRenderingContext2D, a: [number, number], b: [number, number], c: [number, number], fill: string) {
+function tri(
+    ctx: CanvasRenderingContext2D,
+    a: [number, number],
+    b: [number, number],
+    c: [number, number],
+    fill: string
+) {
     ctx.beginPath();
     ctx.moveTo(...a);
     ctx.lineTo(...b);
@@ -62,7 +87,14 @@ function tri(ctx: CanvasRenderingContext2D, a: [number, number], b: [number, num
     ctx.fill();
 }
 
-function quad(ctx: CanvasRenderingContext2D, a: number[], b: number[], c: number[], d: number[], fill: string) {
+function quad(
+    ctx: CanvasRenderingContext2D,
+    a: number[],
+    b: number[],
+    c: number[],
+    d: number[],
+    fill: string
+) {
     ctx.beginPath();
     ctx.moveTo(a[0], a[1]);
     ctx.lineTo(b[0], b[1]);
@@ -73,7 +105,14 @@ function quad(ctx: CanvasRenderingContext2D, a: number[], b: number[], c: number
     ctx.fill();
 }
 
-function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+function roundRect(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    r: number
+) {
     ctx.beginPath();
     ctx.roundRect(x, y, w, h, r);
 }
@@ -167,7 +206,14 @@ function drawSky(ctx: CanvasRenderingContext2D, W: number, H: number) {
 const SX = [0.07, 0.18, 0.29, 0.41, 0.52, 0.63, 0.71, 0.83, 0.91, 0.13, 0.37, 0.58, 0.78, 0.96];
 const SY = [0.12, 0.3, 0.08, 0.22, 0.4, 0.15, 0.34, 0.2, 0.46, 0.5, 0.55, 0.66, 0.6, 0.72];
 
-function drawStars(ctx: CanvasRenderingContext2D, W: number, H: number, time: number, reduce: boolean, settle: number) {
+function drawStars(
+    ctx: CanvasRenderingContext2D,
+    W: number,
+    H: number,
+    time: number,
+    reduce: boolean,
+    settle: number
+) {
     for (let i = 0; i < SX.length; i++) {
         const x = SX[i] * W;
         const y = SY[i] * H;
@@ -184,7 +230,14 @@ function drawStars(ctx: CanvasRenderingContext2D, W: number, H: number, time: nu
     }
 }
 
-function drawMoon(ctx: CanvasRenderingContext2D, cx: number, cy: number, radius: number, anim: number, settle: number) {
+function drawMoon(
+    ctx: CanvasRenderingContext2D,
+    cx: number,
+    cy: number,
+    radius: number,
+    anim: number,
+    settle: number
+) {
     const pulse = 1 + 0.03 * Math.sin(anim * 0.8);
     for (let i = 6; i >= 1; i--) {
         const f = i / 6;
@@ -198,13 +251,31 @@ function drawMoon(ctx: CanvasRenderingContext2D, cx: number, cy: number, radius:
     circle(ctx, cx + radius * 0.04, cy + radius * 0.4, radius * 0.09, cc);
 }
 
-function drawClouds(ctx: CanvasRenderingContext2D, W: number, H: number, time: number, reduce: boolean, settle: number) {
+function drawClouds(
+    ctx: CanvasRenderingContext2D,
+    W: number,
+    H: number,
+    time: number,
+    reduce: boolean,
+    settle: number
+) {
     drawCloud(ctx, W, H, 0.2, 0.4, 56, time * 0.01, 0.1, reduce, settle);
     drawCloud(ctx, W, H, 0.7, 0.66, 72, time * 0.014, 0.08, reduce, settle);
 }
 
-function drawCloud(ctx: CanvasRenderingContext2D, W: number, H: number, fx: number, fy: number, scale: number, drift: number, alpha: number, reduce: boolean, settle: number) {
-    const driftX = reduce ? 0 : (((drift % 1) - 0.5) * 40);
+function drawCloud(
+    ctx: CanvasRenderingContext2D,
+    W: number,
+    H: number,
+    fx: number,
+    fy: number,
+    scale: number,
+    drift: number,
+    alpha: number,
+    reduce: boolean,
+    settle: number
+) {
+    const driftX = reduce ? 0 : ((drift % 1) - 0.5) * 40;
     const cx = fx * W + driftX;
     const cy = fy * H;
     const col = rgba([140, 143, 189], alpha * settle);
@@ -214,7 +285,13 @@ function drawCloud(ctx: CanvasRenderingContext2D, W: number, H: number, fx: numb
     ellipse(ctx, cx + scale * 0.05, cy + scale * 0.2, scale * 0.8, scale * 0.24, col);
 }
 
-function drawStardust(ctx: CanvasRenderingContext2D, hc: [number, number], time: number, reduce: boolean, settle: number) {
+function drawStardust(
+    ctx: CanvasRenderingContext2D,
+    hc: [number, number],
+    time: number,
+    reduce: boolean,
+    settle: number
+) {
     const root: [number, number] = [hc[0] - 70, hc[1] - 6];
     const count = 16;
     for (let i = 0; i < count; i++) {
@@ -236,7 +313,14 @@ function drawStardust(ctx: CanvasRenderingContext2D, hc: [number, number], time:
     }
 }
 
-function drawHorse(ctx: CanvasRenderingContext2D, center: [number, number], flap: number, time: number, reduce: boolean, settle: number) {
+function drawHorse(
+    ctx: CanvasRenderingContext2D,
+    center: [number, number],
+    flap: number,
+    time: number,
+    reduce: boolean,
+    settle: number
+) {
     const coat = rgba(Coat, settle);
     const coatDeep = rgba(CoatDeep, settle);
     const [x, y] = center;
@@ -255,7 +339,13 @@ function drawHorse(ctx: CanvasRenderingContext2D, center: [number, number], flap
     drawWing(ctx, shoulder, flap, WingNear, Cream, 1, settle, false);
 }
 
-function drawBodySilhouette(ctx: CanvasRenderingContext2D, [x, y]: [number, number], coat: string, coatDeep: string, settle: number) {
+function drawBodySilhouette(
+    ctx: CanvasRenderingContext2D,
+    [x, y]: [number, number],
+    coat: string,
+    coatDeep: string,
+    settle: number
+) {
     ellipse(ctx, x, y, 58, 30, coat);
     ellipse(ctx, x - 34, y + 2, 30, 26, coatDeep);
     ellipse(ctx, x + 34, y - 4, 28, 24, coat);
@@ -272,21 +362,32 @@ function norm(dx: number, dy: number): [number, number] {
     return [dx / l, dy / l];
 }
 
-function drawNeck(ctx: CanvasRenderingContext2D, base: [number, number], poll: [number, number], coat: string) {
+function drawNeck(
+    ctx: CanvasRenderingContext2D,
+    base: [number, number],
+    poll: [number, number],
+    coat: string
+) {
     const [dx, dy] = norm(poll[0] - base[0], poll[1] - base[1]);
     const perp: [number, number] = [-dy, dx];
-    const bh = 24, th = 14;
+    const bh = 24,
+        th = 14;
     quad(
         ctx,
         [base[0] + perp[0] * bh, base[1] + perp[1] * bh],
         [base[0] - perp[0] * bh, base[1] - perp[1] * bh],
         [poll[0] - perp[0] * th, poll[1] - perp[1] * th],
         [poll[0] + perp[0] * th, poll[1] + perp[1] * th],
-        coat,
+        coat
     );
 }
 
-function drawHead(ctx: CanvasRenderingContext2D, poll: [number, number], coat: string, settle: number) {
+function drawHead(
+    ctx: CanvasRenderingContext2D,
+    poll: [number, number],
+    coat: string,
+    settle: number
+) {
     const jaw: [number, number] = [poll[0] + 3, poll[1] + 7];
     ellipse(ctx, jaw[0], jaw[1], 15, 13, coat);
     const [mdx, mdy] = norm(0.72, 0.7);
@@ -298,7 +399,7 @@ function drawHead(ctx: CanvasRenderingContext2D, poll: [number, number], coat: s
         [jaw[0] - perp[0] * 10, jaw[1] - perp[1] * 10],
         [muzzle[0] - perp[0] * 6.5, muzzle[1] - perp[1] * 6.5],
         [muzzle[0] + perp[0] * 6.5, muzzle[1] + perp[1] * 6.5],
-        coat,
+        coat
     );
     ellipse(ctx, muzzle[0], muzzle[1], 8, 6.5, coat);
     const [edx, edy] = norm(-0.2, -1);
@@ -306,14 +407,43 @@ function drawHead(ctx: CanvasRenderingContext2D, poll: [number, number], coat: s
     drawEar(ctx, [poll[0], poll[1] - 2], [edx, edy], ep, 16, 6, coat);
     drawEar(ctx, [poll[0] + 11, poll[1]], [edx, edy], ep, 14, 5.5, coat);
     circle(ctx, jaw[0] + 4, jaw[1] - 3, 2.4, rgba(Silver, 0.9 * settle));
-    line(ctx, poll[0] + 12, poll[1] - 2, muzzle[0] + 2, muzzle[1] - 2, rgba(Silver, 0.4 * settle), 1.6);
+    line(
+        ctx,
+        poll[0] + 12,
+        poll[1] - 2,
+        muzzle[0] + 2,
+        muzzle[1] - 2,
+        rgba(Silver, 0.4 * settle),
+        1.6
+    );
 }
 
-function drawEar(ctx: CanvasRenderingContext2D, base: [number, number], dir: [number, number], perp: [number, number], len: number, half: number, coat: string) {
-    tri(ctx, [base[0] + perp[0] * half, base[1] + perp[1] * half], [base[0] - perp[0] * half, base[1] - perp[1] * half], [base[0] + dir[0] * len, base[1] + dir[1] * len], coat);
+function drawEar(
+    ctx: CanvasRenderingContext2D,
+    base: [number, number],
+    dir: [number, number],
+    perp: [number, number],
+    len: number,
+    half: number,
+    coat: string
+) {
+    tri(
+        ctx,
+        [base[0] + perp[0] * half, base[1] + perp[1] * half],
+        [base[0] - perp[0] * half, base[1] - perp[1] * half],
+        [base[0] + dir[0] * len, base[1] + dir[1] * len],
+        coat
+    );
 }
 
-function drawMane(ctx: CanvasRenderingContext2D, base: [number, number], poll: [number, number], time: number, reduce: boolean, coat: string) {
+function drawMane(
+    ctx: CanvasRenderingContext2D,
+    base: [number, number],
+    poll: [number, number],
+    time: number,
+    reduce: boolean,
+    coat: string
+) {
     const steps = 8;
     for (let i = 0; i <= steps; i++) {
         const f = i / steps;
@@ -325,7 +455,13 @@ function drawMane(ctx: CanvasRenderingContext2D, base: [number, number], poll: [
     }
 }
 
-function drawTail(ctx: CanvasRenderingContext2D, [x, y]: [number, number], time: number, reduce: boolean, coat: string) {
+function drawTail(
+    ctx: CanvasRenderingContext2D,
+    [x, y]: [number, number],
+    time: number,
+    reduce: boolean,
+    coat: string
+) {
     const root: [number, number] = [x - 56, y - 6];
     const strands = 6;
     for (let i = 0; i < strands; i++) {
@@ -335,9 +471,12 @@ function drawTail(ctx: CanvasRenderingContext2D, [x, y]: [number, number], time:
         ctx.beginPath();
         ctx.moveTo(root[0], root[1] + spread * 0.3);
         ctx.bezierCurveTo(
-            root[0] - 26, root[1] + 16 + spread * 0.8 + w1,
-            root[0] - 42, root[1] + 38 + spread * 1.2 + w2,
-            root[0] - 52, root[1] + 64 + spread * 1.6 + w2 * 1.2,
+            root[0] - 26,
+            root[1] + 16 + spread * 0.8 + w1,
+            root[0] - 42,
+            root[1] + 38 + spread * 1.2 + w2,
+            root[0] - 52,
+            root[1] + 64 + spread * 1.6 + w2 * 1.2
         );
         ctx.strokeStyle = coat;
         ctx.lineWidth = 5 - i * 0.5;
@@ -346,7 +485,12 @@ function drawTail(ctx: CanvasRenderingContext2D, [x, y]: [number, number], time:
     }
 }
 
-function drawLegs(ctx: CanvasRenderingContext2D, [x, y]: [number, number], coat: string, coatDeep: string) {
+function drawLegs(
+    ctx: CanvasRenderingContext2D,
+    [x, y]: [number, number],
+    coat: string,
+    coatDeep: string
+) {
     const bone = (hip: number[], dxk: number, dxh: number, col: string, uw: number, lw: number) => {
         const knee = [hip[0] + dxk, hip[1] + 20];
         const hoof = [knee[0] + dxh, knee[1] + 20];
@@ -357,7 +501,14 @@ function drawLegs(ctx: CanvasRenderingContext2D, [x, y]: [number, number], coat:
     bone([x + 30, y + 20], 4, -2, coatDeep, 7.5, 5.5);
     bone([x - 30, y + 20], -4, 2, coatDeep, 8, 5.5);
     // Near legs use a longer 24px segment; approximate with the same helper offset.
-    const nearBone = (hip: number[], dxk: number, dxh: number, col: string, uw: number, lw: number) => {
+    const nearBone = (
+        hip: number[],
+        dxk: number,
+        dxh: number,
+        col: string,
+        uw: number,
+        lw: number
+    ) => {
         const knee = [hip[0] + dxk, hip[1] + 24];
         const hoof = [knee[0] + dxh, knee[1] + 24];
         line(ctx, hip[0], hip[1], knee[0], knee[1], col, uw);
@@ -368,7 +519,16 @@ function drawLegs(ctx: CanvasRenderingContext2D, [x, y]: [number, number], coat:
     nearBone([x - 38, y + 14], -5, 3, coat, 10, 6.5);
 }
 
-function drawWing(ctx: CanvasRenderingContext2D, shoulder: [number, number], flap: number, baseCol: Rgb, edgeCol: Rgb, alphaScale: number, settle: number, far: boolean) {
+function drawWing(
+    ctx: CanvasRenderingContext2D,
+    shoulder: [number, number],
+    flap: number,
+    baseCol: Rgb,
+    edgeCol: Rgb,
+    alphaScale: number,
+    settle: number,
+    far: boolean
+) {
     const sweep = lerp(-0.55, 0.45, 0.5 + 0.5 * flap);
     const feathers = 7;
     const spanLen = 96 * (far ? 0.82 : 1);
@@ -386,13 +546,20 @@ function drawWing(ctx: CanvasRenderingContext2D, shoulder: [number, number], fla
         const f = i / (feathers - 1);
         const shade = mix(baseCol, [baseCol[0] * 1.25, baseCol[1] * 1.25, baseCol[2] * 1.25], f);
         const col = rgba(shade, settle * alphaScale);
-        const rootA: [number, number] = [origin[0] + (tips[i][0] - origin[0]) * 0.16, origin[1] + (tips[i][1] - origin[1]) * 0.16];
-        const rootB: [number, number] = [origin[0] + (tips[i + 1][0] - origin[0]) * 0.16, origin[1] + (tips[i + 1][1] - origin[1]) * 0.16];
+        const rootA: [number, number] = [
+            origin[0] + (tips[i][0] - origin[0]) * 0.16,
+            origin[1] + (tips[i][1] - origin[1]) * 0.16,
+        ];
+        const rootB: [number, number] = [
+            origin[0] + (tips[i + 1][0] - origin[0]) * 0.16,
+            origin[1] + (tips[i + 1][1] - origin[1]) * 0.16,
+        ];
         tri(ctx, rootA, tips[i], tips[i + 1], col);
         tri(ctx, rootA, tips[i + 1], rootB, col);
     }
     ctx.beginPath();
-    for (let i = 0; i < feathers; i++) ctx[i === 0 ? 'moveTo' : 'lineTo'](tips[feathers - 1 - i][0], tips[feathers - 1 - i][1]);
+    for (let i = 0; i < feathers; i++)
+        ctx[i === 0 ? 'moveTo' : 'lineTo'](tips[feathers - 1 - i][0], tips[feathers - 1 - i][1]);
     ctx.lineTo(origin[0], origin[1]);
     ctx.closePath();
     ctx.fillStyle = rgba([baseCol[0] * 0.9, baseCol[1] * 0.9, baseCol[2] * 0.9], settle * alphaScale);
@@ -402,7 +569,13 @@ function drawWing(ctx: CanvasRenderingContext2D, shoulder: [number, number], fla
     line(ctx, tips[0][0], tips[0][1], tips[1][0], tips[1][1], edge, 2);
 }
 
-function drawHeading(ctx: CanvasRenderingContext2D, cx: number, y: number, heading: string, settle: number) {
+function drawHeading(
+    ctx: CanvasRenderingContext2D,
+    cx: number,
+    y: number,
+    heading: string,
+    settle: number
+) {
     ctx.font = '700 26px "Bricolage Grotesque Variable", system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
@@ -424,7 +597,14 @@ function wrapLines(ctx: CanvasRenderingContext2D, text: string, wrap: number): s
     return out;
 }
 
-function drawBody(ctx: CanvasRenderingContext2D, cx: number, bottomY: number, wrap: number, body: string, settle: number) {
+function drawBody(
+    ctx: CanvasRenderingContext2D,
+    cx: number,
+    bottomY: number,
+    wrap: number,
+    body: string,
+    settle: number
+) {
     ctx.font = '500 15px "Hanken Grotesk Variable", system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
@@ -441,7 +621,14 @@ function drawBody(ctx: CanvasRenderingContext2D, cx: number, bottomY: number, wr
     lines.forEach((l, i) => ctx.fillText(l, cx, topY + i * lineH));
 }
 
-function drawError(ctx: CanvasRenderingContext2D, cx: number, topY: number, wrap: number, error: string, settle: number) {
+function drawError(
+    ctx: CanvasRenderingContext2D,
+    cx: number,
+    topY: number,
+    wrap: number,
+    error: string,
+    settle: number
+) {
     ctx.font = '500 13px "Hanken Grotesk Variable", system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';

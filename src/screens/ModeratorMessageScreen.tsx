@@ -18,7 +18,7 @@ export function ModeratorMessageScreen() {
 
     const unseen = useMemo(
         () => (connection?.ModeratorMessages ?? []).filter((m) => !m.Seen),
-        [connection],
+        [connection]
     );
 
     async function acknowledge() {
@@ -35,11 +35,11 @@ export function ModeratorMessageScreen() {
                         connection: {
                             ...s.connection,
                             ModeratorMessages: s.connection.ModeratorMessages.map((m) =>
-                                ids.includes(m.Id) ? {...m, Seen: true} : m,
+                                ids.includes(m.Id) ? {...m, Seen: true} : m
                             ),
                         },
                     }
-                    : s,
+                    : s
             );
             router.navigate(resolveNextScreen());
         } catch (e) {
@@ -48,7 +48,10 @@ export function ModeratorMessageScreen() {
         }
     }
 
-    const heading = unseen.length === 1 ? t('common.modmsg_heading_one') : t('common.modmsg_heading_many', unseen.length);
+    const heading =
+        unseen.length === 1
+            ? t('common.modmsg_heading_one')
+            : t('common.modmsg_heading_many', unseen.length);
 
     return (
         <div className="mx-auto flex h-full w-full max-w-md flex-col px-6 pt-8">

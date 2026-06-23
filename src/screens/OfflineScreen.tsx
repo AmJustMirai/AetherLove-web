@@ -9,7 +9,10 @@ import {Button, LoadingSpinner} from '../ui/components';
 
 export function OfflineScreen() {
     const t = useT();
-    const state = useExternal(connection.onStateChange.bind(connection), connection.getState.bind(connection));
+    const state = useExternal(
+        connection.onStateChange.bind(connection),
+        connection.getState.bind(connection)
+    );
     const reconnecting =
         state === SignalConnectionState.Reconnecting || state === SignalConnectionState.Connecting;
 

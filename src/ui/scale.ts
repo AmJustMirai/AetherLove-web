@@ -27,11 +27,11 @@ const VIEWPORT_MARGIN = 24;
 export function computePhoneScale(
     preset: PhoneScalePreset,
     viewportWidth: number,
-    viewportHeight: number,
+    viewportHeight: number
 ): number {
     const fit = Math.min(
         viewportWidth / (DESIGN.width + VIEWPORT_MARGIN),
-        viewportHeight / (DESIGN.height + VIEWPORT_MARGIN),
+        viewportHeight / (DESIGN.height + VIEWPORT_MARGIN)
     );
     return Math.min(PRESET_MULTIPLIER[preset], fit);
 }

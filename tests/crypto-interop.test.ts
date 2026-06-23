@@ -79,13 +79,15 @@ describe('AES-256-GCM (NIST GCM test case 14 + ct||tag layout)', () => {
         const zeroKey = new Uint8Array(AES_GCM_KEY_LENGTH);
         const zeroPt = new Uint8Array(16);
         // Drive WebCrypto with the fixed nonce the KAT requires (encrypt() randomizes the nonce).
-        const key = await crypto.subtle.importKey('raw', zeroKey, {name: 'AES-GCM'}, false, ['encrypt']);
+        const key = await crypto.subtle.importKey('raw', zeroKey, {name: 'AES-GCM'}, false, [
+            'encrypt',
+        ]);
         const combined = new Uint8Array(
             await crypto.subtle.encrypt(
                 {name: 'AES-GCM', iv: new Uint8Array(AES_GCM_NONCE_LENGTH), tagLength: 128},
                 key,
-                zeroPt,
-            ),
+                zeroPt
+            )
         );
         expect(hex(combined)).toBe('cea7403d4d606b6e074ec5d3baf39d18d0d1c8a799996bf0265b98b5d48ab919');
     });
@@ -130,7 +132,7 @@ describe('Private-key wrap/unwrap (AES-GCM, ct||tag, 12B nonce)', () => {
 describe('SHA-256 + conversation salt (ordering + 16B truncation)', () => {
     it('SHA-256("abc") KAT', () => {
         expect(hex(sha256(enc('abc')))).toBe(
-            'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
+            'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad'
         );
     });
 

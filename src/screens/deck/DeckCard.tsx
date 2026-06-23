@@ -5,14 +5,18 @@
 import {animate, motion, useMotionValue, useTransform} from 'framer-motion';
 import type {DeckCardDto} from '../../shared/dtos';
 import {SwipeDirection} from '../../shared/enums';
-import {labelOf, LOOKING_FOR_OPTIONS, maskLabels, RACE_OPTIONS, REGION_OPTIONS} from '../../shared/enumLabels';
+import {labelOf, LOOKING_FOR_OPTIONS, maskLabels, RACE_OPTIONS, REGION_OPTIONS,} from '../../shared/enumLabels';
 import {revokeUrl, webpUrl} from '../../ui/image';
 import {useEffect, useState} from 'react';
 import {useT} from '../../i18n/useT';
 
 const THROW_THRESHOLD = 110;
 
-export function DeckCard({card, onSwipe, onViewProfile}: {
+export function DeckCard({
+                             card,
+                             onSwipe,
+                             onViewProfile,
+                         }: {
     card: DeckCardDto;
     onSwipe: (dir: SwipeDirection) => void;
     onViewProfile: () => void;
@@ -64,11 +68,18 @@ export function DeckCard({card, onSwipe, onViewProfile}: {
             }}
         >
             {portrait ? (
-                <img src={portrait} alt="" className="h-full w-full select-none object-cover" draggable={false}/>
+                <img
+                    src={portrait}
+                    alt=""
+                    className="h-full w-full select-none object-cover"
+                    draggable={false}
+                />
             ) : (
                 <div
                     className="flex h-full w-full items-center justify-center bg-gradient-to-b from-accent-dark/40 to-black">
-                    <span className="font-display text-6xl text-on-accent/20">{card.DisplayName.charAt(0)}</span>
+          <span className="font-display text-6xl text-on-accent/20">
+            {card.DisplayName.charAt(0)}
+          </span>
                 </div>
             )}
 
@@ -88,10 +99,14 @@ export function DeckCard({card, onSwipe, onViewProfile}: {
             </button>
 
             {/* Directional aether glow */}
-            <motion.div style={{opacity: likeGlow}}
-                        className="pointer-events-none absolute inset-0 bg-gradient-to-l from-success/45 to-transparent"/>
-            <motion.div style={{opacity: nopeGlow}}
-                        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-danger/45 to-transparent"/>
+            <motion.div
+                style={{opacity: likeGlow}}
+                className="pointer-events-none absolute inset-0 bg-gradient-to-l from-success/45 to-transparent"
+            />
+            <motion.div
+                style={{opacity: nopeGlow}}
+                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-danger/45 to-transparent"
+            />
 
             {/* LIKE / NOPE stamps */}
             <motion.div
@@ -110,14 +125,20 @@ export function DeckCard({card, onSwipe, onViewProfile}: {
             {/* Name plate (always present; the side panel carries the long-form detail on wide screens) */}
             <div
                 className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/55 to-transparent p-6 pt-20">
-                <h2 className="font-display text-3xl font-bold leading-tight text-on-accent">{card.DisplayName}</h2>
+                <h2 className="font-display text-3xl font-bold leading-tight text-on-accent">
+                    {card.DisplayName}
+                </h2>
                 {subtitle && <p className="mt-0.5 text-sm text-on-accent/75">{subtitle}</p>}
-                {card.Bio && <p className="mt-2 line-clamp-2 text-sm text-on-accent/85 xl:hidden">{card.Bio}</p>}
+                {card.Bio && (
+                    <p className="mt-2 line-clamp-2 text-sm text-on-accent/85 xl:hidden">{card.Bio}</p>
+                )}
                 {lookingFor.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-1.5 xl:hidden">
                         {lookingFor.map((l) => (
-                            <span key={l}
-                                  className="rounded-full bg-on-accent/15 px-2.5 py-1 text-xs text-on-accent backdrop-blur-sm">
+                            <span
+                                key={l}
+                                className="rounded-full bg-on-accent/15 px-2.5 py-1 text-xs text-on-accent backdrop-blur-sm"
+                            >
                 {l}
               </span>
                         ))}

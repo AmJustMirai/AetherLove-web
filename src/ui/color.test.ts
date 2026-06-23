@@ -11,7 +11,12 @@ describe('safeColor', () => {
     });
 
     it('accepts rgb/rgba/hsl/hsla literals', () => {
-        for (const c of ['rgb(1,2,3)', 'rgba(1, 2, 3, .5)', 'hsl(120, 50%, 50%)', 'hsla(0 0% 0% / 50%)']) {
+        for (const c of [
+            'rgb(1,2,3)',
+            'rgba(1, 2, 3, .5)',
+            'hsl(120, 50%, 50%)',
+            'hsla(0 0% 0% / 50%)',
+        ]) {
             expect(safeColor(c, FB)).toBe(c);
         }
     });

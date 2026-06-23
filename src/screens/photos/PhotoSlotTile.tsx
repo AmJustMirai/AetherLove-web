@@ -5,7 +5,7 @@
 import {useEffect, useRef, useState} from 'react';
 import type {PhotoUploadDto} from '../../shared/dtos';
 import {Race} from '../../shared/enums';
-import {type CropRect, loadImageFromUrl, PHOTO_SPEC, previewUrl, processCroppedPhoto} from '../../ui/photo';
+import {type CropRect, loadImageFromUrl, PHOTO_SPEC, previewUrl, processCroppedPhoto,} from '../../ui/photo';
 import {ImageCropModal, LoadingSpinner} from '../../ui/components';
 import {revokeUrl, webpUrl} from '../../ui/image';
 import {useT} from '../../i18n/useT';
@@ -168,20 +168,29 @@ export function PhotoSlotTile({
                         'border-2 border-dashed border-line/20 bg-void/20 transition-colors',
                         kind === 'avatar' ? 'rounded-full' : 'rounded-2xl',
                         !hasImage && !busy && 'cursor-pointer hover:border-accent/60',
-                        pendingRemove && 'border-danger/40',
+                        pendingRemove && 'border-danger/40'
                     )}
                     onClick={!hasImage && !busy ? openPicker : undefined}
                 >
                     {pendingRemove && serverDisplayUrl ? (
                         <>
-                            <img src={serverDisplayUrl} alt="" className="h-full w-full object-cover opacity-40"
-                                 draggable={false}/>
+                            <img
+                                src={serverDisplayUrl}
+                                alt=""
+                                className="h-full w-full object-cover opacity-40"
+                                draggable={false}
+                            />
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <span className="text-3xl font-bold text-danger">✕</span>
                             </div>
                         </>
                     ) : hasImage ? (
-                        <img src={displaySrc!} alt="" className="h-full w-full object-cover" draggable={false}/>
+                        <img
+                            src={displaySrc!}
+                            alt=""
+                            className="h-full w-full object-cover"
+                            draggable={false}
+                        />
                     ) : busy ? (
                         <LoadingSpinner/>
                     ) : (

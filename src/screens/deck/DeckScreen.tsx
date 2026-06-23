@@ -36,15 +36,20 @@ function useCountdown(targetIso: string | null): string {
 
 /** Wide-screen detail column beside the card. Hidden under xl, where the card overlay carries this. */
 function DeckDetails({card}: { card: DeckCardDto }) {
-    const eyebrow = [labelOf(RACE_OPTIONS, card.Race), labelOf(REGION_OPTIONS, card.Region)].filter(Boolean).join(' · ');
+    const eyebrow = [labelOf(RACE_OPTIONS, card.Race), labelOf(REGION_OPTIONS, card.Region)]
+        .filter(Boolean)
+        .join(' · ');
     const lookingFor = maskLabels(LOOKING_FOR_OPTIONS, card.LookingForMask);
     const interests = maskLabels(CONTENT_OPTIONS, card.ContentInterestMask);
 
     return (
         <aside className="hidden w-[300px] shrink-0 flex-col gap-6 xl:flex">
             <div>
-                {eyebrow &&
-                    <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-accent-light">{eyebrow}</p>}
+                {eyebrow && (
+                    <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-accent-light">
+                        {eyebrow}
+                    </p>
+                )}
                 <h2 className="mt-1 font-display text-3xl font-bold text-strong">{card.DisplayName}</h2>
             </div>
             {card.Bio && <p className="text-[15px] leading-relaxed text-body">{card.Bio}</p>}
@@ -54,7 +59,15 @@ function DeckDetails({card}: { card: DeckCardDto }) {
     );
 }
 
-function ChipGroup({title, items, accent = false}: { title: string; items: string[]; accent?: boolean }) {
+function ChipGroup({
+                       title,
+                       items,
+                       accent = false,
+                   }: {
+    title: string;
+    items: string[];
+    accent?: boolean;
+}) {
     return (
         <div>
             <h3 className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">{title}</h3>
@@ -124,9 +137,12 @@ export function DeckScreen() {
     return (
         <div className="flex h-full flex-col">
             <header className="px-6 pb-2 pt-6 lg:px-10 lg:pt-8">
-                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent-light/80">Aetheryte ·
-                    Live</p>
-                <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-strong">{t('nav.deck')}</h1>
+                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent-light/80">
+                    Aetheryte · Live
+                </p>
+                <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-strong">
+                    {t('nav.deck')}
+                </h1>
             </header>
 
             <div className="flex min-h-0 flex-1 items-center justify-center px-4 pb-6">
@@ -170,8 +186,9 @@ export function DeckScreen() {
                                     ♥
                                 </button>
                             </div>
-                            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">← pass · like
-                                →</p>
+                            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+                                ← pass · like →
+                            </p>
                         </div>
 
                         <DeckDetails card={deck.top}/>

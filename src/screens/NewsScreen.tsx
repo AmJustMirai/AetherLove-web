@@ -19,8 +19,14 @@ function markSeen(id: string): void {
     void hubClient.markNewsSeen([id]).catch(() => undefined);
     sessionStore.update((s) =>
         s.connection
-            ? {...s, connection: {...s.connection, UnseenNews: s.connection.UnseenNews.filter((n) => n.Id !== id)}}
-            : s,
+            ? {
+                ...s,
+                connection: {
+                    ...s.connection,
+                    UnseenNews: s.connection.UnseenNews.filter((n) => n.Id !== id),
+                },
+            }
+            : s
     );
 }
 
@@ -85,8 +91,11 @@ export function NewsScreen() {
     }
 
     function Heading() {
-        return <h1
-            className="mb-4 font-display text-3xl font-extrabold tracking-tight text-strong">{t('news.title')}</h1>;
+        return (
+            <h1 className="mb-4 font-display text-3xl font-extrabold tracking-tight text-strong">
+                {t('news.title')}
+            </h1>
+        );
     }
 
     if (view === 'loading') {
@@ -104,7 +113,11 @@ export function NewsScreen() {
                 <p className="text-[14px] text-subtle">
                     {view === 'empty' ? t('news.empty') : t('news.load_error', error ?? '')}
                 </p>
-                <Button variant="ghost" className="mt-4 self-start" onClick={() => router.navigate(Screen.Deck)}>
+                <Button
+                    variant="ghost"
+                    className="mt-4 self-start"
+                    onClick={() => router.navigate(Screen.Deck)}
+                >
                     {t('news.back')}
                 </Button>
             </div>
@@ -113,7 +126,9 @@ export function NewsScreen() {
 
     if (view === 'list') {
         const byDay = new Map<string, NewsSummaryDto[]>();
-        for (const n of [...list].sort((a, b) => Date.parse(b.PublishedAtUtc) - Date.parse(a.PublishedAtUtc))) {
+        for (const n of [...list].sort(
+            (a, b) => Date.parse(b.PublishedAtUtc) - Date.parse(a.PublishedAtUtc)
+        )) {
             const day = new Date(n.PublishedAtUtc).toLocaleDateString();
             (byDay.get(day) ?? byDay.set(day, []).get(day)!).push(n);
         }
@@ -123,7 +138,9 @@ export function NewsScreen() {
                 <div className="min-h-0 flex-1 space-y-5 overflow-y-auto pb-6">
                     {[...byDay.entries()].map(([day, items]) => (
                         <div key={day}>
-                            <p className="mb-1 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">{day}</p>
+                            <p className="mb-1 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+                                {day}
+                            </p>
                             <ul className="space-y-1">
                                 {items.map((n) => (
                                     <li key={n.Id}>
@@ -152,16 +169,24 @@ export function NewsScreen() {
     const label = isQueue && queueIdx < total - 1 ? t('news.next') : t('news.got_it');
     return (
         <div className="mx-auto flex h-full w-full max-w-md flex-col px-6 pt-10">
-            <h1 className="font-display text-2xl font-bold text-strong">{entry?.Title ?? t('news.unavailable')}</h1>
+            <h1 className="font-display text-2xl font-bold text-strong">
+                {entry?.Title ?? t('news.unavailable')}
+            </h1>
             <div className="my-4 min-h-0 flex-1 overflow-y-auto">
-                {entry ? <NewsBody lines={entry.Lines}/> :
-                    <p className="text-[14px] text-subtle">{t('news.unavailable')}</p>}
+                {entry ? (
+                    <NewsBody lines={entry.Lines}/>
+                ) : (
+                    <p className="text-[14px] text-subtle">{t('news.unavailable')}</p>
+                )}
             </div>
             <div className="flex items-center justify-between pb-6">
                 {isQueue ? (
                     <>
-                        {total > 1 && <span
-                            className="font-mono text-[12px] text-muted">{t('news.progress', queueIdx + 1, total)}</span>}
+                        {total > 1 && (
+                            <span className="font-mono text-[12px] text-muted">
+                {t('news.progress', queueIdx + 1, total)}
+              </span>
+                        )}
                         <Button className="ml-auto" onClick={advanceQueue}>
                             {label}
                         </Button>

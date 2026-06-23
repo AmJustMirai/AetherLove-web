@@ -12,7 +12,13 @@ interface SelectProps<T extends number> {
     className?: string;
 }
 
-export function Select<T extends number>({label, value, options, onChange, className}: SelectProps<T>) {
+export function Select<T extends number>({
+                                             label,
+                                             value,
+                                             options,
+                                             onChange,
+                                             className,
+                                         }: SelectProps<T>) {
     return (
         <label className={cn('block', className)}>
             {label && <span className="mb-1 block text-[13px] font-medium text-subtle">{label}</span>}

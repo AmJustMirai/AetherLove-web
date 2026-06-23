@@ -17,7 +17,7 @@ describe('createIdentityBundle / unlockIdentity', () => {
         const unlocked = await unlockIdentity(bundle, 'correct horse battery staple');
         expect(unlocked).not.toBeNull();
         expect(Buffer.from(unlocked!.privateKey).toString('hex')).toBe(
-            Buffer.from(identity.privateKey).toString('hex'),
+            Buffer.from(identity.privateKey).toString('hex')
         );
 
         expect(await unlockIdentity(bundle, 'wrong')).toBeNull();

@@ -71,8 +71,11 @@ export function MatchScreen() {
                     <Button className="w-full max-w-[280px]" onClick={openChat}>
                         {t('deck.match_send_message')}
                     </Button>
-                    <Button variant="ghost" className="w-full max-w-[280px]"
-                            onClick={() => router.navigate(Screen.Deck)}>
+                    <Button
+                        variant="ghost"
+                        className="w-full max-w-[280px]"
+                        onClick={() => router.navigate(Screen.Deck)}
+                    >
                         {t('deck.match_keep_swiping')}
                     </Button>
                 </div>

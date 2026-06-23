@@ -78,7 +78,7 @@ export function registerPushHandlers(): void {
         sessionStore.update((s) =>
             s.connection
                 ? {...s, connection: {...s.connection, Warnings: [...s.connection.Warnings, p.Warning]}}
-                : s,
+                : s
         );
         pushToast(p.Warning.Reason, 'error', 8000);
     });
@@ -89,9 +89,12 @@ export function registerPushHandlers(): void {
             s.connection && !s.connection.ModeratorMessages.some((m) => m.Id === p.Message.Id)
                 ? {
                     ...s,
-                    connection: {...s.connection, ModeratorMessages: [...s.connection.ModeratorMessages, p.Message]}
+                    connection: {
+                        ...s.connection,
+                        ModeratorMessages: [...s.connection.ModeratorMessages, p.Message],
+                    },
                 }
-                : s,
+                : s
         );
         pushToast(p.Message.Body, 'info', 8000);
     });
@@ -100,7 +103,7 @@ export function registerPushHandlers(): void {
         sessionStore.update((s) => ({...s, result: 'banned'}));
         if (p.Reason) {
             sessionStore.update((s) =>
-                s.connection ? {...s, connection: {...s.connection, BanReason: p.Reason}} : s,
+                s.connection ? {...s, connection: {...s.connection, BanReason: p.Reason}} : s
             );
         }
         router.navigate(Screen.Banned);
@@ -110,7 +113,12 @@ export function registerPushHandlers(): void {
 }
 
 // Screens that own the connection lifecycle themselves — the offline gate should not interrupt them.
-const OFFLINE_EXEMPT = new Set<Screen>([Screen.Splash, Screen.Onboarding, Screen.Banned, Screen.Outdated]);
+const OFFLINE_EXEMPT = new Set<Screen>([
+    Screen.Splash,
+    Screen.Onboarding,
+    Screen.Banned,
+    Screen.Outdated,
+]);
 
 /** Routes to the Offline screen when the hub drops mid-session and back to the prior screen once restored
  *  (mirrors the plugin's AetherSignalService → ScreenRouter offline gate). */

@@ -4,7 +4,7 @@
 import {type ReactNode, useEffect, useMemo, useState} from 'react';
 import {hubClient} from '../services/signal/hubClient';
 import {useT} from '../i18n/useT';
-import type {OnboardingStateDto, PhotoBatchDto, PhotoUploadDto, ProfileDetailDto} from '../shared/dtos';
+import type {OnboardingStateDto, PhotoBatchDto, PhotoUploadDto, ProfileDetailDto,} from '../shared/dtos';
 import {
     CONTENT_OPTIONS,
     EXPANSION_OPTIONS,
@@ -41,7 +41,10 @@ export function MyProfileScreen() {
         setLoading(true);
         setError(null);
         try {
-            const [d, s] = await Promise.all([hubClient.getMyProfileDetail(), hubClient.getOnboardingState()]);
+            const [d, s] = await Promise.all([
+                hubClient.getMyProfileDetail(),
+                hubClient.getOnboardingState(),
+            ]);
             setDetail(d);
             setState(s);
         } catch (e) {
@@ -59,8 +62,12 @@ export function MyProfileScreen() {
     return (
         <div className="mx-auto flex h-full w-full max-w-2xl flex-col">
             <header className="px-6 pb-3 pt-6 lg:px-8 lg:pt-8">
-                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent-light/80">AetherLove</p>
-                <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-strong">{t('profile.title')}</h1>
+                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent-light/80">
+                    AetherLove
+                </p>
+                <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-strong">
+                    {t('profile.title')}
+                </h1>
                 <div className="mt-4 flex gap-1 rounded-xl bg-surface/5 p-1">
                     {(['view', 'edit', 'images'] as Tab[]).map((id) => (
                         <button
@@ -69,10 +76,14 @@ export function MyProfileScreen() {
                             onClick={() => setTab(id)}
                             className={cn(
                                 'flex-1 rounded-lg px-3 py-2 text-[14px] font-semibold transition-colors',
-                                tab === id ? 'bg-accent/20 text-strong' : 'text-subtle hover:text-strong',
+                                tab === id ? 'bg-accent/20 text-strong' : 'text-subtle hover:text-strong'
                             )}
                         >
-                            {id === 'view' ? t('profile.tab_view') : id === 'edit' ? t('profile.tab_edit') : t('profile.tab_images')}
+                            {id === 'view'
+                                ? t('profile.tab_view')
+                                : id === 'edit'
+                                    ? t('profile.tab_edit')
+                                    : t('profile.tab_images')}
                         </button>
                     ))}
                 </div>
@@ -116,9 +127,15 @@ function ProfileView({t, detail}: { t: T; detail: ProfileDetailDto }) {
             <div className="flex items-center gap-4">
                 <Avatar bytes={avatarBytes} size={72}/>
                 <div className="min-w-0">
-                    <h2 className="truncate font-display text-2xl font-bold text-strong">{detail.DisplayName}</h2>
+                    <h2 className="truncate font-display text-2xl font-bold text-strong">
+                        {detail.DisplayName}
+                    </h2>
                     <p className="text-[13px] text-subtle">
-                        {[labelOf(RACE_OPTIONS, detail.Race), labelOf(GENDER_OPTIONS, detail.Gender), labelOf(REGION_OPTIONS, detail.Region)]
+                        {[
+                            labelOf(RACE_OPTIONS, detail.Race),
+                            labelOf(GENDER_OPTIONS, detail.Gender),
+                            labelOf(REGION_OPTIONS, detail.Region),
+                        ]
                             .filter(Boolean)
                             .join(' · ')}
                     </p>
@@ -131,11 +148,21 @@ function ProfileView({t, detail}: { t: T; detail: ProfileDetailDto }) {
                 </p>
             </Section>
 
-            {languages.length > 0 && <ChipSection title={t('profile.section_languages')} labels={languages}/>}
-            {lookingFor.length > 0 && <ChipSection title={t('profile.section_looking_for')} labels={lookingFor}/>}
-            {interests.length > 0 && <ChipSection title={t('profile.section_interests')} labels={interests} gradient/>}
+            {languages.length > 0 && (
+                <ChipSection title={t('profile.section_languages')} labels={languages}/>
+            )}
+            {lookingFor.length > 0 && (
+                <ChipSection title={t('profile.section_looking_for')} labels={lookingFor}/>
+            )}
+            {interests.length > 0 && (
+                <ChipSection title={t('profile.section_interests')} labels={interests} gradient/>
+            )}
 
-            {(job || expansion || detail.FavoriteAnime || detail.FavoriteMovie || detail.FavoriteFFCharacter) && (
+            {(job ||
+                expansion ||
+                detail.FavoriteAnime ||
+                detail.FavoriteMovie ||
+                detail.FavoriteFFCharacter) && (
                 <Section title={t('profile.section_favourites')}>
                     <dl className="grid grid-cols-1 gap-x-6 gap-y-1.5 sm:grid-cols-2">
                         <FavRow label={t('profile.fav_job')} value={job}/>
@@ -163,13 +190,23 @@ function ProfileView({t, detail}: { t: T; detail: ProfileDetailDto }) {
 function Section({title, children}: { title: string; children: ReactNode }) {
     return (
         <div className="mt-6">
-            <h3 className="mb-2 text-[13px] font-semibold uppercase tracking-wide text-accent-light">{title}</h3>
+            <h3 className="mb-2 text-[13px] font-semibold uppercase tracking-wide text-accent-light">
+                {title}
+            </h3>
             {children}
         </div>
     );
 }
 
-function ChipSection({title, labels, gradient}: { title: string; labels: string[]; gradient?: boolean }) {
+function ChipSection({
+                         title,
+                         labels,
+                         gradient,
+                     }: {
+    title: string;
+    labels: string[];
+    gradient?: boolean;
+}) {
     return (
         <Section title={title}>
             <div className="flex flex-wrap gap-2">
@@ -208,7 +245,15 @@ function PhotoThumb({bytes}: { bytes: Uint8Array }) {
 
 // ---- Images tab --------------------------------------------------------------------------
 
-function ProfileImagesTab({t, detail, onReload}: { t: T; detail: ProfileDetailDto; onReload: () => void }) {
+function ProfileImagesTab({
+                              t,
+                              detail,
+                              onReload,
+                          }: {
+    t: T;
+    detail: ProfileDetailDto;
+    onReload: () => void;
+}) {
     const [avatar, setAvatar] = useState<PhotoUploadDto | null>(null);
     const [main, setMain] = useState<PhotoUploadDto | null>(null);
     const [extra1, setExtra1] = useState<PhotoUploadDto | null>(null);
@@ -231,11 +276,13 @@ function ProfileImagesTab({t, detail, onReload}: { t: T; detail: ProfileDetailDt
     const serverExtra3 = detail.Photos.find((p) => p.Order === 4) ?? null;
 
     const allDeclared = useMemo(() => {
-        const ok = (p: PhotoUploadDto | null, d: PhotoNsfwDecl) => p === null || d !== PhotoNsfwDecl.Unselected;
+        const ok = (p: PhotoUploadDto | null, d: PhotoNsfwDecl) =>
+            p === null || d !== PhotoNsfwDecl.Unselected;
         return ok(extra1, decl1) && ok(extra2, decl2) && ok(extra3, decl3);
     }, [extra1, decl1, extra2, decl2, extra3, decl3]);
 
-    const hasChanges = !!(avatar ?? main ?? extra1 ?? extra2 ?? extra3) || remove2 || remove3 || remove4;
+    const hasChanges =
+        !!(avatar ?? main ?? extra1 ?? extra2 ?? extra3) || remove2 || remove3 || remove4;
 
     async function save() {
         if (saving || !hasChanges) return;
@@ -309,10 +356,14 @@ function ProfileImagesTab({t, detail, onReload}: { t: T; detail: ProfileDetailDt
                             onDeclaration={setDecl1}
                             race={detail.Race}
                             onChange={setExtra1}
-                            onRemove={serverExtra1 && !remove2 ? () => {
-                                setExtra1(null);
-                                setRemove2(true);
-                            } : undefined}
+                            onRemove={
+                                serverExtra1 && !remove2
+                                    ? () => {
+                                        setExtra1(null);
+                                        setRemove2(true);
+                                    }
+                                    : undefined
+                            }
                             pendingRemove={remove2}
                             onUndoRemove={remove2 ? () => setRemove2(false) : undefined}
                             className="aspect-[350/560]"
@@ -327,10 +378,14 @@ function ProfileImagesTab({t, detail, onReload}: { t: T; detail: ProfileDetailDt
                             onDeclaration={setDecl2}
                             race={detail.Race}
                             onChange={setExtra2}
-                            onRemove={serverExtra2 && !remove3 ? () => {
-                                setExtra2(null);
-                                setRemove3(true);
-                            } : undefined}
+                            onRemove={
+                                serverExtra2 && !remove3
+                                    ? () => {
+                                        setExtra2(null);
+                                        setRemove3(true);
+                                    }
+                                    : undefined
+                            }
                             pendingRemove={remove3}
                             onUndoRemove={remove3 ? () => setRemove3(false) : undefined}
                             className="aspect-[350/560]"
@@ -345,10 +400,14 @@ function ProfileImagesTab({t, detail, onReload}: { t: T; detail: ProfileDetailDt
                             onDeclaration={setDecl3}
                             race={detail.Race}
                             onChange={setExtra3}
-                            onRemove={serverExtra3 && !remove4 ? () => {
-                                setExtra3(null);
-                                setRemove4(true);
-                            } : undefined}
+                            onRemove={
+                                serverExtra3 && !remove4
+                                    ? () => {
+                                        setExtra3(null);
+                                        setRemove4(true);
+                                    }
+                                    : undefined
+                            }
                             pendingRemove={remove4}
                             onUndoRemove={remove4 ? () => setRemove4(false) : undefined}
                             className="aspect-[350/560]"
@@ -366,12 +425,7 @@ function ProfileImagesTab({t, detail, onReload}: { t: T; detail: ProfileDetailDt
             )}
 
             <div className="border-t border-line/10 px-6 py-4 lg:px-8">
-                <Button
-                    className="w-full"
-                    onClick={save}
-                    loading={saving}
-                    disabled={!hasChanges || saving}
-                >
+                <Button className="w-full" onClick={save} loading={saving} disabled={!hasChanges || saving}>
                     {saving ? t('profile.saving') : saved ? t('profile.saved') : t('profile.save_changes')}
                 </Button>
             </div>
@@ -384,7 +438,9 @@ function ProfileImagesTab({t, detail, onReload}: { t: T; detail: ProfileDetailDt
 function ImgSection({title, children}: { title: string; children: ReactNode }) {
     return (
         <div className="mt-6">
-            <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-wide text-accent-light">{title}</h3>
+            <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-wide text-accent-light">
+                {title}
+            </h3>
             {children}
         </div>
     );
@@ -393,7 +449,8 @@ function ImgSection({title, children}: { title: string; children: ReactNode }) {
 function NsfwMasterToggle({t, detail}: { t: T; detail: ProfileDetailDto }) {
     const [on, setOn] = useState(detail.IsNsfw);
     const [busy, setBusy] = useState(false);
-    const locked = hasFlag(detail.LookingForMask, LookingFor.Erp) || detail.Photos.some((p) => p.IsNsfw);
+    const locked =
+        hasFlag(detail.LookingForMask, LookingFor.Erp) || detail.Photos.some((p) => p.IsNsfw);
 
     async function toggle(next: boolean) {
         if (!next && locked) return;
@@ -419,15 +476,27 @@ function NsfwMasterToggle({t, detail}: { t: T; detail: ProfileDetailDto }) {
                 onClick={() => void toggle(!on)}
                 className="flex w-full items-center gap-3 py-1 text-left disabled:opacity-50"
             >
-                <span className="min-w-0 flex-1">
-                    <span className="block text-[14px] font-medium text-strong">{t('profile.images_nsfw_toggle')}</span>
-                    <span className="block text-[12px] leading-snug text-muted">{t('profile.images_nsfw_hint')}</span>
-                </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[14px] font-medium text-strong">
+            {t('profile.images_nsfw_toggle')}
+          </span>
+          <span className="block text-[12px] leading-snug text-muted">
+            {t('profile.images_nsfw_hint')}
+          </span>
+        </span>
                 <span
-                    className={cn('relative h-6 w-11 shrink-0 rounded-full transition-colors', on ? 'bg-accent' : 'bg-surface/15')}>
-                    <span
-                        className={cn('absolute top-0.5 h-5 w-5 rounded-full bg-strong shadow transition-transform', on ? 'left-0.5 translate-x-5' : 'left-0.5')}/>
-                </span>
+                    className={cn(
+                        'relative h-6 w-11 shrink-0 rounded-full transition-colors',
+                        on ? 'bg-accent' : 'bg-surface/15'
+                    )}
+                >
+          <span
+              className={cn(
+                  'absolute top-0.5 h-5 w-5 rounded-full bg-strong shadow transition-transform',
+                  on ? 'left-0.5 translate-x-5' : 'left-0.5'
+              )}
+          />
+        </span>
             </button>
             {locked && on && (
                 <p className="mt-1 text-[12px] text-amber">{t('profile.images_nsfw_locked')}</p>

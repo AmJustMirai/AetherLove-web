@@ -38,7 +38,9 @@ const Body = ({children}: { children: string }) => (
     <p className="whitespace-pre-line text-[14px] leading-relaxed text-subtle">{children}</p>
 );
 const SectionLabel = ({children}: { children: string }) => (
-    <h3 className="mb-2 mt-4 text-[13px] font-semibold uppercase tracking-wide text-accent-light">{children}</h3>
+    <h3 className="mb-2 mt-4 text-[13px] font-semibold uppercase tracking-wide text-accent-light">
+        {children}
+    </h3>
 );
 
 function ChipGrid<V extends number>({
@@ -92,7 +94,12 @@ export function StepHowItWorks({t}: StepProps) {
     );
 }
 
-export function StepTOS({t, tosAccepted, onAccept, secondsLeft}: StepProps & {
+export function StepTOS({
+                            t,
+                            tosAccepted,
+                            onAccept,
+                            secondsLeft,
+                        }: StepProps & {
     tosAccepted: boolean;
     onAccept: (v: boolean) => void;
     secondsLeft: number;
@@ -105,7 +112,11 @@ export function StepTOS({t, tosAccepted, onAccept, secondsLeft}: StepProps & {
                 <p className="text-[13px] text-muted">{t('onboarding.tos_wait', secondsLeft)}</p>
             ) : (
                 <label className="flex items-center gap-2 text-[14px] text-body">
-                    <input type="checkbox" checked={tosAccepted} onChange={(e) => onAccept(e.target.checked)}/>
+                    <input
+                        type="checkbox"
+                        checked={tosAccepted}
+                        onChange={(e) => onAccept(e.target.checked)}
+                    />
                     {t('onboarding.tos_accept')}
                 </label>
             )}
@@ -130,7 +141,10 @@ export function StepXIVAuth({t}: StepProps) {
                     </Button>
                 </div>
             ) : (
-                <Button onClick={() => authService.startSignIn()} loading={snap.state === AuthFlowState.Starting}>
+                <Button
+                    onClick={() => authService.startSignIn()}
+                    loading={snap.state === AuthFlowState.Starting}
+                >
                     {t('onboarding.auth_open')}
                 </Button>
             )}
@@ -185,19 +199,37 @@ export function StepProfile({api, t}: StepProps) {
                 maxLength={300}
             />
             <div className="grid grid-cols-2 gap-3">
-                <Select label={t('onboarding.profile_race')} value={form.race} options={RACE_OPTIONS}
-                        onChange={(v) => set('race', v)}/>
-                <Select label={t('onboarding.profile_gender')} value={form.gender} options={GENDER_OPTIONS}
-                        onChange={(v) => set('gender', v)}/>
+                <Select
+                    label={t('onboarding.profile_race')}
+                    value={form.race}
+                    options={RACE_OPTIONS}
+                    onChange={(v) => set('race', v)}
+                />
+                <Select
+                    label={t('onboarding.profile_gender')}
+                    value={form.gender}
+                    options={GENDER_OPTIONS}
+                    onChange={(v) => set('gender', v)}
+                />
             </div>
-            <Select label={t('onboarding.profile_region')} value={form.region} options={REGION_OPTIONS}
-                    onChange={(v) => set('region', v)}/>
+            <Select
+                label={t('onboarding.profile_region')}
+                value={form.region}
+                options={REGION_OPTIONS}
+                onChange={(v) => set('region', v)}
+            />
             <SectionLabel>{t('onboarding.profile_languages')}</SectionLabel>
-            <ChipGrid options={LANGUAGE_OPTIONS} mask={form.languageMask}
-                      onToggle={(f) => toggleMask('languageMask', f)}/>
+            <ChipGrid
+                options={LANGUAGE_OPTIONS}
+                mask={form.languageMask}
+                onToggle={(f) => toggleMask('languageMask', f)}
+            />
             <SectionLabel>{t('onboarding.profile_looking_for')}</SectionLabel>
-            <ChipGrid options={LOOKING_FOR_OPTIONS} mask={form.lookingForMask}
-                      onToggle={(f) => toggleMask('lookingForMask', f)}/>
+            <ChipGrid
+                options={LOOKING_FOR_OPTIONS}
+                mask={form.lookingForMask}
+                onToggle={(f) => toggleMask('lookingForMask', f)}
+            />
         </div>
     );
 }
@@ -307,35 +339,64 @@ export function StepOptional({api, t}: StepProps) {
             <Heading>{t('onboarding.header_optional_details')}</Heading>
             <Body>{t('onboarding.optional_intro')}</Body>
             <div className="grid grid-cols-2 gap-3">
-                <Select label={t('onboarding.optional_job')} value={form.favoriteJob} options={JOB_OPTIONS}
-                        onChange={(v) => set('favoriteJob', v)}/>
-                <Select label={t('onboarding.optional_expansion')} value={form.favoriteExpansion}
-                        options={EXPANSION_OPTIONS} onChange={(v) => set('favoriteExpansion', v)}/>
+                <Select
+                    label={t('onboarding.optional_job')}
+                    value={form.favoriteJob}
+                    options={JOB_OPTIONS}
+                    onChange={(v) => set('favoriteJob', v)}
+                />
+                <Select
+                    label={t('onboarding.optional_expansion')}
+                    value={form.favoriteExpansion}
+                    options={EXPANSION_OPTIONS}
+                    onChange={(v) => set('favoriteExpansion', v)}
+                />
             </div>
             <label className="block">
-                <span
-                    className="mb-1 block text-[13px] font-medium text-subtle">{t('onboarding.optional_location')}</span>
+        <span className="mb-1 block text-[13px] font-medium text-subtle">
+          {t('onboarding.optional_location')}
+        </span>
                 <select
                     value={form.favoriteLocationName}
                     onChange={(e) => set('favoriteLocationName', e.target.value)}
                     disabled={territories.length === 0}
                     className="w-full appearance-none rounded-xl border border-line/10 bg-void/30 px-3 py-2 text-[15px] text-body outline-none focus:border-accent disabled:opacity-50"
                 >
-                    <option value="" className="bg-[#160d1f]">{t('onboarding.optional_location_none')}</option>
+                    <option value="" className="bg-[#160d1f]">
+                        {t('onboarding.optional_location_none')}
+                    </option>
                     {territories.map((loc) => (
-                        <option key={loc.id} value={loc.name} className="bg-[#160d1f]">{loc.name}</option>
+                        <option key={loc.id} value={loc.name} className="bg-[#160d1f]">
+                            {loc.name}
+                        </option>
                     ))}
                 </select>
             </label>
-            <TextInput label={t('onboarding.optional_anime')} value={form.favoriteAnime}
-                       onChange={(v) => set('favoriteAnime', v)} maxLength={60}/>
-            <TextInput label={t('onboarding.optional_movie')} value={form.favoriteMovie}
-                       onChange={(v) => set('favoriteMovie', v)} maxLength={60}/>
-            <TextInput label={t('onboarding.optional_character')} value={form.favoriteCharacter}
-                       onChange={(v) => set('favoriteCharacter', v)} maxLength={60}/>
+            <TextInput
+                label={t('onboarding.optional_anime')}
+                value={form.favoriteAnime}
+                onChange={(v) => set('favoriteAnime', v)}
+                maxLength={60}
+            />
+            <TextInput
+                label={t('onboarding.optional_movie')}
+                value={form.favoriteMovie}
+                onChange={(v) => set('favoriteMovie', v)}
+                maxLength={60}
+            />
+            <TextInput
+                label={t('onboarding.optional_character')}
+                value={form.favoriteCharacter}
+                onChange={(v) => set('favoriteCharacter', v)}
+                maxLength={60}
+            />
             <SectionLabel>{t('onboarding.profile_looking_for')}</SectionLabel>
-            <ChipGrid options={CONTENT_OPTIONS} mask={form.contentMask} onToggle={(f) => toggleMask('contentMask', f)}
-                      gradient/>
+            <ChipGrid
+                options={CONTENT_OPTIONS}
+                mask={form.contentMask}
+                onToggle={(f) => toggleMask('contentMask', f)}
+                gradient
+            />
         </div>
     );
 }
@@ -347,16 +408,29 @@ export function StepFilters({api, t}: StepProps) {
             <Heading>{t('onboarding.header_match_preferences')}</Heading>
             <Body>{t('onboarding.filters_intro')}</Body>
             <SectionLabel>{t('onboarding.profile_gender')}</SectionLabel>
-            <ChipGrid options={GENDER_OPTIONS} mask={form.wantedGender}
-                      onToggle={(f) => toggleMask('wantedGender', f)}/>
+            <ChipGrid
+                options={GENDER_OPTIONS}
+                mask={form.wantedGender}
+                onToggle={(f) => toggleMask('wantedGender', f)}
+            />
             <SectionLabel>{t('onboarding.profile_region')}</SectionLabel>
-            <ChipGrid options={REGION_OPTIONS} mask={form.wantedRegion}
-                      onToggle={(f) => toggleMask('wantedRegion', f)}/>
+            <ChipGrid
+                options={REGION_OPTIONS}
+                mask={form.wantedRegion}
+                onToggle={(f) => toggleMask('wantedRegion', f)}
+            />
             <SectionLabel>{t('onboarding.profile_languages')}</SectionLabel>
-            <ChipGrid options={LANGUAGE_OPTIONS} mask={form.wantedLanguage}
-                      onToggle={(f) => toggleMask('wantedLanguage', f)}/>
+            <ChipGrid
+                options={LANGUAGE_OPTIONS}
+                mask={form.wantedLanguage}
+                onToggle={(f) => toggleMask('wantedLanguage', f)}
+            />
             <SectionLabel>{t('onboarding.profile_race')}</SectionLabel>
-            <ChipGrid options={RACE_OPTIONS} mask={form.wantedRace} onToggle={(f) => toggleMask('wantedRace', f)}/>
+            <ChipGrid
+                options={RACE_OPTIONS}
+                mask={form.wantedRace}
+                onToggle={(f) => toggleMask('wantedRace', f)}
+            />
         </div>
     );
 }

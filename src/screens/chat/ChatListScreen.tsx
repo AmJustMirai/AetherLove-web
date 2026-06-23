@@ -47,13 +47,13 @@ function MatchListView({archived}: { archived: boolean }) {
                             }
                         }
                         return {...m, preview};
-                    }),
+                    })
                 );
                 if (!cancelled) setRows(decorated);
                 if (!archived) {
                     void hubClient.markMatchListSeen().catch(() => undefined);
                     sessionStore.update((s) =>
-                        s.connection ? {...s, connection: {...s.connection, NewMatchCount: 0}} : s,
+                        s.connection ? {...s, connection: {...s.connection, NewMatchCount: 0}} : s
                     );
                 }
             } catch {
@@ -72,7 +72,9 @@ function MatchListView({archived}: { archived: boolean }) {
         <div className="mx-auto flex h-full w-full max-w-2xl flex-col">
             <header className="flex items-end justify-between px-6 pb-3 pt-6 lg:px-8 lg:pt-8">
                 <div>
-                    <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent-light/80">Linkpearl</p>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent-light/80">
+                        Linkpearl
+                    </p>
                     <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-strong">
                         {archived ? t('chat.archive_title') : t('chatlist.title')}
                     </h1>
@@ -105,7 +107,7 @@ function MatchListView({archived}: { archived: boolean }) {
                                         onClick={() =>
                                             router.navigate(Screen.Chat, {
                                                 peerId: m.PeerProfileId,
-                                                peerName: m.PeerDisplayName
+                                                peerName: m.PeerDisplayName,
                                             })
                                         }
                                         className="flex min-w-0 flex-1 items-center gap-4 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-surface/5"
@@ -113,12 +115,19 @@ function MatchListView({archived}: { archived: boolean }) {
                                         <Avatar bytes={m.PeerAvatarWebp} size={56}/>
                                         <div className="min-w-0 flex-1">
                                             <div className="flex items-center gap-2">
-                                                <span
-                                                    className="truncate font-semibold text-strong">{m.PeerDisplayName}</span>
-                                                {!archived && m.IsPinned &&
-                                                    <span className="text-[11px] text-accent-light">📌</span>}
+                        <span className="truncate font-semibold text-strong">
+                          {m.PeerDisplayName}
+                        </span>
+                                                {!archived && m.IsPinned && (
+                                                    <span className="text-[11px] text-accent-light">📌</span>
+                                                )}
                                             </div>
-                                            <p className={cn('truncate text-sm', m.UnreadCount > 0 ? 'text-body' : 'text-muted')}>
+                                            <p
+                                                className={cn(
+                                                    'truncate text-sm',
+                                                    m.UnreadCount > 0 ? 'text-body' : 'text-muted'
+                                                )}
+                                            >
                                                 {m.preview}
                                             </p>
                                         </div>

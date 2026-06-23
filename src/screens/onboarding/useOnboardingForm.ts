@@ -16,7 +16,7 @@ import {
     SyncTool,
     toggleFlag,
 } from '../../shared/enums';
-import type {BasicProfileDto, FiltersDto, OnboardingStateDto, PhotoBatchDto, PhotoUploadDto} from '../../shared/dtos';
+import type {BasicProfileDto, FiltersDto, OnboardingStateDto, PhotoBatchDto, PhotoUploadDto,} from '../../shared/dtos';
 import {PhotoNsfwDecl} from '../photos/photoModeration';
 
 export interface OnboardingForm {
@@ -148,54 +148,70 @@ export function useOnboardingForm(resume?: OnboardingStateDto | null) {
         });
     }, []);
 
-    const buildBasicProfile = useCallback((): BasicProfileDto => ({
-        DisplayName: form.displayName,
-        Bio: form.bio,
-        Race: form.race,
-        Gender: form.gender,
-        Region: form.region,
-        LanguageMask: form.languageMask as Language,
-        ContentInterestMask: form.contentMask as ContentInterest,
-        LookingForMask: form.lookingForMask as LookingFor,
-        NsfwEnabled: form.nsfwEnabled,
-        Timezone: form.timezone,
-        FavoriteJob: form.favoriteJob,
-        FavoriteExpansion: form.favoriteExpansion,
-        SpotifyTrackId: '', SpotifyTrackName: '',
-        SoundCloudUrl: '', SoundCloudName: '',
-        AppleMusicUrl: '', AppleMusicName: '',
-        YouTubeMusicUrl: '', YouTubeMusicName: '',
-        FavoriteMovie: form.favoriteMovie,
-        FavoriteAnime: form.favoriteAnime,
-        FavoriteFFCharacter: form.favoriteCharacter,
-        WeekdayHoursMask: 0,
-        WeekendHoursMask: 0,
-        SyncTool: form.syncToolMask as SyncTool,
-    }), [form]);
+    const buildBasicProfile = useCallback(
+        (): BasicProfileDto => ({
+            DisplayName: form.displayName,
+            Bio: form.bio,
+            Race: form.race,
+            Gender: form.gender,
+            Region: form.region,
+            LanguageMask: form.languageMask as Language,
+            ContentInterestMask: form.contentMask as ContentInterest,
+            LookingForMask: form.lookingForMask as LookingFor,
+            NsfwEnabled: form.nsfwEnabled,
+            Timezone: form.timezone,
+            FavoriteJob: form.favoriteJob,
+            FavoriteExpansion: form.favoriteExpansion,
+            SpotifyTrackId: '',
+            SpotifyTrackName: '',
+            SoundCloudUrl: '',
+            SoundCloudName: '',
+            AppleMusicUrl: '',
+            AppleMusicName: '',
+            YouTubeMusicUrl: '',
+            YouTubeMusicName: '',
+            FavoriteMovie: form.favoriteMovie,
+            FavoriteAnime: form.favoriteAnime,
+            FavoriteFFCharacter: form.favoriteCharacter,
+            WeekdayHoursMask: 0,
+            WeekendHoursMask: 0,
+            SyncTool: form.syncToolMask as SyncTool,
+        }),
+        [form]
+    );
 
-    const buildFilters = useCallback((): FiltersDto => ({
-        WantedRaceMask: form.wantedRace as Race,
-        WantedGenderMask: form.wantedGender as Gender,
-        WantedRegionMask: form.wantedRegion as Region,
-        WantedLanguageMask: form.wantedLanguage as Language,
-    }), [form]);
+    const buildFilters = useCallback(
+        (): FiltersDto => ({
+            WantedRaceMask: form.wantedRace as Race,
+            WantedGenderMask: form.wantedGender as Gender,
+            WantedRegionMask: form.wantedRegion as Region,
+            WantedLanguageMask: form.wantedLanguage as Language,
+        }),
+        [form]
+    );
 
-    const buildPhotoBatch = useCallback((): PhotoBatchDto => ({
-        Avatar: form.avatar,
-        Main: form.main,
-        Extra1: form.extra1 ? {...form.extra1, IsNsfw: form.decl1 === PhotoNsfwDecl.Nsfw} : null,
-        Extra2: form.extra2 ? {...form.extra2, IsNsfw: form.decl2 === PhotoNsfwDecl.Nsfw} : null,
-        Extra3: form.extra3 ? {...form.extra3, IsNsfw: form.decl3 === PhotoNsfwDecl.Nsfw} : null,
-    }), [form]);
+    const buildPhotoBatch = useCallback(
+        (): PhotoBatchDto => ({
+            Avatar: form.avatar,
+            Main: form.main,
+            Extra1: form.extra1 ? {...form.extra1, IsNsfw: form.decl1 === PhotoNsfwDecl.Nsfw} : null,
+            Extra2: form.extra2 ? {...form.extra2, IsNsfw: form.decl2 === PhotoNsfwDecl.Nsfw} : null,
+            Extra3: form.extra3 ? {...form.extra3, IsNsfw: form.decl3 === PhotoNsfwDecl.Nsfw} : null,
+        }),
+        [form]
+    );
 
     const passphraseValid = useMemo(
         () => form.passphrase.length >= MIN_PASSPHRASE && form.passphrase === form.passphraseConfirm,
-        [form.passphrase, form.passphraseConfirm],
+        [form.passphrase, form.passphraseConfirm]
     );
 
     const allConfirmedExtrasDeclared = useMemo(() => {
-        const ok = (p: PhotoUploadDto | null, d: PhotoNsfwDecl) => p === null || d !== PhotoNsfwDecl.Unselected;
-        return ok(form.extra1, form.decl1) && ok(form.extra2, form.decl2) && ok(form.extra3, form.decl3);
+        const ok = (p: PhotoUploadDto | null, d: PhotoNsfwDecl) =>
+            p === null || d !== PhotoNsfwDecl.Unselected;
+        return (
+            ok(form.extra1, form.decl1) && ok(form.extra2, form.decl2) && ok(form.extra3, form.decl3)
+        );
     }, [form.extra1, form.decl1, form.extra2, form.decl2, form.extra3, form.decl3]);
 
     const firstUndeclaredExtra = useMemo((): 2 | 3 | 4 | null => {
@@ -206,9 +222,15 @@ export function useOnboardingForm(resume?: OnboardingStateDto | null) {
     }, [form.extra1, form.decl1, form.extra2, form.decl2, form.extra3, form.decl3]);
 
     return {
-        form, set, toggleMask,
-        buildBasicProfile, buildFilters, buildPhotoBatch,
-        passphraseValid, allConfirmedExtrasDeclared, firstUndeclaredExtra,
+        form,
+        set,
+        toggleMask,
+        buildBasicProfile,
+        buildFilters,
+        buildPhotoBatch,
+        passphraseValid,
+        allConfirmedExtrasDeclared,
+        firstUndeclaredExtra,
     };
 }
 

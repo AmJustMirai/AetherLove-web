@@ -74,7 +74,7 @@ export function useDeck() {
                 setState((s) => ({...s, cards: [card, ...s.cards]}));
             }
         },
-        [state.cards],
+        [state.cards]
     );
 
     return {

@@ -8,7 +8,7 @@
 
 :root {
     /* Crystal Void defaults. The shell root overrides these per active theme (ui/theme.ts);
-       they live here too so anything rendered outside the shell still has a sane palette. */
+         they live here too so anything rendered outside the shell still has a sane palette. */
     --al-accent: 186 107 201;
     --al-accent-light: 217 143 230;
     --al-accent-dark: 122 64 161;
@@ -20,8 +20,8 @@
     --al-btn-active: 97 31 140;
 
     /* Surfaces (the page chrome) — dark defaults; the shell root overrides these per active theme so a
-       light theme can flip the whole canvas (ui/theme.ts SurfacePalette). Stored as "R G B" triplets so
-       they compose with alpha at every call site. */
+         light theme can flip the whole canvas (ui/theme.ts SurfacePalette). Stored as "R G B" triplets so
+         they compose with alpha at every call site. */
     --al-void: 11 6 18; /* the dark "void" the app floats on */
     --al-text-strong: 245 240 255; /* headings / high-emphasis text (was literal white) */
     --al-body: 217 217 217; /* UiColors.Body 0.85 */
@@ -33,7 +33,7 @@
 
     --al-text: #f5f0ff;
     /* Text that sits on a saturated accent/button/danger fill — stays light in every theme (the fills are
-       mid-tone in both modes), so it is intentionally NOT overridden per theme. */
+         mid-tone in both modes), so it is intentionally NOT overridden per theme. */
     --al-on-accent: 245 240 255;
     --al-danger: 242 115 115; /* UiColors.Danger */
     --al-amber: 242 166 36; /* UiColors.Amber */

@@ -64,11 +64,25 @@ export class FireworkEffect implements MatchEffect {
         const cx = w / 2;
         const cy = h * 0.62;
         const textA = reduce ? 1 : easeOut(progress(s.t, 1.0));
-        centerText(ctx, cx, h * 0.16, "It's a match!", '800 36px "Bricolage Grotesque Variable", sans-serif', rgba([255, 255, 255], textA));
+        centerText(
+            ctx,
+            cx,
+            h * 0.16,
+            "It's a match!",
+            '800 36px "Bricolage Grotesque Variable", sans-serif',
+            rgba([255, 255, 255], textA)
+        );
 
         const r = 48;
         avatarCircle(ctx, cx - r - 12, cy, r, content.ownAvatar);
         avatarCircle(ctx, cx + r + 12, cy, r, content.peerAvatar);
-        centerText(ctx, cx, cy + r + 26, `${content.ownName}  &  ${content.peerName}`, '600 15px "Hanken Grotesk Variable", sans-serif', rgba(s.accentLight, textA));
+        centerText(
+            ctx,
+            cx,
+            cy + r + 26,
+            `${content.ownName}  &  ${content.peerName}`,
+            '600 15px "Hanken Grotesk Variable", sans-serif',
+            rgba(s.accentLight, textA)
+        );
     }
 }

@@ -99,7 +99,10 @@ function openDb(): Promise<IDBDatabase> {
     return dbPromise;
 }
 
-async function idbRun<T>(mode: IDBTransactionMode, fn: (store: IDBObjectStore) => IDBRequest): Promise<T> {
+async function idbRun<T>(
+    mode: IDBTransactionMode,
+    fn: (store: IDBObjectStore) => IDBRequest
+): Promise<T> {
     const db = await openDb();
     return new Promise<T>((resolve, reject) => {
         const tx = db.transaction(STORE_KV, mode);

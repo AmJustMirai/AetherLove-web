@@ -15,7 +15,12 @@ export interface Settings {
 
 const STORAGE_KEY = 'aetherlove:settings';
 
-const DEFAULTS: Settings = {phoneScale: 'medium', reduceMotion: false, soundEffects: true, alwaysBlurNsfw: false};
+const DEFAULTS: Settings = {
+    phoneScale: 'medium',
+    reduceMotion: false,
+    soundEffects: true,
+    alwaysBlurNsfw: false,
+};
 
 function loadInitial(): Settings {
     try {

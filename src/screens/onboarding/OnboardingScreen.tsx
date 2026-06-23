@@ -82,7 +82,7 @@ export function OnboardingScreen() {
     const hasKeyBundle = !!bootSnapshot.connection?.HasKeyBundle;
 
     const [index, setIndex] = useState(() =>
-        resuming ? STEPS.indexOf(hasKeyBundle ? 'profile' : 'encryption') : 0,
+        resuming ? STEPS.indexOf(hasKeyBundle ? 'profile' : 'encryption') : 0
     );
     const step = STEPS[index];
 
@@ -115,7 +115,11 @@ export function OnboardingScreen() {
                     (hasKeyBundle && sessionStore.get().identity !== null)
                 );
             case 'profile':
-                return api.form.displayName.length > 0 && api.form.languageMask !== 0 && api.form.lookingForMask !== 0;
+                return (
+                    api.form.displayName.length > 0 &&
+                    api.form.languageMask !== 0 &&
+                    api.form.lookingForMask !== 0
+                );
             case 'imageDisclaimer':
                 return api.form.disclaimerAck;
             case 'avatar':
@@ -204,8 +208,13 @@ export function OnboardingScreen() {
                         {step === 'welcome' && <StepWelcome api={api} t={t}/>}
                         {step === 'howItWorks' && <StepHowItWorks api={api} t={t}/>}
                         {step === 'tos' && (
-                            <StepTOS api={api} t={t} tosAccepted={tosAccepted} onAccept={setTosAccepted}
-                                     secondsLeft={tosSecondsLeft}/>
+                            <StepTOS
+                                api={api}
+                                t={t}
+                                tosAccepted={tosAccepted}
+                                onAccept={setTosAccepted}
+                                secondsLeft={tosSecondsLeft}
+                            />
                         )}
                         {step === 'xivAuth' && <StepXIVAuth api={api} t={t}/>}
                         {step === 'encryption' && <StepPassphrase api={api} t={t}/>}
@@ -227,14 +236,22 @@ export function OnboardingScreen() {
                         ) : (
                             <span/>
                         )}
-                        <Button onClick={goNext} disabled={!canProceed} loading={saving} className="min-w-[140px]">
+                        <Button
+                            onClick={goNext}
+                            disabled={!canProceed}
+                            loading={saving}
+                            className="min-w-[140px]"
+                        >
                             {nextLabel}
                         </Button>
                     </footer>
                 </div>
             </div>
 
-            <UndeclaredNsfwModal open={showUndeclaredModal} onClose={() => setShowUndeclaredModal(false)}/>
+            <UndeclaredNsfwModal
+                open={showUndeclaredModal}
+                onClose={() => setShowUndeclaredModal(false)}
+            />
         </div>
     );
 }
@@ -245,13 +262,24 @@ function OnboardingAside({index, t}: { index: number; t: ReturnType<typeof useT>
         <aside
             className="relative hidden w-[38%] max-w-[460px] shrink-0 flex-col overflow-hidden border-r border-line/10 bg-gradient-to-b from-[#1a0f26]/80 to-[#0b0612]/80 px-10 py-14 backdrop-blur-xl lg:flex">
             <div className="flex items-center gap-3">
-                <svg width="34" height="34" viewBox="0 0 24 24" className="text-accent" fill="currentColor" aria-hidden>
+                <svg
+                    width="34"
+                    height="34"
+                    viewBox="0 0 24 24"
+                    className="text-accent"
+                    fill="currentColor"
+                    aria-hidden
+                >
                     <path
                         d="M12 21s-7.5-4.6-10-9.2C.5 8.6 2 5.5 5 5.5c1.9 0 3.2 1.1 4 2.3.8-1.2 2.1-2.3 4-2.3 3 0 4.5 3.1 3 6.3C19.5 16.4 12 21 12 21z"/>
                 </svg>
-                <span className="font-display text-2xl font-extrabold tracking-tight text-strong">AetherLove</span>
+                <span className="font-display text-2xl font-extrabold tracking-tight text-strong">
+          AetherLove
+        </span>
             </div>
-            <p className="mt-4 max-w-[300px] text-[15px] leading-relaxed text-subtle">{t('onboarding.welcome_body')}</p>
+            <p className="mt-4 max-w-[300px] text-[15px] leading-relaxed text-subtle">
+                {t('onboarding.welcome_body')}
+            </p>
 
             <ol className="mt-10 min-h-0 flex-1 space-y-1 overflow-y-auto pr-2">
                 {STEPS.map((s, i) => {
@@ -262,7 +290,7 @@ function OnboardingAside({index, t}: { index: number; t: ReturnType<typeof useT>
                             key={s}
                             className={cn(
                                 'flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] transition-colors',
-                                current ? 'bg-accent/15 text-strong' : done ? 'text-subtle' : 'text-muted',
+                                current ? 'bg-accent/15 text-strong' : done ? 'text-subtle' : 'text-muted'
                             )}
                         >
               <span
@@ -272,7 +300,7 @@ function OnboardingAside({index, t}: { index: number; t: ReturnType<typeof useT>
                           ? 'bg-accent-light text-[#1a0f26]'
                           : done
                               ? 'bg-accent/30 text-accent-light'
-                              : 'border border-line/15 text-muted',
+                              : 'border border-line/15 text-muted'
                   )}
               >
                 {done ? '✓' : i + 1}
@@ -283,7 +311,9 @@ function OnboardingAside({index, t}: { index: number; t: ReturnType<typeof useT>
                 })}
             </ol>
 
-            <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">🔒 End-to-end encrypted</p>
+            <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+                🔒 End-to-end encrypted
+            </p>
         </aside>
     );
 }
@@ -291,7 +321,9 @@ function OnboardingAside({index, t}: { index: number; t: ReturnType<typeof useT>
 function StepPreferences({t}: { t: ReturnType<typeof useT> }) {
     return (
         <div className="space-y-5">
-            <h2 className="font-display text-xl font-bold text-strong">{t('onboarding.preferences_intro')}</h2>
+            <h2 className="font-display text-xl font-bold text-strong">
+                {t('onboarding.preferences_intro')}
+            </h2>
             <div>
                 <h3 className="mb-2 text-[13px] font-semibold uppercase tracking-wide text-accent-light">
                     {t('onboarding.preferences_theme')}

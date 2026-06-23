@@ -11,9 +11,6 @@ export function useStore<T>(store: ReadableStore<T>): T {
 }
 
 /** Generic subscribe+snapshot binding for the Phase-1 singletons that aren't ReadableStores. */
-export function useExternal<T>(
-    subscribe: (cb: () => void) => () => void,
-    getSnapshot: () => T,
-): T {
+export function useExternal<T>(subscribe: (cb: () => void) => () => void, getSnapshot: () => T): T {
     return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 }

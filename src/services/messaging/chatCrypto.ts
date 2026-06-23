@@ -14,7 +14,7 @@ import {
     unwrapPrivateKey,
     wrapPrivateKey,
 } from '../crypto/cryptoService';
-import type {EncryptedMessageDto, KeyBundleDto, SendMessageRequest,} from '../../shared/dtos';
+import type {EncryptedMessageDto, KeyBundleDto, SendMessageRequest} from '../../shared/dtos';
 import type {Guid} from '../../shared/wire';
 
 // Default Argon2id parameters for newly created identities. Existing accounts MUST use the params
@@ -24,7 +24,7 @@ export const DEFAULT_KDF = {memoryKb: 65536, iterations: 3, parallelism: 1} as c
 /** Derives the conversation message key for an unlocked identity ↔ a peer public key. */
 export function deriveConversationFor(
     identity: IdentityKeyPair,
-    peerPublicKey: Uint8Array,
+    peerPublicKey: Uint8Array
 ): Uint8Array {
     const salt = deriveConversationSalt(identity.publicKey, peerPublicKey);
     const shared = deriveSharedSecret(identity.privateKey, peerPublicKey);
@@ -36,7 +36,7 @@ export async function encryptForPeer(
     identity: IdentityKeyPair,
     peerProfileId: Guid,
     peerPublicKey: Uint8Array,
-    plaintext: string,
+    plaintext: string
 ): Promise<SendMessageRequest> {
     const key = deriveConversationFor(identity, peerPublicKey);
     const {ciphertext, nonce} = await encrypt(key, new TextEncoder().encode(plaintext));
@@ -47,7 +47,7 @@ export async function encryptForPeer(
 export async function decryptFromPeer(
     identity: IdentityKeyPair,
     peerPublicKey: Uint8Array,
-    msg: Pick<EncryptedMessageDto, 'Ciphertext' | 'Nonce'>,
+    msg: Pick<EncryptedMessageDto, 'Ciphertext' | 'Nonce'>
 ): Promise<string> {
     const key = deriveConversationFor(identity, peerPublicKey);
     const plain = await decrypt(key, msg.Nonce, msg.Ciphertext);
@@ -56,7 +56,7 @@ export async function decryptFromPeer(
 
 /** Creates a fresh identity and the KeyBundleDto to upload, wrapping the private key under a passphrase. */
 export async function createIdentityBundle(
-    passphrase: string,
+    passphrase: string
 ): Promise<{ identity: IdentityKeyPair; bundle: KeyBundleDto }> {
     const identity = generateIdentityKeyPair();
     const salt = crypto.getRandomValues(new Uint8Array(16));
@@ -77,7 +77,7 @@ export async function createIdentityBundle(
 /** Unlocks an identity from a stored KeyBundleDto using the passphrase. Returns null on wrong passphrase. */
 export async function unlockIdentity(
     bundle: KeyBundleDto,
-    passphrase: string,
+    passphrase: string
 ): Promise<IdentityKeyPair | null> {
     const kek = deriveKek(passphrase, {
         salt: bundle.KdfSalt,
