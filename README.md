@@ -9,6 +9,8 @@ Yes, this is a port from the plugin. All done through the power of water wasting
 
 ## There's an integrity check on the public keys you receive. If they ever decide to do a MiTM you'd get a notification from the website.
 
+## This is all open-source, feel free to study explore and conduct research for "untrusted behaviour" that is deemed by from the Plugin Developer. Doubt much will be found though. 
+
 ## Disclaimer
 **This project is not affiliated with, endorsed by, or associated with the original AetherLove plugin, its developers, or any related entities.**
 It is an independent, unofficial browser-based port.
