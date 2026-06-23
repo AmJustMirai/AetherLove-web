@@ -21,6 +21,7 @@ import {
     StepFilters,
     StepFinished,
     StepHowItWorks,
+    StepImageDisclaimer,
     StepOptional,
     StepPassphrase,
     StepPhotos,
@@ -29,6 +30,7 @@ import {
     StepWelcome,
     StepXIVAuth,
 } from './steps';
+import {UndeclaredNsfwModal} from '../photos/photoModeration';
 
 const STEPS = [
     'welcome',
@@ -37,6 +39,7 @@ const STEPS = [
     'xivAuth',
     'encryption',
     'profile',
+    'imageDisclaimer',
     'avatar',
     'photos',
     'optional',
@@ -54,6 +57,7 @@ const HEADER_KEY: Record<StepId, Parameters<ReturnType<typeof useT>>[0]> = {
     xivAuth: 'onboarding.header_sign_in',
     encryption: 'onboarding.header_secure_messages',
     profile: 'onboarding.header_your_profile',
+    imageDisclaimer: 'onboarding.header_image_disclaimer',
     avatar: 'onboarding.header_profile_picture',
     photos: 'onboarding.header_your_photos',
     optional: 'onboarding.header_optional_details',
@@ -86,6 +90,7 @@ export function OnboardingScreen() {
     const [tosSecondsLeft, setTosSecondsLeft] = useState(TOS_WAIT_SECONDS);
     const [saving, setSaving] = useState(false);
     const [bundleUploaded, setBundleUploaded] = useState(resuming && hasKeyBundle);
+    const [showUndeclaredModal, setShowUndeclaredModal] = useState(false);
 
     // TOS read-timer: counts down when the step is shown (mirrors _tosTimerStart).
     useEffect(() => {
@@ -111,9 +116,12 @@ export function OnboardingScreen() {
                 );
             case 'profile':
                 return api.form.displayName.length > 0 && api.form.languageMask !== 0 && api.form.lookingForMask !== 0;
+            case 'imageDisclaimer':
+                return api.form.disclaimerAck;
             case 'avatar':
                 return api.form.avatar !== null;
             case 'photos':
+                // Next is enabled when main is set; undeclared extras are caught in goNext.
                 return api.form.main !== null;
             default:
                 return true;
@@ -151,6 +159,10 @@ export function OnboardingScreen() {
                     setBundleUploaded(true);
                 });
             case 'photos':
+                if (!api.allConfirmedExtrasDeclared) {
+                    setShowUndeclaredModal(true);
+                    return;
+                }
                 return runSave('photos', () => hubClient.savePhotos(api.buildPhotoBatch()));
             case 'optional':
                 return runSave('profile', () => hubClient.saveBasicProfile(api.buildBasicProfile()));
@@ -198,6 +210,7 @@ export function OnboardingScreen() {
                         {step === 'xivAuth' && <StepXIVAuth api={api} t={t}/>}
                         {step === 'encryption' && <StepPassphrase api={api} t={t}/>}
                         {step === 'profile' && <StepProfile api={api} t={t}/>}
+                        {step === 'imageDisclaimer' && <StepImageDisclaimer api={api} t={t}/>}
                         {step === 'avatar' && <StepAvatar api={api} t={t}/>}
                         {step === 'photos' && <StepPhotos api={api} t={t}/>}
                         {step === 'optional' && <StepOptional api={api} t={t}/>}
@@ -220,6 +233,8 @@ export function OnboardingScreen() {
                     </footer>
                 </div>
             </div>
+
+            <UndeclaredNsfwModal open={showUndeclaredModal} onClose={() => setShowUndeclaredModal(false)}/>
         </div>
     );
 }

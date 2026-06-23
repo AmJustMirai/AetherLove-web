@@ -1,15 +1,10 @@
-// Web port of Screens/MyProfileScreen.cs, condensed to View + Edit tabs (the plugin's separate Images tab is
-// deferred — see note). View renders the read-only profile detail; Edit reuses the onboarding form hook +
-// step bodies and pushes basic profile + filters back to the server.
-//
-// NOTE: photo editing is intentionally out of scope here. useOnboardingForm starts its photo slots empty and
-// SavePhotos with nulls would clear server slots, so Edit saves text/enum/filter fields only; photos are
-// shown read-only in the View tab. Image editing lands in a later batch.
+// Web port of Screens/MyProfileScreen.cs. Three tabs: View (read-only detail), Edit (text/filter
+// fields via onboarding form hook), Images (photo management mirroring MyProfileScreen.Images.cs).
 
-import {type ReactNode, useEffect, useState} from 'react';
+import {type ReactNode, useEffect, useMemo, useState} from 'react';
 import {hubClient} from '../services/signal/hubClient';
 import {useT} from '../i18n/useT';
-import type {OnboardingStateDto, ProfileDetailDto} from '../shared/dtos';
+import type {OnboardingStateDto, PhotoBatchDto, PhotoUploadDto, ProfileDetailDto} from '../shared/dtos';
 import {
     CONTENT_OPTIONS,
     EXPANSION_OPTIONS,
@@ -22,13 +17,16 @@ import {
     RACE_OPTIONS,
     REGION_OPTIONS,
 } from '../shared/enumLabels';
+import {hasFlag, LookingFor} from '../shared/enums';
 import {Avatar, Button, Chip, LoadingSpinner, pushToast} from '../ui/components';
 import {useOnboardingForm} from './onboarding/useOnboardingForm';
 import {StepFilters, StepOptional, StepProfile} from './onboarding/steps';
 import {revokeUrl, webpUrl} from '../ui/image';
 import {cn} from '../ui/cn';
+import {PhotoSlotTile} from './photos/PhotoSlotTile';
+import {PhotoNsfwDecl, UndeclaredNsfwModal} from './photos/photoModeration';
 
-type Tab = 'view' | 'edit';
+type Tab = 'view' | 'edit' | 'images';
 type T = ReturnType<typeof useT>;
 
 export function MyProfileScreen() {
@@ -64,7 +62,7 @@ export function MyProfileScreen() {
                 <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent-light/80">AetherLove</p>
                 <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-strong">{t('profile.title')}</h1>
                 <div className="mt-4 flex gap-1 rounded-xl bg-surface/5 p-1">
-                    {(['view', 'edit'] as Tab[]).map((id) => (
+                    {(['view', 'edit', 'images'] as Tab[]).map((id) => (
                         <button
                             key={id}
                             type="button"
@@ -74,7 +72,7 @@ export function MyProfileScreen() {
                                 tab === id ? 'bg-accent/20 text-strong' : 'text-subtle hover:text-strong',
                             )}
                         >
-                            {t(id === 'view' ? 'profile.tab_view' : 'profile.tab_edit')}
+                            {id === 'view' ? t('profile.tab_view') : id === 'edit' ? t('profile.tab_edit') : t('profile.tab_images')}
                         </button>
                     ))}
                 </div>
@@ -93,8 +91,10 @@ export function MyProfileScreen() {
                 </div>
             ) : tab === 'view' ? (
                 detail && <ProfileView t={t} detail={detail}/>
-            ) : (
+            ) : tab === 'edit' ? (
                 state && <ProfileEdit t={t} state={state}/>
+            ) : (
+                detail && <ProfileImagesTab t={t} detail={detail} onReload={load}/>
             )}
         </div>
     );
@@ -202,6 +202,236 @@ function PhotoThumb({bytes}: { bytes: Uint8Array }) {
     return (
         <div className="aspect-[350/560] overflow-hidden rounded-xl bg-surface/5 ring-1 ring-line/10">
             {url && <img src={url} alt="" className="h-full w-full object-cover" draggable={false}/>}
+        </div>
+    );
+}
+
+// ---- Images tab --------------------------------------------------------------------------
+
+function ProfileImagesTab({t, detail, onReload}: { t: T; detail: ProfileDetailDto; onReload: () => void }) {
+    const [avatar, setAvatar] = useState<PhotoUploadDto | null>(null);
+    const [main, setMain] = useState<PhotoUploadDto | null>(null);
+    const [extra1, setExtra1] = useState<PhotoUploadDto | null>(null);
+    const [extra2, setExtra2] = useState<PhotoUploadDto | null>(null);
+    const [extra3, setExtra3] = useState<PhotoUploadDto | null>(null);
+    const [decl1, setDecl1] = useState(PhotoNsfwDecl.Unselected);
+    const [decl2, setDecl2] = useState(PhotoNsfwDecl.Unselected);
+    const [decl3, setDecl3] = useState(PhotoNsfwDecl.Unselected);
+    const [remove2, setRemove2] = useState(false);
+    const [remove3, setRemove3] = useState(false);
+    const [remove4, setRemove4] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const [saved, setSaved] = useState(false);
+    const [showUndeclared, setShowUndeclared] = useState(false);
+
+    const serverAvatar = detail.Photos.find((p) => p.Order === 0) ?? null;
+    const serverMain = detail.Photos.find((p) => p.Order === 1) ?? null;
+    const serverExtra1 = detail.Photos.find((p) => p.Order === 2) ?? null;
+    const serverExtra2 = detail.Photos.find((p) => p.Order === 3) ?? null;
+    const serverExtra3 = detail.Photos.find((p) => p.Order === 4) ?? null;
+
+    const allDeclared = useMemo(() => {
+        const ok = (p: PhotoUploadDto | null, d: PhotoNsfwDecl) => p === null || d !== PhotoNsfwDecl.Unselected;
+        return ok(extra1, decl1) && ok(extra2, decl2) && ok(extra3, decl3);
+    }, [extra1, decl1, extra2, decl2, extra3, decl3]);
+
+    const hasChanges = !!(avatar ?? main ?? extra1 ?? extra2 ?? extra3) || remove2 || remove3 || remove4;
+
+    async function save() {
+        if (saving || !hasChanges) return;
+        if (!allDeclared) {
+            setShowUndeclared(true);
+            return;
+        }
+        setSaving(true);
+        setSaved(false);
+        try {
+            const batch: PhotoBatchDto = {
+                Avatar: avatar,
+                Main: main,
+                Extra1: extra1 ? {...extra1, IsNsfw: decl1 === PhotoNsfwDecl.Nsfw} : null,
+                Extra2: extra2 ? {...extra2, IsNsfw: decl2 === PhotoNsfwDecl.Nsfw} : null,
+                Extra3: extra3 ? {...extra3, IsNsfw: decl3 === PhotoNsfwDecl.Nsfw} : null,
+            };
+            if (batch.Avatar ?? batch.Main ?? batch.Extra1 ?? batch.Extra2 ?? batch.Extra3) {
+                await hubClient.savePhotos(batch);
+            }
+            if (remove2) await hubClient.deletePhoto(2);
+            if (remove3) await hubClient.deletePhoto(3);
+            if (remove4) await hubClient.deletePhoto(4);
+            setSaved(true);
+            setTimeout(() => setSaved(false), 2500);
+            onReload();
+        } catch (e) {
+            pushToast(t('profile.images_save_failed', (e as Error).message), 'error');
+        } finally {
+            setSaving(false);
+        }
+    }
+
+    return (
+        <div className="flex min-h-0 flex-1 flex-col">
+            <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6 lg:px-8">
+                <ImgSection title={t('profile.images_avatar_section')}>
+                    <p className="mb-3 text-[13px] text-subtle">{t('profile.images_avatar_desc')}</p>
+                    <div className="flex justify-center">
+                        <PhotoSlotTile
+                            kind="avatar"
+                            order={0}
+                            value={avatar}
+                            serverBytes={serverAvatar?.WebpBytes}
+                            race={detail.Race}
+                            onChange={setAvatar}
+                            className="h-32 w-32"
+                        />
+                    </div>
+                </ImgSection>
+
+                <ImgSection title={t('profile.images_photos_section')}>
+                    <p className="mb-3 text-[13px] text-subtle">{t('profile.images_photos_desc')}</p>
+                    <div className="grid grid-cols-2 gap-4">
+                        <PhotoSlotTile
+                            kind="portrait"
+                            order={1}
+                            value={main}
+                            serverBytes={serverMain?.WebpBytes}
+                            race={detail.Race}
+                            onChange={setMain}
+                            className="aspect-[350/560]"
+                        />
+                        <PhotoSlotTile
+                            kind="portrait"
+                            order={2}
+                            value={extra1}
+                            serverBytes={remove2 ? null : serverExtra1?.WebpBytes}
+                            serverIsNsfw={serverExtra1?.IsNsfw}
+                            declaration={decl1}
+                            onDeclaration={setDecl1}
+                            race={detail.Race}
+                            onChange={setExtra1}
+                            onRemove={serverExtra1 && !remove2 ? () => {
+                                setExtra1(null);
+                                setRemove2(true);
+                            } : undefined}
+                            pendingRemove={remove2}
+                            onUndoRemove={remove2 ? () => setRemove2(false) : undefined}
+                            className="aspect-[350/560]"
+                        />
+                        <PhotoSlotTile
+                            kind="portrait"
+                            order={3}
+                            value={extra2}
+                            serverBytes={remove3 ? null : serverExtra2?.WebpBytes}
+                            serverIsNsfw={serverExtra2?.IsNsfw}
+                            declaration={decl2}
+                            onDeclaration={setDecl2}
+                            race={detail.Race}
+                            onChange={setExtra2}
+                            onRemove={serverExtra2 && !remove3 ? () => {
+                                setExtra2(null);
+                                setRemove3(true);
+                            } : undefined}
+                            pendingRemove={remove3}
+                            onUndoRemove={remove3 ? () => setRemove3(false) : undefined}
+                            className="aspect-[350/560]"
+                        />
+                        <PhotoSlotTile
+                            kind="portrait"
+                            order={4}
+                            value={extra3}
+                            serverBytes={remove4 ? null : serverExtra3?.WebpBytes}
+                            serverIsNsfw={serverExtra3?.IsNsfw}
+                            declaration={decl3}
+                            onDeclaration={setDecl3}
+                            race={detail.Race}
+                            onChange={setExtra3}
+                            onRemove={serverExtra3 && !remove4 ? () => {
+                                setExtra3(null);
+                                setRemove4(true);
+                            } : undefined}
+                            pendingRemove={remove4}
+                            onUndoRemove={remove4 ? () => setRemove4(false) : undefined}
+                            className="aspect-[350/560]"
+                        />
+                    </div>
+                </ImgSection>
+
+                <ImgSection title={t('profile.images_nsfw_section')}>
+                    <NsfwMasterToggle t={t} detail={detail}/>
+                </ImgSection>
+            </div>
+
+            {!allDeclared && (
+                <p className="px-6 pb-2 text-[13px] text-amber">{t('profile.images_declare_first')}</p>
+            )}
+
+            <div className="border-t border-line/10 px-6 py-4 lg:px-8">
+                <Button
+                    className="w-full"
+                    onClick={save}
+                    loading={saving}
+                    disabled={!hasChanges || saving}
+                >
+                    {saving ? t('profile.saving') : saved ? t('profile.saved') : t('profile.save_changes')}
+                </Button>
+            </div>
+
+            <UndeclaredNsfwModal open={showUndeclared} onClose={() => setShowUndeclared(false)}/>
+        </div>
+    );
+}
+
+function ImgSection({title, children}: { title: string; children: ReactNode }) {
+    return (
+        <div className="mt-6">
+            <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-wide text-accent-light">{title}</h3>
+            {children}
+        </div>
+    );
+}
+
+function NsfwMasterToggle({t, detail}: { t: T; detail: ProfileDetailDto }) {
+    const [on, setOn] = useState(detail.IsNsfw);
+    const [busy, setBusy] = useState(false);
+    const locked = hasFlag(detail.LookingForMask, LookingFor.Erp) || detail.Photos.some((p) => p.IsNsfw);
+
+    async function toggle(next: boolean) {
+        if (!next && locked) return;
+        setBusy(true);
+        const prev = on;
+        setOn(next);
+        try {
+            await hubClient.setProfileNsfw(next);
+        } catch {
+            setOn(prev);
+        } finally {
+            setBusy(false);
+        }
+    }
+
+    return (
+        <div>
+            <button
+                type="button"
+                role="switch"
+                aria-checked={on}
+                disabled={busy}
+                onClick={() => void toggle(!on)}
+                className="flex w-full items-center gap-3 py-1 text-left disabled:opacity-50"
+            >
+                <span className="min-w-0 flex-1">
+                    <span className="block text-[14px] font-medium text-strong">{t('profile.images_nsfw_toggle')}</span>
+                    <span className="block text-[12px] leading-snug text-muted">{t('profile.images_nsfw_hint')}</span>
+                </span>
+                <span
+                    className={cn('relative h-6 w-11 shrink-0 rounded-full transition-colors', on ? 'bg-accent' : 'bg-surface/15')}>
+                    <span
+                        className={cn('absolute top-0.5 h-5 w-5 rounded-full bg-strong shadow transition-transform', on ? 'left-0.5 translate-x-5' : 'left-0.5')}/>
+                </span>
+            </button>
+            {locked && on && (
+                <p className="mt-1 text-[12px] text-amber">{t('profile.images_nsfw_locked')}</p>
+            )}
         </div>
     );
 }

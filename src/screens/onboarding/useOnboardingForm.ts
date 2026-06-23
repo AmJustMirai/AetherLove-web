@@ -17,6 +17,7 @@ import {
     toggleFlag,
 } from '../../shared/enums';
 import type {BasicProfileDto, FiltersDto, OnboardingStateDto, PhotoBatchDto, PhotoUploadDto} from '../../shared/dtos';
+import {PhotoNsfwDecl} from '../photos/photoModeration';
 
 export interface OnboardingForm {
     displayName: string;
@@ -54,6 +55,12 @@ export interface OnboardingForm {
     extra1: PhotoUploadDto | null;
     extra2: PhotoUploadDto | null;
     extra3: PhotoUploadDto | null;
+    // Per-extra NSFW declarations (main is always SFW)
+    decl1: PhotoNsfwDecl;
+    decl2: PhotoNsfwDecl;
+    decl3: PhotoNsfwDecl;
+    // Image-disclaimer acknowledgement
+    disclaimerAck: boolean;
 }
 
 function initial(): OnboardingForm {
@@ -86,6 +93,10 @@ function initial(): OnboardingForm {
         extra1: null,
         extra2: null,
         extra3: null,
+        decl1: PhotoNsfwDecl.Unselected,
+        decl2: PhotoNsfwDecl.Unselected,
+        decl3: PhotoNsfwDecl.Unselected,
+        disclaimerAck: false,
     };
 }
 
@@ -172,9 +183,9 @@ export function useOnboardingForm(resume?: OnboardingStateDto | null) {
     const buildPhotoBatch = useCallback((): PhotoBatchDto => ({
         Avatar: form.avatar,
         Main: form.main,
-        Extra1: form.extra1,
-        Extra2: form.extra2,
-        Extra3: form.extra3,
+        Extra1: form.extra1 ? {...form.extra1, IsNsfw: form.decl1 === PhotoNsfwDecl.Nsfw} : null,
+        Extra2: form.extra2 ? {...form.extra2, IsNsfw: form.decl2 === PhotoNsfwDecl.Nsfw} : null,
+        Extra3: form.extra3 ? {...form.extra3, IsNsfw: form.decl3 === PhotoNsfwDecl.Nsfw} : null,
     }), [form]);
 
     const passphraseValid = useMemo(
@@ -182,7 +193,23 @@ export function useOnboardingForm(resume?: OnboardingStateDto | null) {
         [form.passphrase, form.passphraseConfirm],
     );
 
-    return {form, set, toggleMask, buildBasicProfile, buildFilters, buildPhotoBatch, passphraseValid};
+    const allConfirmedExtrasDeclared = useMemo(() => {
+        const ok = (p: PhotoUploadDto | null, d: PhotoNsfwDecl) => p === null || d !== PhotoNsfwDecl.Unselected;
+        return ok(form.extra1, form.decl1) && ok(form.extra2, form.decl2) && ok(form.extra3, form.decl3);
+    }, [form.extra1, form.decl1, form.extra2, form.decl2, form.extra3, form.decl3]);
+
+    const firstUndeclaredExtra = useMemo((): 2 | 3 | 4 | null => {
+        if (form.extra1 && form.decl1 === PhotoNsfwDecl.Unselected) return 2;
+        if (form.extra2 && form.decl2 === PhotoNsfwDecl.Unselected) return 3;
+        if (form.extra3 && form.decl3 === PhotoNsfwDecl.Unselected) return 4;
+        return null;
+    }, [form.extra1, form.decl1, form.extra2, form.decl2, form.extra3, form.decl3]);
+
+    return {
+        form, set, toggleMask,
+        buildBasicProfile, buildFilters, buildPhotoBatch,
+        passphraseValid, allConfirmedExtrasDeclared, firstUndeclaredExtra,
+    };
 }
 
 export type OnboardingFormApi = ReturnType<typeof useOnboardingForm>;

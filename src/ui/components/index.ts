@@ -8,3 +8,4 @@ export {Modal} from './Modal';
 export {ProgressDots} from './ProgressDots';
 export {LoadingSpinner} from './LoadingSpinner';
 export {ToastHost, pushToast} from './Toast';
+export {ImageCropModal} from './ImageCropModal';

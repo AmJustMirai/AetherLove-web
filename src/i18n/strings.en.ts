@@ -282,6 +282,80 @@ export const en = {
     'common.recovery_support':
         'If you previously had chats on this account, they cannot be recovered with a new key.',
 
+    // ---- Photo moderation / upload ----
+    'common.ok': 'OK',
+    'common.use_this_crop': 'Use this crop',
+
+    // SFW gate modal (avatar + main must be SFW)
+    'common.sfw_gate_title': 'Profile + Avatar — SFW ONLY',
+    'common.sfw_gate_subtitle': 'What is NOT SFW:',
+    'common.sfw_gate_b1': 'Full nudity of any gender.',
+    'common.sfw_gate_b2': 'Visible nipples of any gender.',
+    'common.sfw_gate_b3': 'Visible pubic hair or genital areas.',
+    'common.sfw_gate_b4': 'Graphic depictions of blood, injuries, wounds, or bodily harm.',
+    'common.sfw_gate_b5': 'Tattoos, markings, symbols, or text that are obscene, discriminatory, hateful, or target individuals or groups based on protected characteristics.',
+    'common.sfw_gate_b6': 'Sexual gestures, poses, or visual references that imply or simulate sexual acts.',
+    'common.sfw_gate_secondary': 'You can still upload NSFW material in your secondary profile images.',
+    'common.sfw_gate_ack': 'I understand the rules for SFW',
+
+    // NSFW declaration
+    'common.nsfw_decl_unselected': '— select an option —',
+    'common.nsfw_decl_sfw': 'this picture is SFW',
+    'common.nsfw_decl_nsfw': 'this picture is NSFW',
+
+    // Lalafell NSFW modal
+    'common.lalafell_nsfw_title': 'NSFW not available',
+    'common.lalafell_nsfw_body': 'We do not allow NSFW pictures of Lalafell characters. Because Lalafells are child-like in appearance, we apply this policy uniformly to every Lalafell account and make no case-by-case exceptions.\n\nYour photo has been set back to SFW. If this photo isn\'t safe-for-work, please remove it and upload a different one.',
+
+    // Undeclared photo modal
+    'common.undeclared_photo_title': 'Declaration required',
+    'common.undeclared_photo_body': 'You must select whether your other picture is SFW or NSFW before uploading another.',
+
+    // Image requirements modal
+    'common.img_requirements_title': "Image can't be used",
+    'common.img_invalid': "That file isn't a valid image, or its format isn't supported.",
+    'common.img_too_small': 'That image is only {0}×{1} px, which is too small.',
+    'common.img_requirements_sizes': 'Avatars need at least {0}×{1} px and profile photos at least {2}×{3} px. Please choose a larger image.',
+
+    // Image disclaimer step
+    'onboarding.header_image_disclaimer': 'Photo guidelines',
+    'onboarding.disclaimer_intro': 'AetherLove is built for Final Fantasy XIV players. Before uploading any images, please read the following guidelines carefully.',
+    'onboarding.disclaimer_moderation': 'All uploads are subject to both automated and manual moderation.',
+    'onboarding.disclaimer_general_body': 'All images must depict your own Final Fantasy XIV character. Fan art, AI-generated images, real photos, and images unrelated to your character are not permitted.',
+    'onboarding.disclaimer_sfw_body': 'Your profile picture and main photo must be safe-for-work (SFW). Extra photos (slots 2–4) may be marked as adult content.',
+    'onboarding.disclaimer_moderation_body': 'Every image is automatically reviewed using AI moderation APIs and assessed by human staff. Violations result in image removal and may result in account action.',
+    'onboarding.disclaimer_ack': 'I understand and agree',
+
+    // Photo slot controls
+    'photo.replace': 'Replace',
+    'photo.remove': 'Remove',
+    'photo.undo_remove': 'Undo',
+    'photo.add': 'Add',
+
+    // MyProfile images tab
+    'profile.tab_images': 'Photos',
+    'profile.images_avatar_section': 'Profile picture',
+    'profile.images_avatar_desc': 'Your profile picture is shown in the chat list and on match cards. Use a square close-up portrait of your FFXIV character.',
+    'profile.images_photos_section': 'Profile photos',
+    'profile.images_photos_desc': 'Add portrait photos to your profile (10:16 ratio). The first slot is required; slots 2–4 are optional.',
+    'profile.images_nsfw_section': 'Adult content',
+    'profile.images_nsfw_toggle': 'Adult (NSFW) profile',
+    'profile.images_nsfw_hint': 'Required to appear in adult searches and to mark extra photos as NSFW.',
+    'profile.images_nsfw_locked': 'Stays on while you have an NSFW photo or adult roleplay selected.',
+    'profile.images_declare_first': 'Mark every extra photo as SFW or NSFW before saving.',
+    'profile.images_save_failed': 'Could not save photos: {0}',
+    'profile.images_load_failed': 'Could not load photos: {0}',
+    'profile.main_must_be_sfw': 'Your main profile picture MUST be SFW. Uploading an NSFW picture is grounds for account suspension or deletion.',
+    'profile.sfw_or_nsfw': 'Is this picture SFW or NSFW?',
+    'profile.sfw_mismatch_warning': "If our system detects you uploaded NSFW while SFW is selected, your photo will be held for moderation and you risk account suspension.",
+    'profile.replace': 'Replace',
+    'profile.remove': 'Remove',
+    'profile.undo': 'Undo',
+    'profile.currently_sfw': 'Currently: SFW',
+    'profile.currently_nsfw': 'Currently: NSFW',
+    'profile.new_photo_ready': 'New photo ready — not yet saved.',
+    'profile.photo_will_be_removed': 'Photo will be removed.',
+
     'chat.matches_title': 'Matches',
     'chat.archive_title': 'Archived',
     'chat.menu_archive': 'Archive chat',

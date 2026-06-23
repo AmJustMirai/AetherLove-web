@@ -41,6 +41,8 @@ export function MatchCanvas({effect, content}: { effect: MatchEffect; content: M
             content,
             accent,
             accentLight,
+            secondaryStart,
+            secondaryEnd,
         };
 
         let raf = 0;

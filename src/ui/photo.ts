@@ -1,10 +1,8 @@
-// Client-side photo preparation for PhotoUploadDto. The plugin let the user crop, then the *server*
-// crops+resizes to PhotoSpec (avatar 100², portrait 350×560). A full crop UI is a later batch; for now
-// we centre-crop to the target aspect and downscale in a canvas, then send a full-frame crop rect.
-//
-// Crop rect units are PIXELS (confirmed against the C# SharedUiHelpers.ReadPhotoUpload). Since we've
-// already cropped+resized to the target, the rect is the full processed image: CropX/Y=0 and
-// CropWidth/Height = the target dimensions. The server reads that as "already processed, no further crop".
+// Client-side photo preparation for PhotoUploadDto. Ports PhotoTransform.cs (AetherLove.Shared).
+// Crop rect units are PIXELS (confirmed against SharedUiHelpers.ReadPhotoUpload). The processed
+// image is sent with CropX/Y=0 and CropWidth/Height = target dims — the server reads this as
+// "already processed, no further crop needed". Upload encoding is lossless PNG; the server does
+// the single lossy re-encode to WebP.
 
 import type {PhotoUploadDto} from '../shared/dtos';
 
@@ -13,7 +11,12 @@ export const PHOTO_SPEC = {
     portrait: {w: 350, h: 560},
 } as const;
 
-function loadImage(file: File): Promise<HTMLImageElement> {
+export const MIN_CROP_SIDE = 32;
+
+export type CropRect = { x: number; y: number; width: number; height: number };
+
+/** Loads a file and revokes the object URL once decoded. */
+export function loadImage(file: File): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
         const url = URL.createObjectURL(file);
         const img = new Image();
@@ -29,48 +32,52 @@ function loadImage(file: File): Promise<HTMLImageElement> {
     });
 }
 
-/** Centre-crops `img` to the target aspect, scales to target size, returns base64 (no data-url prefix). */
-function renderToBase64(img: HTMLImageElement, target: { w: number; h: number }): string {
-    const targetAspect = target.w / target.h;
-    const srcAspect = img.width / img.height;
+/** Loads from a caller-owned URL (does not revoke). */
+export function loadImageFromUrl(url: string): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = url;
+    });
+}
 
-    let sx = 0;
-    let sy = 0;
-    let sw = img.width;
-    let sh = img.height;
-    if (srcAspect > targetAspect) {
-        // Source too wide — crop the sides.
-        sw = img.height * targetAspect;
-        sx = (img.width - sw) / 2;
-    } else {
-        // Source too tall — crop top/bottom.
-        sh = img.width / targetAspect;
-        sy = (img.height - sh) / 2;
-    }
+/** Largest centered crop of the target aspect at 75% fit (mirrors ImageCropWidget default). */
+export function defaultCropRect(imgW: number, imgH: number, aspectWoverH: number): CropRect {
+    const maxByWidth = imgW * 0.75;
+    const maxByHeight = imgH * aspectWoverH * 0.75;
+    const cropW = Math.min(maxByWidth, maxByHeight);
+    const cropH = cropW / aspectWoverH;
+    return {
+        x: (imgW - cropW) / 2,
+        y: (imgH - cropH) / 2,
+        width: cropW,
+        height: cropH,
+    };
+}
 
+/** Renders the crop region of img to target dimensions. Returns PNG base64 (no data-url prefix). */
+export function renderCrop(img: HTMLImageElement, crop: CropRect, target: { w: number; h: number }): string {
     const canvas = document.createElement('canvas');
     canvas.width = target.w;
     canvas.height = target.h;
     const ctx = canvas.getContext('2d')!;
-    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, target.w, target.h);
-    return canvas.toDataURL('image/jpeg', 0.88).split(',')[1];
+    ctx.drawImage(img, crop.x, crop.y, crop.width, crop.height, 0, 0, target.w, target.h);
+    return canvas.toDataURL('image/png').split(',')[1];
 }
 
-export async function processPhoto(
-    file: File,
+export function processCroppedPhoto(
+    img: HTMLImageElement,
+    crop: CropRect,
     kind: 'avatar' | 'portrait',
     isNsfw = false,
-): Promise<PhotoUploadDto> {
-    const img = await loadImage(file);
+): PhotoUploadDto {
     const spec = PHOTO_SPEC[kind];
-    const base64 = renderToBase64(img, spec);
-    // Crop fields are pixels, not normalized: we've already cropped+resized to the target, so the rect is
-    // the full processed image (CropWidth/Height = target dims). That's the server's "no further crop needed"
-    // signal — sending 1×1 reads as a 1px crop and trips img_crop_too_small (min 32px/side).
+    const base64 = renderCrop(img, crop, spec);
     return {Base64: base64, CropX: 0, CropY: 0, CropWidth: spec.w, CropHeight: spec.h, IsNsfw: isNsfw};
 }
 
-/** A data-url preview for an already-processed base64 JPEG. */
+/** A data-url preview for a processed PNG base64. */
 export function previewUrl(base64: string): string {
-    return `data:image/jpeg;base64,${base64}`;
+    return `data:image/png;base64,${base64}`;
 }

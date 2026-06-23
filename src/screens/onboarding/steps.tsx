@@ -8,7 +8,7 @@ import {loadTerritories, type Territory} from '../../services/gameData';
 import {authService} from '../../state/auth';
 import {useAuthFlowState} from './useAuthFlowState';
 import {Button, Chip, Select, TextInput} from '../../ui/components';
-import {PhotoPicker} from './PhotoPicker';
+import {PhotoSlotTile} from '../photos/PhotoSlotTile';
 import {
     CONTENT_OPTIONS,
     EXPANSION_OPTIONS,
@@ -202,6 +202,30 @@ export function StepProfile({api, t}: StepProps) {
     );
 }
 
+export function StepImageDisclaimer({api, t}: StepProps) {
+    const {form, set} = api;
+    return (
+        <div className="space-y-4">
+            <Heading>{t('onboarding.header_image_disclaimer')}</Heading>
+            <Body>{t('onboarding.disclaimer_intro')}</Body>
+            <div className="space-y-2 text-[13px] text-subtle">
+                <p>{t('onboarding.disclaimer_general_body')}</p>
+                <p>{t('onboarding.disclaimer_sfw_body')}</p>
+                <p className="text-muted">{t('onboarding.disclaimer_moderation_body')}</p>
+            </div>
+            <label className="flex items-start gap-2.5 text-[14px] text-body">
+                <input
+                    type="checkbox"
+                    className="mt-0.5 shrink-0"
+                    checked={form.disclaimerAck}
+                    onChange={(e) => set('disclaimerAck', e.target.checked)}
+                />
+                {t('onboarding.disclaimer_ack')}
+            </label>
+        </div>
+    );
+}
+
 export function StepAvatar({api, t}: StepProps) {
     const {form, set} = api;
     return (
@@ -209,8 +233,14 @@ export function StepAvatar({api, t}: StepProps) {
             <Heading>{t('onboarding.header_profile_picture')}</Heading>
             <Body>{t('onboarding.avatar_intro')}</Body>
             <div className="flex justify-center pt-2">
-                <PhotoPicker value={form.avatar} onChange={(p) => set('avatar', p)} kind="avatar"
-                             className="h-36 w-36"/>
+                <PhotoSlotTile
+                    kind="avatar"
+                    order={0}
+                    value={form.avatar}
+                    race={form.race}
+                    onChange={(p) => set('avatar', p)}
+                    className="h-36 w-36"
+                />
             </div>
         </div>
     );
@@ -222,15 +252,45 @@ export function StepPhotos({api, t}: StepProps) {
         <div className="space-y-4">
             <Heading>{t('onboarding.header_your_photos')}</Heading>
             <Body>{t('onboarding.photos_intro')}</Body>
-            <div className="grid grid-cols-2 gap-3">
-                <PhotoPicker value={form.main} onChange={(p) => set('main', p)} kind="portrait"
-                             className="aspect-[350/560]"/>
-                <PhotoPicker value={form.extra1} onChange={(p) => set('extra1', p)} kind="portrait"
-                             className="aspect-[350/560]"/>
-                <PhotoPicker value={form.extra2} onChange={(p) => set('extra2', p)} kind="portrait"
-                             className="aspect-[350/560]"/>
-                <PhotoPicker value={form.extra3} onChange={(p) => set('extra3', p)} kind="portrait"
-                             className="aspect-[350/560]"/>
+            <div className="grid grid-cols-2 gap-4">
+                <PhotoSlotTile
+                    kind="portrait"
+                    order={1}
+                    value={form.main}
+                    race={form.race}
+                    onChange={(p) => set('main', p)}
+                    className="aspect-[350/560]"
+                />
+                <PhotoSlotTile
+                    kind="portrait"
+                    order={2}
+                    value={form.extra1}
+                    declaration={form.decl1}
+                    onDeclaration={(d) => set('decl1', d)}
+                    race={form.race}
+                    onChange={(p) => set('extra1', p)}
+                    className="aspect-[350/560]"
+                />
+                <PhotoSlotTile
+                    kind="portrait"
+                    order={3}
+                    value={form.extra2}
+                    declaration={form.decl2}
+                    onDeclaration={(d) => set('decl2', d)}
+                    race={form.race}
+                    onChange={(p) => set('extra2', p)}
+                    className="aspect-[350/560]"
+                />
+                <PhotoSlotTile
+                    kind="portrait"
+                    order={4}
+                    value={form.extra3}
+                    declaration={form.decl3}
+                    onDeclaration={(d) => set('decl3', d)}
+                    race={form.race}
+                    onChange={(p) => set('extra3', p)}
+                    className="aspect-[350/560]"
+                />
             </div>
         </div>
     );
