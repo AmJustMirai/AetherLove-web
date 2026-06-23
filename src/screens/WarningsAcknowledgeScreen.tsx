@@ -17,7 +17,6 @@ export function WarningsAcknowledgeScreen() {
     const [error, setError] = useState<string | null>(null);
 
     const unseen = useMemo(() => (connection?.Warnings ?? []).filter((w) => !w.Seen), [connection]);
-    const notes = connection?.ModerationNotes?.trim();
 
     async function acknowledge() {
         if (submitting || unseen.length === 0) return;
@@ -59,12 +58,6 @@ export function WarningsAcknowledgeScreen() {
                         <p className="mt-0.5 text-[14px] leading-relaxed text-strong">{w.Reason}</p>
                     </div>
                 ))}
-                {notes && (
-                    <div>
-                        <p className="text-[12px] font-medium text-muted">{t('common.moderator_notes_label')}</p>
-                        <p className="mt-0.5 text-[14px] leading-relaxed text-body">{notes}</p>
-                    </div>
-                )}
             </div>
 
             {error && <p className="mb-2 text-[13px] text-danger">{t('common.warnings_submit_error', error)}</p>}

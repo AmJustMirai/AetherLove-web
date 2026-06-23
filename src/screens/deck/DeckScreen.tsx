@@ -17,6 +17,7 @@ import {
     REGION_OPTIONS,
 } from '../../shared/enumLabels';
 import {LoadingSpinner} from '../../ui/components';
+import {router, Screen} from '../../app/router';
 import {useT} from '../../i18n/useT';
 
 function useCountdown(targetIso: string | null): string {
@@ -139,7 +140,18 @@ export function DeckScreen() {
                                 {deck.cards[2] && <GhostCard depth={2}/>}
                                 {deck.cards[1] && <GhostCard depth={1}/>}
                                 {/* key forces a fresh card instance per profile so gesture state resets */}
-                                <DeckCard key={deck.top.ProfileId} card={deck.top} onSwipe={(d) => void deck.swipe(d)}/>
+                                <DeckCard
+                                    key={deck.top.ProfileId}
+                                    card={deck.top}
+                                    onSwipe={(d) => void deck.swipe(d)}
+                                    onViewProfile={() =>
+                                        router.navigate(Screen.Profile, {
+                                            peerId: deck.top!.ProfileId,
+                                            peerName: deck.top!.DisplayName,
+                                            returnTo: Screen.Deck,
+                                        })
+                                    }
+                                />
                             </div>
 
                             <div className="flex items-center gap-7">

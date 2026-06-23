@@ -14,7 +14,16 @@ import {Button, Card, LoadingSpinner, pushToast, TextInput} from '../ui/componen
 import {ThemePicker} from '../ui/ThemePicker';
 import {cn} from '../ui/cn';
 
-type View = 'normal' | 'confirmDelete' | 'deleting' | 'deleted' | 'warnings' | 'feedback' | 'tos' | 'contributors';
+type View =
+    | 'normal'
+    | 'confirmDelete'
+    | 'deleting'
+    | 'deleted'
+    | 'warnings'
+    | 'modMessages'
+    | 'feedback'
+    | 'tos'
+    | 'contributors';
 
 export function SettingsScreen() {
     const t = useT();
@@ -33,6 +42,7 @@ export function SettingsScreen() {
                 {view === 'deleting' && <DeletingView t={t}/>}
                 {view === 'deleted' && <DeletedView t={t}/>}
                 {view === 'warnings' && <WarningsView t={t} onBack={() => setView('normal')}/>}
+                {view === 'modMessages' && <ModMessagesView t={t} onBack={() => setView('normal')}/>}
                 {view === 'feedback' && <FeedbackView t={t} onBack={() => setView('normal')}/>}
                 {view === 'tos' && <TextPanel title={t('settings.terms_of_service')} body={t('onboarding.tos_body')}
                                               onBack={() => setView('normal')} t={t}/>}
@@ -118,6 +128,8 @@ function NormalView({t, setView}: { t: T; setView: (v: View) => void }) {
     const connection = useStore(sessionStore).connection;
     const warnings = connection?.Warnings ?? [];
     const unseenWarnings = warnings.filter((w) => !w.Seen).length;
+    const modMessages = connection?.ModeratorMessages ?? [];
+    const unseenModMessages = modMessages.filter((m) => !m.Seen).length;
 
     return (
         <div>
@@ -158,6 +170,13 @@ function NormalView({t, setView}: { t: T; setView: (v: View) => void }) {
                     onClick={() => router.navigate(Screen.News)}
                     badge={connection?.UnseenNews.length || undefined}
                 />
+                {modMessages.length > 0 && (
+                    <MenuRow
+                        label={t('settings.modmsg_button')}
+                        onClick={() => setView('modMessages')}
+                        badge={unseenModMessages || undefined}
+                    />
+                )}
                 <MenuRow label={t('settings.send_feedback')} onClick={() => setView('feedback')}/>
                 <MenuRow label={t('settings.terms_of_service')} onClick={() => setView('tos')}/>
                 <MenuRow label={t('settings.contributors')} onClick={() => setView('contributors')}/>
@@ -324,6 +343,32 @@ function WarningsView({t, onBack}: { t: T; onBack: () => void }) {
                                 {new Date(w.CreatedAtUtc).toLocaleString()}
                             </p>
                             <p className="mt-1 text-[14px] text-body">{w.Reason}</p>
+                        </Card>
+                    ))}
+                </div>
+            )}
+            <Button variant="ghost" className="mt-5" onClick={onBack}>
+                {t('settings.back_to_settings')}
+            </Button>
+        </div>
+    );
+}
+
+function ModMessagesView({t, onBack}: { t: T; onBack: () => void }) {
+    const messages = useStore(sessionStore).connection?.ModeratorMessages ?? [];
+    return (
+        <div className="pt-2">
+            <h2 className="mb-3 font-display text-xl font-bold text-strong">{t('settings.modmsg_title')}</h2>
+            {messages.length === 0 ? (
+                <p className="text-[14px] text-muted">{t('settings.no_modmsg')}</p>
+            ) : (
+                <div className="space-y-3">
+                    {messages.map((m) => (
+                        <Card key={m.Id}>
+                            <p className="font-mono text-[11px] uppercase tracking-wide text-muted">
+                                {new Date(m.CreatedAtUtc).toLocaleString()}
+                            </p>
+                            <p className={cn('mt-1 text-[14px]', m.Seen ? 'text-muted' : 'text-accent-light')}>{m.Body}</p>
                         </Card>
                     ))}
                 </div>

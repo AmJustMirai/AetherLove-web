@@ -20,7 +20,9 @@ import {OfflineScreen} from './screens/OfflineScreen';
 import {OutdatedScreen} from './screens/OutdatedScreen';
 import {BannedScreen} from './screens/BannedScreen';
 import {WarningsAcknowledgeScreen} from './screens/WarningsAcknowledgeScreen';
+import {ModeratorMessageScreen} from './screens/ModeratorMessageScreen';
 import {PassphraseUnlockScreen} from './screens/PassphraseUnlockScreen';
+import {EncryptionRecoveryScreen} from './screens/EncryptionRecoveryScreen';
 import {NewsScreen} from './screens/NewsScreen';
 import {ProfileScreen} from './screens/ProfileScreen';
 import {PlaceholderScreen} from './screens/PlaceholderScreen';
@@ -53,8 +55,12 @@ function renderScreen(screen: Screen) {
             return <BannedScreen/>;
         case Screen.WarningsAcknowledge:
             return <WarningsAcknowledgeScreen/>;
+        case Screen.ModeratorMessages:
+            return <ModeratorMessageScreen/>;
         case Screen.PassphraseUnlock:
             return <PassphraseUnlockScreen/>;
+        case Screen.EncryptionRecovery:
+            return <EncryptionRecoveryScreen/>;
         case Screen.News:
             return <NewsScreen/>;
         case Screen.Profile:

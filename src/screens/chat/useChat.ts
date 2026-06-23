@@ -21,6 +21,9 @@ export interface ChatMessage {
 interface ChatState {
     loading: boolean;
     locked: boolean;
+    /** The account itself has no server key bundle (E2E never set up / broken), distinct from `locked`
+     *  which means a bundle exists but is not unlocked on this device. Mirrors chat.e2e_self_broken. */
+    selfBroken: boolean;
     messages: ChatMessage[];
     error: string | null;
     /** Set when the peer's pinned public key changed (possible MITM); null when the key is trusted. */
@@ -31,6 +34,7 @@ export function useChat(peerId: Guid) {
     const [state, setState] = useState<ChatState>({
         loading: true,
         locked: false,
+        selfBroken: false,
         messages: [],
         error: null,
         keyAlert: null
@@ -40,7 +44,10 @@ export function useChat(peerId: Guid) {
     const load = useCallback(async () => {
         const identity = sessionStore.get().identity;
         if (!identity) {
-            setState({loading: false, locked: true, messages: [], error: null, keyAlert: null});
+            // No unlocked identity: if the server holds no bundle at all, the user's own E2E is broken
+            // (self-broken); otherwise the bundle just needs unlocking on this device (locked).
+            const selfBroken = sessionStore.get().connection?.HasKeyBundle === false;
+            setState({loading: false, locked: true, selfBroken, messages: [], error: null, keyAlert: null});
             return;
         }
         setState((s) => ({...s, loading: true, error: null}));
@@ -61,7 +68,7 @@ export function useChat(peerId: Guid) {
                     read: m.ReadByOtherAtUtc != null,
                 })),
             );
-            setState({loading: false, locked: false, messages, error: null, keyAlert});
+            setState({loading: false, locked: false, selfBroken: false, messages, error: null, keyAlert});
             // Mark read on open (mirrors MarkConversationReadAsync).
             void hubClient.markConversationRead(peerId).catch(() => undefined);
         } catch (e) {

@@ -19,6 +19,6 @@ export const API_BASE: string = (() => {
 })();
 
 /** Protocol version the client sends on the hub connection. Mirrors ApiVersion.Current. */
-export const API_VERSION = 2;
+export const API_VERSION = 3;
 
 export const HUB_PATH = 'hubs/aetherlove';

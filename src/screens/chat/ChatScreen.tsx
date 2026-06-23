@@ -81,7 +81,9 @@ export function ChatScreen() {
                         <LoadingSpinner size={24} className="text-accent"/>
                     </div>
                 ) : chat.locked ? (
-                    <p className="px-6 pt-10 text-center text-[14px] text-subtle">{t('chat.locked')}</p>
+                    <p className="px-6 pt-10 text-center text-[14px] text-subtle">
+                        {chat.selfBroken ? t('chat.e2e_self_broken') : t('chat.locked')}
+                    </p>
                 ) : (
                     <>
                         <p className="py-1 text-center text-[11px] text-muted">🔒 {t('chat.encrypted_note')}</p>

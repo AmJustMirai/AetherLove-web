@@ -83,6 +83,19 @@ export function registerPushHandlers(): void {
         pushToast(p.Warning.Reason, 'error', 8000);
     });
 
+    hubClient.on('ModeratorMessageIssued', (p) => {
+        // Append idempotently to the cached snapshot; the startup gate / settings list surface it from there.
+        sessionStore.update((s) =>
+            s.connection && !s.connection.ModeratorMessages.some((m) => m.Id === p.Message.Id)
+                ? {
+                    ...s,
+                    connection: {...s.connection, ModeratorMessages: [...s.connection.ModeratorMessages, p.Message]}
+                }
+                : s,
+        );
+        pushToast(p.Message.Body, 'info', 8000);
+    });
+
     hubClient.on('AccountBanned', (p) => {
         sessionStore.update((s) => ({...s, result: 'banned'}));
         if (p.Reason) {

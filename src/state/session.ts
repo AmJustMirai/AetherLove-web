@@ -149,11 +149,23 @@ function hasUnseenWarnings(s: SessionState): boolean {
     return (s.connection?.Warnings ?? []).some((w) => !w.Seen);
 }
 
+/** Whether the snapshot carries any unacknowledged moderator messages. Null-guarded for version skew. */
+function hasUnseenModeratorMessages(s: SessionState): boolean {
+    return (s.connection?.ModeratorMessages ?? []).some((m) => !m.Seen);
+}
+
+/** An Active account that reached the service with no server key bundle (e.g. re-registered after
+ *  deletion). Mirrors SessionBootstrapper.NeedsEncryptionRecovery (SignedInActive && !HasKeyBundle). */
+function needsEncryptionRecovery(s: SessionState): boolean {
+    return s.result === 'active' && s.connection?.HasKeyBundle === false;
+}
+
 function hasUnseenNews(s: SessionState): boolean {
     return (s.connection?.UnseenNews?.length ?? 0) > 0;
 }
 
-/** Startup gate order: outdated/banned → warnings → passphrase → news → deck/onboarding. */
+/** Startup gate order: outdated/banned → warnings → moderator messages → passphrase →
+ *  encryption recovery → news → deck/onboarding. */
 export function resolveNextScreen(): Screen {
     const s = sessionStore.get();
     if (s.result === 'outdated') return Screen.Outdated;
@@ -161,7 +173,11 @@ export function resolveNextScreen(): Screen {
     if (hasUnseenWarnings(s) && (s.result === 'active' || s.result === 'onboarding')) {
         return Screen.WarningsAcknowledge;
     }
+    if (hasUnseenModeratorMessages(s) && (s.result === 'active' || s.result === 'onboarding')) {
+        return Screen.ModeratorMessages;
+    }
     if (needsPassphraseUnlock(s)) return Screen.PassphraseUnlock;
+    if (needsEncryptionRecovery(s)) return Screen.EncryptionRecovery;
     if (hasUnseenNews(s) && s.result === 'active') return Screen.News;
     return s.result === 'active' ? Screen.Deck : Screen.Onboarding;
 }

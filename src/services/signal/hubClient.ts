@@ -19,6 +19,7 @@ import type {
     MatchListDto,
     MessageReadPushDto,
     MessageReceivedPushDto,
+    ModeratorMessageIssuedPushDto,
     MusicLinkDto,
     NewsDto,
     NewsPublishedPushDto,
@@ -48,6 +49,7 @@ export interface HubEvents {
     Unmatched: UnmatchedPushDto;
     BlockedByPeer: BlockedByPeerPushDto;
     WarningIssued: WarningIssuedPushDto;
+    ModeratorMessageIssued: ModeratorMessageIssuedPushDto;
     NewsPublished: NewsPublishedPushDto;
     NewsTestPush: NewsTestPushDto;
     AccountBanned: AccountBannedPushDto;
@@ -119,6 +121,11 @@ export class HubClient {
     // ---- Warnings ----
     markWarningsSeen(warningIds: Guid[]): Promise<void> {
         return this.send('MarkWarningsSeenAsync', warningIds);
+    }
+
+    // ---- Moderator messages ----
+    markModeratorMessagesSeen(messageIds: Guid[]): Promise<void> {
+        return this.send('MarkModeratorMessagesSeenAsync', messageIds);
     }
 
     // ---- News ----

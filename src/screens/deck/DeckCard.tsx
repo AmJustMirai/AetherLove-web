@@ -8,10 +8,16 @@ import {SwipeDirection} from '../../shared/enums';
 import {labelOf, LOOKING_FOR_OPTIONS, maskLabels, RACE_OPTIONS, REGION_OPTIONS} from '../../shared/enumLabels';
 import {revokeUrl, webpUrl} from '../../ui/image';
 import {useEffect, useState} from 'react';
+import {useT} from '../../i18n/useT';
 
 const THROW_THRESHOLD = 110;
 
-export function DeckCard({card, onSwipe}: { card: DeckCardDto; onSwipe: (dir: SwipeDirection) => void }) {
+export function DeckCard({card, onSwipe, onViewProfile}: {
+    card: DeckCardDto;
+    onSwipe: (dir: SwipeDirection) => void;
+    onViewProfile: () => void;
+}) {
+    const t = useT();
     const x = useMotionValue(0);
     const rotate = useTransform(x, [-240, 240], [-14, 14]);
     const likeOpacity = useTransform(x, [40, 140], [0, 1]);
@@ -65,6 +71,21 @@ export function DeckCard({card, onSwipe}: { card: DeckCardDto; onSwipe: (dir: Sw
                     <span className="font-display text-6xl text-on-accent/20">{card.DisplayName.charAt(0)}</span>
                 </div>
             )}
+
+            {/* View-profile pill (mirrors DeckScreen.cs ##viewProfile). stopPropagation on pointer-down keeps
+                the drag gesture from hijacking the tap. */}
+            <button
+                type="button"
+                onPointerDownCapture={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    if (!gone) onViewProfile();
+                }}
+                className="absolute left-4 top-4 z-10 flex items-center gap-1.5 rounded-full bg-black/45 px-3 py-1.5 text-xs font-semibold text-on-accent backdrop-blur-sm transition-colors hover:bg-black/65"
+            >
+                <span aria-hidden>ⓘ</span>
+                {t('deck.view_profile')}
+            </button>
 
             {/* Directional aether glow */}
             <motion.div style={{opacity: likeGlow}}

@@ -104,6 +104,7 @@ export const en = {
     'deck.no_pool': 'No one matches your filters yet. Try widening them in settings.',
     'deck.pass': 'Pass',
     'deck.like': 'Like',
+    'deck.view_profile': 'View profile',
     'deck.match_congratulations': 'Congratulations',
     'deck.match_its_a_match': 'It’s a match!',
     'deck.match_you': 'You',
@@ -123,6 +124,7 @@ export const en = {
     'chat.placeholder': 'Message',
     'chat.send': 'Send',
     'chat.locked': 'Unlock your messages to read this conversation.',
+    'chat.e2e_self_broken': 'Your message encryption isn’t set up yet. Reconnect to finish setting up encryption before chatting.',
     'chat.read': 'Read',
     'chat.encrypted_note': 'Messages are end-to-end encrypted.',
     'chat.key_changed_toast': '⚠️ {0}’s security key changed.',
@@ -171,6 +173,10 @@ export const en = {
     'settings.warnings_button_unseen': 'View warnings ({0} new of {1})',
     'settings.warnings_title': 'Warnings',
     'settings.no_warnings': 'No warnings on your account.',
+    'settings.modmsg_button': 'Moderator messages',
+    'settings.modmsg_button_unseen': 'Moderator messages ({0} new)',
+    'settings.modmsg_title': 'Moderator messages',
+    'settings.no_modmsg': 'No messages from the moderation team.',
 
     // Feedback
     'settings.feedback_intro': 'Found a bug or have an idea? Tell us.',
@@ -237,7 +243,6 @@ export const en = {
     'common.unlock': 'Unlock',
     'common.unlocking': 'Unlocking…',
     'common.acknowledging': 'Acknowledging…',
-    'common.moderator_notes_label': 'Moderator notes',
     'common.server_unreachable_detail': "Couldn't reach the server: {0}",
     'common.banned_title': 'Account banned',
     'common.banned_body': 'Your AetherLove account has been banned. You can no longer use the service.',
@@ -266,6 +271,16 @@ export const en = {
     'common.warnings_body':
         'Please read the following warning(s) from the moderation team. Repeat offenses can result in account suspension.',
     'common.warnings_submit_error': "Couldn't reach the server: {0}. Tap to retry.",
+    'common.modmsg_heading_one': 'A message from the moderation team',
+    'common.modmsg_heading_many': 'You have {0} messages from the moderation team',
+    'common.modmsg_body': 'Please read the following message(s) from the moderation team.',
+    'common.modmsg_got_it': 'Got it',
+    'common.recovery_title': 'Set up message encryption',
+    'common.recovery_intro':
+        'Your account is active but has no encryption key yet. Choose a passphrase to set up end-to-end encryption so you can send and receive messages. Keep it safe — there is no recovery if you forget it.',
+    'common.recovery_button': 'Set up encryption',
+    'common.recovery_support':
+        'If you previously had chats on this account, they cannot be recovered with a new key.',
 
     'chat.matches_title': 'Matches',
     'chat.archive_title': 'Archived',

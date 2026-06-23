@@ -163,12 +163,19 @@ export interface WarningDto {
     CreatedAtUtc: DateTimeOffset;
 }
 
+export interface ModeratorMessageDto {
+    Id: Guid;
+    Body: string;
+    Seen: boolean;
+    CreatedAtUtc: DateTimeOffset;
+}
+
 export interface AetherConnectionDto {
     Status: ProfileLifecycle;
     DisplayName: string;
     BanReason: string | null;
-    ModerationNotes: string | null;
     Warnings: WarningDto[];
+    ModeratorMessages: ModeratorMessageDto[];
     NewMatchCount: number;
     HasKeyBundle: boolean;
     UnseenNews: NewsSummaryDto[];
@@ -356,6 +363,10 @@ export interface WarningIssuedPushDto {
 
 export interface AccountBannedPushDto {
     Reason: string | null;
+}
+
+export interface ModeratorMessageIssuedPushDto {
+    Message: ModeratorMessageDto;
 }
 
 // ---- News -------------------------------------------------------------------------------
