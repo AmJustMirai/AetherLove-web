@@ -4,8 +4,8 @@ A standalone browser-based port of the AetherLove FFXIV matchmaking plugin.
 
 This project is not an original creation. It is a port of the existing plugin, rewritten for the browser.
 
-The client is hosted on GitHub Pages and can be accessed at:
-**https://amjustmirai.github.io/AetherLove-web/**
+~~The client is hosted on GitHub Pages and can be accessed at:~~
+~~**https://amjustmirai.github.io/AetherLove-web/**~~
 
 ---
 
@@ -24,8 +24,6 @@ tampered with. This applies equally to any Dalamud plugin, Aetherlove included.
 There is an integrity check on public keys received through the client. Should a man-in-the-middle attempt occur, the site will surface a notification. But this is a mitigation, not a guarantee of safety.
 
 ### Verifying the official deployment
-
-The official deployment at `amjustmirai.github.io/AetherLove-web/` has two independent tamper-detection mechanisms:
 
 **1. SLSA build provenance** — every CI build is cryptographically attested via GitHub's OIDC/Sigstore integration,
 binding the deployed files to the exact source commit and workflow run. Verify any downloaded asset with:
