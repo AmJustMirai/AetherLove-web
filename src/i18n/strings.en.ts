@@ -135,6 +135,8 @@ export const en = {
   'chat.e2e_self_broken':
     'Your message encryption isn’t set up yet. Reconnect to finish setting up encryption before chatting.',
   'chat.read': 'Read',
+  'chat.read_at': 'Read {0}',
+  'chat.sent': 'Sent',
   'chat.encrypted_note': 'Messages are end-to-end encrypted.',
   'chat.key_changed_toast': '⚠️ {0}’s security key changed.',
   'chat.key_changed_title': 'Security key changed',

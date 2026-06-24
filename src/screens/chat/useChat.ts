@@ -19,7 +19,8 @@ export interface ChatMessage {
   fromMe: boolean;
   text: string;
   createdAtUtc: string;
-  read: boolean;
+  /** UTC ISO timestamp when the peer read this message; null if unread. Only meaningful for fromMe messages. */
+  readAtUtc: string | null;
 }
 
 interface ChatState {
@@ -76,7 +77,7 @@ export function useChat(peerId: Guid) {
           fromMe: m.SenderProfileId !== peerId,
           text: await decryptFromPeer(identity, convo.PeerPublicKey, m),
           createdAtUtc: m.CreatedAtUtc,
-          read: m.ReadByOtherAtUtc != null,
+          readAtUtc: m.ReadByOtherAtUtc ?? null,
         }))
       );
       setState({
@@ -118,7 +119,7 @@ export function useChat(peerId: Guid) {
             fromMe: false,
             text,
             createdAtUtc: p.createdAtUtc,
-            read: false,
+            readAtUtc: null,
           },
         ],
       }));
@@ -129,7 +130,9 @@ export function useChat(peerId: Guid) {
       const ids = new Set(p.messageIds);
       setState((s) => ({
         ...s,
-        messages: s.messages.map((m) => (ids.has(m.id) ? { ...m, read: true } : m)),
+        messages: s.messages.map((m) =>
+          ids.has(m.id) ? { ...m, readAtUtc: m.readAtUtc ?? p.readAtUtc } : m
+        ),
       }));
     });
     return () => {
@@ -155,7 +158,7 @@ export function useChat(peerId: Guid) {
             fromMe: true,
             text: trimmed,
             createdAtUtc: resp.CreatedAtUtc,
-            read: false,
+            readAtUtc: null,
           },
         ],
       }));

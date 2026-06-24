@@ -11,6 +11,9 @@ import { LoadingSpinner } from '../../ui/components';
 import { pushToast } from '../../ui/components/Toast';
 import { cn } from '../../ui/cn';
 
+const fmtTime = (iso: string) =>
+  new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
 export function ChatScreen() {
   const t = useT();
   const route = useStore(router.store);
@@ -93,22 +96,36 @@ export function ChatScreen() {
               <div key={m.id} className={cn('flex', m.fromMe ? 'justify-end' : 'justify-start')}>
                 {m.fromMe ? (
                   <div className="flex flex-col items-end max-w-[78%]">
-                    <div
-                      className={cn('rounded-2xl px-3.5 py-2 text-[14px] bg-accent text-strong')}
-                    >
+                    <div className="rounded-2xl px-3.5 py-2 text-[14px] bg-accent text-strong">
                       {m.text}
                     </div>
-                    {m.read && (
-                      <span className="mt-1 text-[9px] text-strong/60">{t('chat.read')}</span>
-                    )}
+                    {/* Send time + read-receipt checkmark */}
+                    <div className="mt-0.5 flex items-center gap-1">
+                      <span className="text-[10px] text-strong/50">{fmtTime(m.createdAtUtc)}</span>
+                      {m.readAtUtc != null ? (
+                        <span
+                          className="text-[11px] leading-none text-accent-light"
+                          title={t('chat.read_at', fmtTime(m.readAtUtc))}
+                          aria-label={t('chat.read')}
+                        >
+                          ✓✓
+                        </span>
+                      ) : (
+                        <span
+                          className="text-[11px] leading-none text-strong/40"
+                          aria-label={t('chat.sent')}
+                        >
+                          ✓
+                        </span>
+                      )}
+                    </div>
                   </div>
                 ) : (
-                  <div
-                    className={cn(
-                      'max-w-[78%] rounded-2xl px-3.5 py-2 text-[14px] bg-surface/10 text-body'
-                    )}
-                  >
-                    {m.text}
+                  <div className="flex flex-col items-start max-w-[78%]">
+                    <div className="rounded-2xl px-3.5 py-2 text-[14px] bg-surface/10 text-body">
+                      {m.text}
+                    </div>
+                    <span className="mt-0.5 text-[10px] text-muted">{fmtTime(m.createdAtUtc)}</span>
                   </div>
                 )}
               </div>
