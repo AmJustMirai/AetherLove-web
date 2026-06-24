@@ -16,6 +16,7 @@ import {
 import { revokeUrl, webpUrl } from '@/ui/image.ts';
 import { useEffect, useRef, useState } from 'react';
 import { useT } from '@/i18n/useT.ts';
+import { withEmoji } from '@/ui/emoji.ts';
 
 const THROW_THRESHOLD = 110;
 
@@ -152,7 +153,9 @@ export function DeckCard({
         </h2>
         {subtitle && <p className="mt-0.5 text-sm text-on-accent/75">{subtitle}</p>}
         {card.Bio && (
-          <p className="mt-2 line-clamp-2 text-sm text-on-accent/85 xl:hidden">{card.Bio}</p>
+          <p className="mt-2 line-clamp-2 text-sm text-on-accent/85 xl:hidden">
+            {withEmoji(card.Bio)}
+          </p>
         )}
         {lookingFor.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1.5 xl:hidden">

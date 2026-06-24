@@ -27,6 +27,7 @@
     "@noble/curves": "^1.6.0",
     "@noble/hashes": "^1.5.0",
     "framer-motion": "^11.5.4",
+    "node-emoji": "^2.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

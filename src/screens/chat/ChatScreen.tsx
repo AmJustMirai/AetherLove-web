@@ -10,6 +10,7 @@ import { useT } from '../../i18n/useT';
 import { LoadingSpinner } from '../../ui/components';
 import { pushToast } from '../../ui/components/Toast';
 import { cn } from '../../ui/cn';
+import { withEmoji } from '../../ui/emoji';
 
 const fmtTime = (iso: string) =>
   new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -97,7 +98,7 @@ export function ChatScreen() {
                 {m.fromMe ? (
                   <div className="flex flex-col items-end max-w-[78%]">
                     <div className="rounded-2xl px-3.5 py-2 text-[14px] bg-accent text-strong">
-                      {m.text}
+                      {withEmoji(m.text)}
                     </div>
                     {/* Send time + read-receipt checkmark */}
                     <div className="mt-0.5 flex items-center gap-1">
@@ -123,7 +124,7 @@ export function ChatScreen() {
                 ) : (
                   <div className="flex flex-col items-start max-w-[78%]">
                     <div className="rounded-2xl px-3.5 py-2 text-[14px] bg-surface/10 text-body">
-                      {m.text}
+                      {withEmoji(m.text)}
                     </div>
                     <span className="mt-0.5 text-[10px] text-muted">{fmtTime(m.createdAtUtc)}</span>
                   </div>

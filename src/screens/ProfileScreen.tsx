@@ -33,6 +33,7 @@ import {
 } from '../ui/components';
 import { revokeUrl, webpUrl } from '../ui/image';
 import { safeColor } from '../ui/color';
+import { withEmoji } from '../ui/emoji';
 import { useT } from '../i18n/useT';
 
 type T = ReturnType<typeof useT>;
@@ -176,7 +177,11 @@ function PeerBody({ t, detail, flairs }: { t: T; detail: ProfileDetailDto; flair
 
       <Section title={t('profile.section_about')}>
         <p className="whitespace-pre-line text-[14px] leading-relaxed text-body">
-          {detail.Bio || <span className="text-muted">{t('profile.no_bio')}</span>}
+          {detail.Bio ? (
+            withEmoji(detail.Bio)
+          ) : (
+            <span className="text-muted">{t('profile.no_bio')}</span>
+          )}
         </p>
       </Section>
 

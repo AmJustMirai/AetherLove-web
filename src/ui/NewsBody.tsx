@@ -6,6 +6,7 @@ import { useEffect, useMemo } from 'react';
 import { NewsLineKind } from '../shared/enums';
 import type { NewsLineDto } from '../shared/dtos';
 import { revokeUrl, webpUrl } from './image';
+import { withEmoji } from './emoji';
 
 function NewsImage({ line }: { line: NewsLineDto }) {
   const url = useMemo(() => webpUrl(line.ImageBytes), [line.ImageBytes]);
@@ -30,7 +31,7 @@ export function NewsBody({ lines }: { lines: NewsLineDto[] }) {
           <NewsImage key={i} line={line} />
         ) : line.Text ? (
           <p key={i} className="whitespace-pre-line text-[15px] leading-relaxed text-body">
-            {line.Text}
+            {withEmoji(line.Text)}
           </p>
         ) : null
       )}
