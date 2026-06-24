@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/gen-integrity-manifest.mjs",
+    "gen:integrity": "node scripts/gen-integrity-manifest.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

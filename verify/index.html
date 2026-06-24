@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>AetherLove — Integrity Verifier</title>
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+
+        body {
+            background: #0b0612;
+            color: #d9d9d9;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        h1 {
+            color: #f5f0ff;
+            margin: 0 0 0.25rem;
+        }
+
+        .subtitle {
+            color: #8c8c8c;
+            margin: 0 0 1.5rem;
+        }
+
+        .trust-note {
+            background: rgb(242 166 36 / 0.12);
+            border: 1px solid rgb(242 166 36 / 0.35);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #f2a624;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .trust-note strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        input[type=url] {
+            flex: 1;
+            min-width: 260px;
+            background: rgb(255 255 255 / 0.06);
+            border: 1px solid rgb(255 255 255 / 0.12);
+            border-radius: 6px;
+            color: #f5f0ff;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        button {
+            background: rgb(186 107 201 / 0.25);
+            border: 1px solid rgb(186 107 201 / 0.5);
+            border-radius: 6px;
+            color: #f5f0ff;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            background: rgb(186 107 201 / 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #results {
+            font-family: 'Courier New', monospace;
+            font-size: 0.82rem;
+        }
+
+        .meta {
+            color: #8c8c8c;
+            margin-bottom: 1rem;
+        }
+
+        .line {
+            padding: 1px 0;
+        }
+
+        .pass {
+            color: #59d973;
+        }
+
+        .fail {
+            color: #f27373;
+        }
+
+        .warn {
+            color: #f2a624;
+        }
+
+        .verdict {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            font-family: inherit;
+        }
+
+        .verdict.ok {
+            background: rgb(89 217 115 / 0.1);
+            border: 1px solid rgb(89 217 115 / 0.3);
+            color: #59d973;
+        }
+
+        .verdict.bad {
+            background: rgb(242 115 115 / 0.1);
+            border: 1px solid rgb(242 115 115 / 0.3);
+            color: #f27373;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgb(186 107 201 / 0.3);
+            border-top-color: #ba6bc9;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>AetherLove — Integrity Verifier</h1>
+<p class="subtitle">Check that the live deployment matches the signed build manifest.</p>
+
+<div class="trust-note">
+    <strong>⚠ Trust note</strong>
+    This page is only meaningful when opened <strong>from a local clone of the source
+    repository</strong> (github.com). If you opened it from the live Pages deployment, an attacker
+    who controls that host could have replaced both this page and the embedded public key, making
+    the check circular. Clone from GitHub, then open <code>verify/index.html</code> locally.
+</div>
+
+<form id="form">
+    <input id="url" placeholder="https://owner.github.io/repo/"
+           required
+           type="url" value=""/>
+    <button id="btn" type="submit">Verify</button>
+</form>
+
+<div id="results"></div>
+
+<script type="module">
+    // Ed25519 public key — the trust anchor committed to the source repo.
+    // If this was obtained from the Pages host it may have been replaced.
+    const PUBLIC_KEY_B64 = 'm+rI9YBtHhqsZxaLCuKHDr8ipW5H/lFK7W2YXaSRrhU=';
+
+    const form = document.getElementById('form');
+    const btn = document.getElementById('btn');
+    const out = document.getElementById('results');
+
+    // Load @noble/curves/ed25519 from CDN (deterministic ESM, version-pinned)
+    const {ed25519} = await import('https://esm.sh/@noble/curves@1.6.0/ed25519');
+
+    function b64ToBytes(b64) {
+        const bin = atob(b64);
+        return Uint8Array.from(bin, c => c.charCodeAt(0));
+    }
+
+    async function sha384(buf) {
+        const hash = await crypto.subtle.digest('SHA-384', buf);
+        const b64 = btoa(String.fromCharCode(...new Uint8Array(hash)));
+        return 'sha384-' + b64;
+    }
+
+    async function fetchText(url) {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`);
+        return r.text();
+    }
+
+    async function fetchBuf(url) {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`);
+        return r.arrayBuffer();
+    }
+
+    function line(cls, text) {
+        const d = document.createElement('div');
+        d.className = 'line ' + cls;
+        d.textContent = text;
+        out.appendChild(d);
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        out.innerHTML = '';
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> Verifying…';
+
+        const rawUrl = document.getElementById('url').value.trim();
+        const BASE = rawUrl.endsWith('/') ? rawUrl : rawUrl + '/';
+        const pubKey = b64ToBytes(PUBLIC_KEY_B64);
+
+        try {
+            // 1. Fetch manifest
+            let manifestText, manifest;
+            try {
+                manifestText = await fetchText(BASE + 'integrity-manifest.json');
+                manifest = JSON.parse(manifestText);
+            } catch (e) {
+                line('fail', `✗  Failed to fetch manifest: ${e.message}`);
+                return;
+            }
+
+            // 2. Verify signature
+            try {
+                const sigText = await fetchText(BASE + 'integrity-manifest.json.sig');
+                const sigBytes = b64ToBytes(sigText.trim());
+                const msgBytes = new TextEncoder().encode(manifestText);
+                const valid = ed25519.verify(sigBytes, msgBytes, pubKey);
+                if (!valid) {
+                    line('fail', '✗  SIGNATURE INVALID — manifest does not match the trusted public key.');
+                    line('fail', '   The deployment may have been tampered with.');
+                    return;
+                }
+                line('pass', '✓  Signature valid (Ed25519)');
+            } catch (sigErr) {
+                if (sigErr.message?.includes('404')) {
+                    line('warn', '⚠  No signature file found — unsigned build (hash-only verification).');
+                } else {
+                    line('warn', `⚠  Signature check skipped: ${sigErr.message}`);
+                }
+            }
+
+            const meta = document.createElement('div');
+            meta.className = 'meta';
+            meta.innerHTML = `Commit: <b>${manifest.commit}</b> &nbsp;|&nbsp; Ref: <b>${manifest.ref}</b> &nbsp;|&nbsp; Built: ${manifest.builtAt}`;
+            out.appendChild(meta);
+
+            // 3. Hash-check each file
+            const files = Object.entries(manifest.files ?? {});
+            let passed = 0, failed = 0;
+
+            for (const [rel, expected] of files) {
+                try {
+                    const buf = await fetchBuf(BASE + rel);
+                    const actual = await sha384(buf);
+                    if (actual === expected) {
+                        line('pass', `  ✓  ${rel}`);
+                        passed++;
+                    } else {
+                        line('fail', `  ✗  ${rel}`);
+                        line('fail', `       expected: ${expected}`);
+                        line('fail', `       actual:   ${actual}`);
+                        failed++;
+                    }
+                } catch (e) {
+                    line('fail', `  ✗  ${rel}  [${e.message}]`);
+                    failed++;
+                }
+            }
+
+            const verdict = document.createElement('div');
+            if (failed === 0) {
+                verdict.className = 'verdict ok';
+                verdict.textContent = `✓  ALL ${passed} file(s) verified. The deployment matches the signed manifest.`;
+            } else {
+                verdict.className = 'verdict bad';
+                verdict.textContent = `✗  ${failed} of ${passed + failed} file(s) FAILED. The deployment may have been tampered with.`;
+            }
+            out.appendChild(verdict);
+
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Verify';
+        }
+    });
+</script>
+</body>
+</html>

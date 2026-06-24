@@ -9,6 +9,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  attestations: write
 
 concurrency:
   group: pages
@@ -45,6 +46,12 @@ jobs:
         run: pnpm run build
         env:
           VITE_BASE: /${{ github.event.repository.name }}/
+          INTEGRITY_SIGNING_KEY: ${{ secrets.INTEGRITY_SIGNING_KEY }}
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: dist/**/*
 
       - uses: actions/configure-pages@v5
 

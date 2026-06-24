@@ -11,6 +11,14 @@ export default defineConfig([
     ignores: ['dist/**', 'coverage/**', 'node_modules/**'],
   },
 
+  // Node.js scripts — run in Node, not the browser
+  {
+    files: ['scripts/**/*.mjs', 'verify/**/*.mjs'],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+
   js.configs.recommended,
 
   ...tseslint.configs.recommended,

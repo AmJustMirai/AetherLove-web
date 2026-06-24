@@ -227,6 +227,60 @@ function NormalView({ t, setView }: { t: T; setView: (v: View) => void }) {
           {t('settings.delete_account')}
         </Button>
       </div>
+
+      <BuildInfoPanel />
+    </div>
+  );
+}
+
+// Build transparency: fetches integrity-manifest.json produced at build time and shows the
+// commit hash, ref, and build timestamp. Not a security check — just a discoverability aid
+// that tells users what commit is running and how to independently verify it from the source repo.
+function BuildInfoPanel() {
+  const [info, setInfo] = useState<{ commit: string; ref: string; builtAt: string } | null>(null);
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        const res = await fetch(`${import.meta.env.BASE_URL}integrity-manifest.json`);
+        if (!res.ok) return;
+        const m = (await res.json()) as { commit: string; ref: string; builtAt: string };
+        setInfo(m);
+      } catch {
+        // unavailable in dev (manifest is a build artifact, not in public/)
+      }
+    })();
+  }, []);
+
+  if (!info) return null;
+
+  const shortCommit = info.commit.slice(0, 7);
+  const builtDate = new Date(info.builtAt).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+  const verifyUrl = window.location.origin + import.meta.env.BASE_URL;
+
+  return (
+    <div className="mt-8 border-t border-line/5 pt-5 pb-2">
+      <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.3em] text-muted/50">
+        Build info
+      </p>
+      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 font-mono text-[12px]">
+        <dt className="text-muted/60">commit</dt>
+        <dd className="text-subtle">{shortCommit}</dd>
+        <dt className="text-muted/60">ref</dt>
+        <dd className="text-subtle">{info.ref}</dd>
+        <dt className="text-muted/60">built</dt>
+        <dd className="text-subtle">{builtDate}</dd>
+      </dl>
+      <p className="mt-3 text-[11px] leading-relaxed text-muted/50">
+        To verify this deployment matches the source:{' '}
+        <span className="break-all font-mono text-muted/70">
+          node verify/verify.mjs {verifyUrl}
+        </span>
+      </p>
     </div>
   );
 }
