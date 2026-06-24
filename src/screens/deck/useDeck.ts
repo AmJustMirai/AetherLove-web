@@ -3,13 +3,13 @@
 // DeckScreen's data half; the gesture/animation lives in DeckScreen.tsx.
 
 import { useCallback, useEffect, useState } from 'react';
-import { hubClient } from '../../services/signal/hubClient';
-import { SwipeDirection } from '../../shared/enums';
-import type { DeckCardDto, MatchDeckDto } from '../../shared/dtos';
-import { onLive } from '../../state/events';
-import { setPendingMatch } from '../../state/matchContext';
-import { sessionStore } from '../../state/session';
-import { router, Screen } from '../../app/router';
+import { hubClient } from '@/services/signal/hubClient.ts';
+import { SwipeDirection } from '@/shared/enums.ts';
+import type { DeckCardDto, MatchDeckDto } from '@/shared/dtos.ts';
+import { onLive } from '@/state/events.ts';
+import { setPendingMatch } from '@/state/matchContext.ts';
+import { sessionStore } from '@/state/session.ts';
+import { router, Screen } from '@/app/router.ts';
 
 interface DeckState {
   loading: boolean;
@@ -65,7 +65,7 @@ export function useDeck() {
             peerName: card.DisplayName,
             peerAvatar: card.AvatarWebp,
             ownName: sessionStore.get().displayName ?? '',
-            ownAvatar: null,
+            ownAvatar: sessionStore.get().ownAvatar,
           });
           router.navigate(Screen.Match);
         }

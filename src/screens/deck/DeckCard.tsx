@@ -2,19 +2,20 @@
 // LIKE/NOPE crystal stamp, and a coloured "aether" glow that swells toward the drag direction. Releasing
 // past the threshold throws the card off-screen and reports the direction; short drags spring back.
 
+import type { AnimationPlaybackControls } from 'framer-motion';
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
-import type { DeckCardDto } from '../../shared/dtos';
-import { SwipeDirection } from '../../shared/enums';
+import type { DeckCardDto } from '@/shared/dtos.ts';
+import { SwipeDirection } from '@/shared/enums.ts';
 import {
   labelOf,
   LOOKING_FOR_OPTIONS,
   maskLabels,
   RACE_OPTIONS,
   REGION_OPTIONS,
-} from '../../shared/enumLabels';
-import { revokeUrl, webpUrl } from '../../ui/image';
-import { useEffect, useState } from 'react';
-import { useT } from '../../i18n/useT';
+} from '@/shared/enumLabels.ts';
+import { revokeUrl, webpUrl } from '@/ui/image.ts';
+import { useEffect, useRef, useState } from 'react';
+import { useT } from '@/i18n/useT.ts';
 
 const THROW_THRESHOLD = 110;
 
@@ -48,6 +49,18 @@ export function DeckCard({
   }, [card]);
 
   const [gone, setGone] = useState(false);
+  const throwControls = useRef<AnimationPlaybackControls | null>(null);
+
+  // Stop any in-flight throw animation when the card unmounts (e.g. keyed remount after swipe).
+  // Without this, the dangling imperative animate() can prevent AnimatePresence from resolving
+  // the outgoing screen's exit, leaving the app stuck at opacity 0 (black screen).
+  useEffect(
+    () => () => {
+      throwControls.current?.stop();
+    },
+    []
+  );
+
   const lookingFor = maskLabels(LOOKING_FOR_OPTIONS, card.LookingForMask).slice(0, 3);
   const subtitle = [labelOf(RACE_OPTIONS, card.Race), labelOf(REGION_OPTIONS, card.Region)]
     .filter(Boolean)
@@ -57,7 +70,11 @@ export function DeckCard({
     if (gone) return;
     setGone(true);
     const to = dir === SwipeDirection.Like ? 700 : -700;
-    animate(x, to, { duration: 0.32, ease: 'easeIn', onComplete: () => onSwipe(dir) });
+    throwControls.current = animate(x, to, {
+      duration: 0.32,
+      ease: 'easeIn',
+      onComplete: () => onSwipe(dir),
+    });
   }
 
   return (

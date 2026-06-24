@@ -21,6 +21,8 @@ export interface SessionState {
   onboardingState: OnboardingStateDto | null;
   /** Unlocked identity for E2E chat (null until onboarding/unlock provides it). */
   identity: IdentityKeyPair | null;
+  /** Cached own-avatar bytes (Order === 0 photo); null until loaded post-boot or if no photo. */
+  ownAvatar: Uint8Array | null;
 }
 
 const INITIAL: SessionState = {
@@ -29,6 +31,7 @@ const INITIAL: SessionState = {
   connection: null,
   onboardingState: null,
   identity: null,
+  ownAvatar: null,
 };
 
 export const sessionStore = createStore<SessionState>(INITIAL);
@@ -41,6 +44,19 @@ function patch(p: Partial<SessionState>): void {
 export async function setIdentity(identity: IdentityKeyPair): Promise<void> {
   patch({ identity });
   await keyStorage.save(identity);
+}
+
+/** Best-effort own-avatar fetch: reads the first photo from the user's profile and caches it in the
+ *  store so the sidebar chip and match overlay both have "your face" without each screen fetching
+ *  independently. Silently no-ops if the network is down or the account has no photos yet. */
+export async function loadOwnAvatar(): Promise<void> {
+  try {
+    const detail = await hubClient.getMyProfileDetail();
+    const bytes = detail.Photos.find((p) => p.Order === 0)?.WebpBytes ?? null;
+    patch({ ownAvatar: bytes });
+  } catch {
+    /* best-effort — leave null; sidebar/match show the neutral disc */
+  }
 }
 
 /** Tears down the local session: drops tokens + identity key, disconnects the hub, and resets the store to
@@ -117,6 +133,7 @@ async function runCore(): Promise<BootResult> {
     switch (status.Status) {
       case ProfileLifecycle.Active:
       case ProfileLifecycle.ShadowBanned:
+        void loadOwnAvatar(); // populate sidebar chip + match overlay own-face; never blocks boot
         return settle('active', status.DisplayName);
       default:
         return settle('onboarding', status.DisplayName);

@@ -79,7 +79,7 @@ export default function App() {
 
   return (
     <AppShell>
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         <motion.div
           key={route.screen}
           className="absolute inset-0"

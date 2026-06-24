@@ -111,6 +111,14 @@ export const en = {
   'deck.match_your_match': 'Your match',
   'deck.match_send_message': 'Send a message',
   'deck.match_keep_swiping': 'Keep swiping',
+  // Match-effect flavour subtitles (one per effect, shown under "It's a match!")
+  'deck.match_fx_synthwave': 'Under a neon sun',
+  'deck.match_fx_aurora': 'The lights aligned for you',
+  'deck.match_fx_supernova': 'Your hearts shine together',
+  'deck.match_fx_kaleido': 'A perfect pattern',
+  'deck.match_fx_tarot_title': 'The Lovers',
+  'deck.match_fx_tarot': 'The stars have spoken',
+  'deck.match_fx_lanterns': 'A wish just came true',
 
   // ---- Chat list ----
   'chatlist.title': 'Matches',

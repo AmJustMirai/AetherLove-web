@@ -8,7 +8,7 @@ import { sessionStore } from '../state/session';
 import { emitLive } from '../state/events';
 import { setPendingMatch } from '../state/matchContext';
 import { chatArchiveStore } from '../state/chatArchive';
-import { pushToast } from '../ui/components/Toast';
+import { pushToast } from '@/ui/components';
 import { router, Screen } from './router';
 
 let registered = false;
@@ -26,7 +26,7 @@ export function registerPushHandlers(): void {
       peerName: p.OtherDisplayName,
       peerAvatar: null,
       ownName: own ?? '',
-      ownAvatar: null,
+      ownAvatar: sessionStore.get().ownAvatar,
     });
     void hubClient
       .getProfileDetail(p.OtherProfileId)
@@ -37,7 +37,7 @@ export function registerPushHandlers(): void {
           peerName: p.OtherDisplayName,
           peerAvatar: avatar,
           ownName: own ?? '',
-          ownAvatar: null,
+          ownAvatar: sessionStore.get().ownAvatar,
         });
       })
       .catch(() => undefined);

@@ -7,7 +7,7 @@ import { useStore } from '../state/hooks';
 import { sessionStore } from '../state/session';
 import { router, Screen } from './router';
 import { useT } from '../i18n/useT';
-import { Avatar } from '../ui/components';
+import { Avatar } from '@/ui/components';
 import { cn } from '../ui/cn';
 
 interface NavItem {
@@ -69,7 +69,7 @@ export function AppNav({ variant }: { variant: 'rail' | 'bar' }) {
   const t = useT();
   const active = useStore(router.store).screen;
   const newMatches = useNewMatches();
-  const displayName = useStore(sessionStore).displayName;
+  const { displayName, ownAvatar } = useStore(sessionStore);
 
   if (variant === 'bar') {
     return (
@@ -152,7 +152,7 @@ export function AppNav({ variant }: { variant: 'rail' | 'bar' }) {
         className="mt-2 flex w-full items-center justify-center gap-2.5 rounded-xl py-2 transition-colors hover:bg-surface/5 xl:justify-start xl:px-2"
         aria-label={t('nav.profile')}
       >
-        <Avatar bytes={null} size={36} />
+        <Avatar bytes={ownAvatar} size={36} />
         <span className="hidden truncate text-[13px] font-medium text-subtle xl:inline">
           {displayName ?? t('nav.profile')}
         </span>
